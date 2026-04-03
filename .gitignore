@@ -6,4 +6,7 @@ env/
 external/
 data/raw/
 logs/
-results/
+results/*
+!results/.gitkeep
+!results/*_metrics.txt
+!results/*_predictions.csv
