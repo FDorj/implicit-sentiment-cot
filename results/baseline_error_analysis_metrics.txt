@@ -1,0 +1,48 @@
+Direct predictions: results/direct_isa_predictions.csv
+THOR predictions: results/thor_isa_predictions.csv
+Analysis output: results/baseline_error_analysis_predictions.csv
+Examples output: results/baseline_error_examples_predictions.csv
+n_total: 2188
+
+Direct metrics
+accuracy: 0.657221
+macro_f1: 0.660807
+
+THOR metrics
+accuracy: 0.585923
+macro_f1: 0.588127
+
+Correctness groups
+both_correct: 976 (44.61%)
+direct_correct_thor_wrong: 462 (21.12%)
+both_wrong: 444 (20.29%)
+thor_correct_direct_wrong: 306 (13.99%)
+
+Model agreement
+agree: 1349 (61.65%)
+disagree: 839 (38.35%)
+
+Direct confusion matrix
+               pred_positive  pred_negative  pred_neutral
+gold_positive            393             44           160
+gold_negative             25            489           105
+gold_neutral             183            233           556
+
+THOR confusion matrix
+               pred_positive  pred_negative  pred_neutral
+gold_positive            426             30           141
+gold_negative             68            330           221
+gold_neutral             295            151           526
+
+Correctness groups by gold label
+comparison_group  both_correct  both_wrong  direct_correct_thor_wrong  thor_correct_direct_wrong
+polarity                                                                                        
+negative                   299          99                        190                         31
+neutral                    356         246                        200                        170
+positive                   321          99                         72                        105
+
+Correctness groups by domain
+comparison_group  both_correct  both_wrong  direct_correct_thor_wrong  thor_correct_direct_wrong
+domain                                                                                          
+laptop                     395         162                        217                        117
+restaurant                 581         282                        245                        189
