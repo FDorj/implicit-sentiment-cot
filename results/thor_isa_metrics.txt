@@ -1,0 +1,16 @@
+Data: data/processed/semeval14_scapt_isa_only_clean.csv
+Output: results/thor_isa_predictions.csv
+n_total: 2188
+n_eval: 2188
+accuracy: 0.585923
+macro_f1: 0.588127
+
+              precision    recall  f1-score   support
+
+    positive     0.5399    0.7136    0.6147       597
+    negative     0.6458    0.5331    0.5841       619
+     neutral     0.5923    0.5412    0.5656       972
+
+    accuracy                         0.5859      2188
+   macro avg     0.5927    0.5959    0.5881      2188
+weighted avg     0.5932    0.5859    0.5842      2188

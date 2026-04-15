@@ -1,0 +1,11 @@
+Sentence: "{sentence}"
+Target: "{target}"
+
+Question: What aspect of the target is implied or mentioned in the sentence?
+
+Rules:
+- Focus only on the given target.
+- Output one short phrase only.
+- If no specific aspect is clear, output: general
+
+Aspect:

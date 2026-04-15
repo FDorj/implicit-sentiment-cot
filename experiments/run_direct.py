@@ -1,6 +1,12 @@
 from pathlib import Path
+import os
+import sys
 import pandas as pd
 from tqdm import tqdm
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.prompt_runner import PromptRunner
 from src.utils import load_prompt, normalize_label
@@ -13,7 +19,7 @@ OUTPUT_PATH = "results/direct_isa_predictions.csv"
 METRICS_PATH = "results/direct_isa_metrics.txt"
 
 # برای تست اولیه:
-DEBUG_N = None   # بعداً برای اجرای کامل، این را None کن
+DEBUG_N = int(os.getenv("DEBUG_N")) if os.getenv("DEBUG_N") else None
 
 
 def main():

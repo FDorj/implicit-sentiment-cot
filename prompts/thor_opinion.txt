@@ -1,0 +1,12 @@
+Sentence: "{sentence}"
+Target: "{target}"
+Aspect: "{aspect}"
+
+Question: What opinion expression or opinion clue is implied or mentioned for this target-aspect?
+
+Rules:
+- Focus on the given target and aspect.
+- Output a short opinion phrase only.
+- If no opinion clue is clear, output: no clear opinion
+
+Opinion:

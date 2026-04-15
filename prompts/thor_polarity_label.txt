@@ -1,0 +1,9 @@
+Polarity reasoning: "{polarity_reasoning}"
+
+Question: Convert the polarity reasoning into one sentiment label.
+
+Rules:
+- Output only one label from: positive, negative, neutral
+- Do not explain.
+
+Label:

@@ -1,0 +1,13 @@
+Sentence: "{sentence}"
+Target: "{target}"
+Aspect: "{aspect}"
+Opinion: "{opinion}"
+
+Question: Based on the aspect and opinion, what is the sentiment polarity toward the target?
+
+Rules:
+- Focus on the sentiment toward the target.
+- Keep the answer short.
+- If the opinion clue is "no clear opinion", the sentiment is neutral.
+
+Polarity reasoning:
