@@ -1,0 +1,24 @@
+Sentence: "{sentence}"
+Target: "{target}"
+
+THOR aspect: "{aspect}"
+THOR opinion clue: "{opinion}"
+THOR polarity reasoning: "{polarity_reasoning}"
+THOR initial label: "{initial_label}"
+
+Question: Review the THOR reasoning and decide the final sentiment label toward the target.
+
+Rules:
+- Output only one label from: positive, negative, neutral
+- Focus only on sentiment toward the given target.
+- If the THOR aspect or opinion is off-target, rely on the sentence and target directly.
+- Do not treat "no clear opinion" as neutral when the sentence implies an absence, failure, limitation, complaint, praise, recommendation, or contrast.
+- Absence, unavailability, missing items, failures, limitations, and complaints about the target are usually negative.
+- Mere mentions, menu/list items, factual descriptions, or undecided comparisons without evaluation are neutral.
+- Praise, enjoyment, usefulness, recommendation, or preference toward the target is positive.
+- Sarcasm or negative wording disguised as praise should be negative.
+- Return exactly one word: positive, negative, or neutral.
+- Do not repeat the field name.
+- Do not explain.
+
+Answer:
