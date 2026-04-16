@@ -1,0 +1,48 @@
+Direct predictions: results/direct_isa_predictions.csv
+THOR predictions: results/thor_isa_predictions.csv
+Reflection predictions: results/simple_reflection_isa_predictions.csv
+Analysis output: results/reflection_error_analysis_predictions.csv
+Examples output: results/reflection_error_examples_predictions.csv
+n_total: 2188
+
+Direct metrics
+accuracy: 0.657221
+macro_f1: 0.660807
+
+THOR metrics
+accuracy: 0.585923
+macro_f1: 0.588127
+
+Simple reflection metrics
+accuracy: 0.600548
+macro_f1: 0.605101
+
+Reflection changes vs THOR
+unchanged: 2114 (96.62%)
+changed: 74 (3.38%)
+
+Reflection change groups
+unchanged_correct: 1265 (57.82%)
+unchanged_wrong: 849 (38.80%)
+fixed_by_reflection: 49 (2.24%)
+broken_by_reflection: 17 (0.78%)
+changed_still_wrong: 8 (0.37%)
+
+Simple reflection confusion matrix
+               pred_positive  pred_negative  pred_neutral
+gold_positive            426             35           136
+gold_negative             63            379           177
+gold_neutral             292            171           509
+
+Reflection change groups by gold label
+reflection_change_group  broken_by_reflection  changed_still_wrong  fixed_by_reflection  unchanged_correct  unchanged_wrong
+polarity                                                                                                                   
+negative                                    0                    0                   49                330              240
+neutral                                    17                    3                    0                509              443
+positive                                    0                    5                    0                426              166
+
+Reflection change groups by domain
+reflection_change_group  broken_by_reflection  changed_still_wrong  fixed_by_reflection  unchanged_correct  unchanged_wrong
+domain                                                                                                                     
+laptop                                      8                    6                   33                504              340
+restaurant                                  9                    2                   16                761              509

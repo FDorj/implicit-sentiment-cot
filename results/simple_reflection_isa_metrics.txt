@@ -1,16 +1,16 @@
 Source: results/thor_isa_predictions.csv
 Output: results/simple_reflection_isa_predictions.csv
-n_total: 20
-n_eval: 20
-accuracy: 0.750000
-macro_f1: 0.688889
+n_total: 2188
+n_eval: 2188
+accuracy: 0.600548
+macro_f1: 0.605101
 
               precision    recall  f1-score   support
 
-    positive     0.8182    1.0000    0.9000         9
-    negative     0.6667    0.4000    0.5000         5
-     neutral     0.6667    0.6667    0.6667         6
+    positive     0.5455    0.7136    0.6183       597
+    negative     0.6479    0.6123    0.6296       619
+     neutral     0.6192    0.5237    0.5674       972
 
-    accuracy                         0.7500        20
-   macro avg     0.7172    0.6889    0.6889        20
-weighted avg     0.7348    0.7500    0.7300        20
+    accuracy                         0.6005      2188
+   macro avg     0.6042    0.6165    0.6051      2188
+weighted avg     0.6072    0.6005    0.5989      2188
