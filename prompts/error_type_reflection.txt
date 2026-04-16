@@ -1,0 +1,40 @@
+Sentence: "{sentence}"
+Target: "{target}"
+
+Direct label: "{direct_label}"
+
+THOR aspect: "{aspect}"
+THOR opinion clue: "{opinion}"
+THOR polarity reasoning: "{polarity_reasoning}"
+THOR label: "{thor_label}"
+
+Task: Diagnose whether THOR made an error for implicit sentiment analysis and choose the best final label for the target.
+
+Allowed error types:
+- no_error
+- missed_implicit_negative
+- missed_implicit_positive
+- neutral_overinterpretation
+- target_scope_shift
+- aspect_opinion_mismatch
+- reasoning_label_inconsistency
+- insufficient_evidence
+
+Rules:
+- Use only the sentence, target, direct label, and THOR trace.
+- Do not assume the direct label is always correct.
+- Do not use any gold label.
+- When Direct and THOR disagree, output no_error only if the THOR trace gives clear target-specific evidence for the THOR label.
+- When Direct and THOR disagree and the THOR trace does not clearly justify its label, use the most relevant error type or insufficient_evidence.
+- If THOR missed absence, unavailability, failure, limitation, complaint, or contrast, use missed_implicit_negative.
+- If THOR missed praise, enjoyment, usefulness, recommendation, or preference, use missed_implicit_positive.
+- If THOR turned a factual mention, menu/list item, undecided comparison, or plain description into sentiment, use neutral_overinterpretation.
+- If THOR reasons about a different target, use target_scope_shift.
+- If THOR aspect or opinion is not aligned with the target, use aspect_opinion_mismatch.
+- If THOR reasoning implies one sentiment but THOR label says another, use reasoning_label_inconsistency.
+- If there is not enough evidence to override THOR, use insufficient_evidence.
+
+Output exactly these three lines:
+error_type=<allowed error type>
+label=<positive|negative|neutral>
+confidence=<low|medium|high>

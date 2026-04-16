@@ -10,20 +10,15 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.evaluator import VALID_LABELS, evaluate_predictions
+from src.experiment_config import describe_runtime, parse_debug_n, result_path
 from src.reflection_pipeline import SimpleReflectionPipeline
 
 
-SOURCE_PATH = os.getenv("THOR_PREDICTIONS_PATH", "results/thor_isa_predictions.csv")
-OUTPUT_PATH = os.getenv("SIMPLE_REFLECTION_OUTPUT_PATH", "results/simple_reflection_isa_predictions.csv")
-METRICS_PATH = os.getenv("SIMPLE_REFLECTION_METRICS_PATH", "results/simple_reflection_isa_metrics.txt")
+SOURCE_PATH = result_path("thor_isa", "predictions.csv", "THOR_PREDICTIONS_PATH")
+OUTPUT_PATH = result_path("simple_reflection_isa", "predictions.csv", "SIMPLE_REFLECTION_OUTPUT_PATH")
+METRICS_PATH = result_path("simple_reflection_isa", "metrics.txt", "SIMPLE_REFLECTION_METRICS_PATH")
 
-debug_n_raw = os.getenv("DEBUG_N")
-if debug_n_raw is None:
-    DEBUG_N = 20
-elif debug_n_raw.strip().lower() in {"", "all", "none", "full"}:
-    DEBUG_N = None
-else:
-    DEBUG_N = int(debug_n_raw)
+DEBUG_N = parse_debug_n(default=20)
 
 RESUME = os.getenv("RESUME_SIMPLE_REFLECTION", "0") == "1"
 SAVE_EVERY = int(os.getenv("SAVE_EVERY", "10"))
@@ -53,6 +48,7 @@ def save_outputs(df: pd.DataFrame):
 
     with open(METRICS_PATH, "w", encoding="utf-8") as f:
         f.write(f"Source: {SOURCE_PATH}\n")
+        f.write(f"Runtime: {describe_runtime()}\n")
         f.write(f"Output: {OUTPUT_PATH}\n")
         f.write(f"n_total: {metrics['n_total']}\n")
         f.write(f"n_eval: {metrics['n_eval']}\n")

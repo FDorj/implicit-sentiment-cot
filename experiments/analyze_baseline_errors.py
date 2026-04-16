@@ -9,13 +9,14 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.evaluator import VALID_LABELS, evaluate_predictions
+from src.experiment_config import result_path
 
 
-DIRECT_PATH = "results/direct_isa_predictions.csv"
-THOR_PATH = "results/thor_isa_predictions.csv"
-OUTPUT_PATH = "results/baseline_error_analysis_predictions.csv"
-EXAMPLES_PATH = "results/baseline_error_examples_predictions.csv"
-METRICS_PATH = "results/baseline_error_analysis_metrics.txt"
+DIRECT_PATH = result_path("direct_isa", "predictions.csv", "DIRECT_PREDICTIONS_PATH")
+THOR_PATH = result_path("thor_isa", "predictions.csv", "THOR_PREDICTIONS_PATH")
+OUTPUT_PATH = result_path("baseline_error_analysis", "predictions.csv", "BASELINE_ERROR_ANALYSIS_OUTPUT_PATH")
+EXAMPLES_PATH = result_path("baseline_error_examples", "predictions.csv", "BASELINE_ERROR_EXAMPLES_OUTPUT_PATH")
+METRICS_PATH = result_path("baseline_error_analysis", "metrics.txt", "BASELINE_ERROR_ANALYSIS_METRICS_PATH")
 
 KEY_COLS = ["id", "source_sentence_id", "sentence", "target", "from", "to", "polarity"]
 EXAMPLES_PER_GROUP = 12

@@ -1,0 +1,22 @@
+Direct predictions: results\direct_isa_predictions.csv
+THOR predictions: results\thor_isa_predictions.csv
+Runtime: backend=ollama, model=qwen3:8b
+Output: results\etc_isa_predictions.csv
+trigger_policy: disagreement
+fallback_policy: direct
+trust_no_error_on_disagreement: False
+n_total: 20
+n_eval: 20
+n_diagnostic_triggered: 6
+accuracy: 0.800000
+macro_f1: 0.770136
+
+              precision    recall  f1-score   support
+
+    positive     1.0000    0.8889    0.9412         9
+    negative     0.6250    1.0000    0.7692         5
+     neutral     0.7500    0.5000    0.6000         6
+
+    accuracy                         0.8000        20
+   macro avg     0.7917    0.7963    0.7701        20
+weighted avg     0.8313    0.8000    0.7958        20

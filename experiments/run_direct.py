@@ -1,5 +1,4 @@
 from pathlib import Path
-import os
 import sys
 import pandas as pd
 from tqdm import tqdm
@@ -11,15 +10,15 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.prompt_runner import PromptRunner
 from src.utils import load_prompt, normalize_label
 from src.evaluator import evaluate_predictions
+from src.experiment_config import describe_runtime, parse_debug_n, result_path
 
 
 DATA_PATH = "data/processed/semeval14_scapt_isa_only_clean.csv"
 PROMPT_PATH = "prompts/direct_prompt.txt"
-OUTPUT_PATH = "results/direct_isa_predictions.csv"
-METRICS_PATH = "results/direct_isa_metrics.txt"
+OUTPUT_PATH = result_path("direct_isa", "predictions.csv", "DIRECT_OUTPUT_PATH")
+METRICS_PATH = result_path("direct_isa", "metrics.txt", "DIRECT_METRICS_PATH")
 
-# برای تست اولیه:
-DEBUG_N = int(os.getenv("DEBUG_N")) if os.getenv("DEBUG_N") else None
+DEBUG_N = parse_debug_n(default=None)
 
 
 def main():
@@ -56,6 +55,7 @@ def main():
 
     with open(METRICS_PATH, "w", encoding="utf-8") as f:
         f.write(f"Data: {DATA_PATH}\n")
+        f.write(f"Runtime: {describe_runtime()}\n")
         f.write(f"Output: {OUTPUT_PATH}\n")
         f.write(f"n_total: {metrics['n_total']}\n")
         f.write(f"n_eval: {metrics['n_eval']}\n")
