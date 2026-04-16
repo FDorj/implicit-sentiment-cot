@@ -15,6 +15,7 @@ NON_CORRECTIVE_ERROR_TYPES = {
 }
 VALID_ERROR_TYPES = CORRECTABLE_ERROR_TYPES | NON_CORRECTIVE_ERROR_TYPES
 VALID_CONFIDENCE = {"low", "medium", "high"}
+CONFIDENCE_RANK = {"low": 0, "medium": 1, "high": 2}
 
 
 def normalize_error_type(value: str) -> str:
@@ -35,18 +36,23 @@ def select_final_label(
     confidence: str = "low",
     fallback_policy: str = "direct",
     trust_no_error_on_disagreement: bool = False,
+    min_correctable_confidence: str = "medium",
+    accepted_error_types: set[str] | None = None,
 ) -> tuple[str, str]:
     direct_valid = direct_label in VALID_LABELS
     thor_valid = thor_label in VALID_LABELS
     proposed_valid = proposed_label in VALID_LABELS
     normalized_error_type = normalize_error_type(error_type)
     normalized_confidence = normalize_confidence(confidence)
+    normalized_min_confidence = normalize_confidence(min_correctable_confidence)
 
     if direct_valid and thor_valid and direct_label == thor_label:
         return thor_label, "agreement_keep_shared_label"
 
-    if normalized_error_type in CORRECTABLE_ERROR_TYPES and proposed_valid:
-        if normalized_confidence in {"medium", "high"}:
+    allowed_error_types = accepted_error_types or CORRECTABLE_ERROR_TYPES
+
+    if normalized_error_type in allowed_error_types and proposed_valid:
+        if CONFIDENCE_RANK[normalized_confidence] >= CONFIDENCE_RANK[normalized_min_confidence]:
             return proposed_label, f"accept_{normalized_error_type}"
 
     if normalized_error_type == "no_error" and thor_valid and trust_no_error_on_disagreement:

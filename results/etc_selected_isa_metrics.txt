@@ -1,0 +1,33 @@
+ETC predictions: results\etc_isa_predictions.csv
+Output: results\etc_selected_isa_predictions.csv
+fallback_policy: direct
+trust_no_error_on_disagreement: False
+min_correctable_confidence: high
+accepted_error_types: missed_implicit_positive
+n_total: 2188
+n_eval: 2188
+accuracy: 0.659506
+macro_f1: 0.663444
+
+              precision    recall  f1-score   support
+
+    positive     0.6552    0.6683    0.6617       597
+    negative     0.6421    0.7884    0.7078       619
+     neutral     0.6789    0.5720    0.6209       972
+
+    accuracy                         0.6595      2188
+   macro avg     0.6587    0.6762    0.6634      2188
+weighted avg     0.6620    0.6595    0.6566      2188
+
+
+train metrics
+n_total: 1746
+n_eval: 1746
+accuracy: 0.654066
+macro_f1: 0.656692
+
+test metrics
+n_total: 442
+n_eval: 442
+accuracy: 0.680995
+macro_f1: 0.676798

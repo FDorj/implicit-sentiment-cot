@@ -9,7 +9,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.controller import select_final_label
+from src.controller import CORRECTABLE_ERROR_TYPES, normalize_error_type, select_final_label
 from src.evaluator import VALID_LABELS, evaluate_predictions
 from src.experiment_config import describe_runtime, parse_debug_n, result_path
 from src.reflection_pipeline import ErrorTypeReflectionPipeline
@@ -26,6 +26,8 @@ SAVE_EVERY = int(os.getenv("SAVE_EVERY", "10"))
 TRIGGER_POLICY = os.getenv("ETC_TRIGGER_POLICY", "disagreement").strip().lower()
 FALLBACK_POLICY = os.getenv("ETC_FALLBACK_POLICY", "direct").strip().lower()
 TRUST_NO_ERROR_ON_DISAGREEMENT = os.getenv("ETC_TRUST_NO_ERROR_ON_DISAGREEMENT", "0") == "1"
+MIN_CORRECTABLE_CONFIDENCE = os.getenv("ETC_MIN_CORRECTABLE_CONFIDENCE", "medium").strip().lower()
+ACCEPT_ERROR_TYPES_RAW = os.getenv("ETC_ACCEPT_ERROR_TYPES", "all").strip().lower()
 
 KEY_COLS = ["id", "source_sentence_id", "sentence", "target", "from", "to", "polarity"]
 OUTPUT_COLUMNS = [
@@ -37,6 +39,20 @@ OUTPUT_COLUMNS = [
     "controller_decision",
     "diagnostic_triggered",
 ]
+
+
+def parse_accepted_error_types(raw_value: str) -> set[str]:
+    if raw_value in {"", "all", "*"}:
+        return set(CORRECTABLE_ERROR_TYPES)
+
+    return {
+        normalize_error_type(value)
+        for value in raw_value.split(",")
+        if value.strip()
+    } & CORRECTABLE_ERROR_TYPES
+
+
+ACCEPTED_ERROR_TYPES = parse_accepted_error_types(ACCEPT_ERROR_TYPES_RAW)
 
 
 def require_columns(df: pd.DataFrame, columns: list[str], source: str) -> None:
@@ -141,6 +157,8 @@ def save_outputs(df: pd.DataFrame):
         f.write(f"trigger_policy: {TRIGGER_POLICY}\n")
         f.write(f"fallback_policy: {FALLBACK_POLICY}\n")
         f.write(f"trust_no_error_on_disagreement: {TRUST_NO_ERROR_ON_DISAGREEMENT}\n")
+        f.write(f"min_correctable_confidence: {MIN_CORRECTABLE_CONFIDENCE}\n")
+        f.write(f"accepted_error_types: {','.join(sorted(ACCEPTED_ERROR_TYPES))}\n")
         f.write(f"n_total: {metrics['n_total']}\n")
         f.write(f"n_eval: {metrics['n_eval']}\n")
         f.write(f"n_diagnostic_triggered: {triggered_count}\n")
@@ -198,6 +216,8 @@ def main():
                 confidence=diagnosis["confidence"],
                 fallback_policy=FALLBACK_POLICY,
                 trust_no_error_on_disagreement=TRUST_NO_ERROR_ON_DISAGREEMENT,
+                min_correctable_confidence=MIN_CORRECTABLE_CONFIDENCE,
+                accepted_error_types=ACCEPTED_ERROR_TYPES,
             )
 
             updates = {

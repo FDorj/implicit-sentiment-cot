@@ -1,0 +1,32 @@
+ETC predictions: results\etc_isa_predictions.csv
+Output: results\etc_policy_ablation_predictions.csv
+n_total: 2188
+
+                          policy   split  accuracy  macro_f1  n_eval  changed_vs_thor  changed_vs_direct
+   etc_direct_high_positive_only   train  0.654066  0.656692    1746              661                  6
+        etc_direct_high_no_trust   train  0.653494  0.655011    1746              626                 41
+                 direct_baseline   train  0.651775  0.654005    1746              667                  0
+   etc_direct_high_negative_only   train  0.651203  0.652300    1746              632                 35
+      etc_direct_medium_no_trust   train  0.647766  0.649020    1746              603                 65
+etc_direct_medium_trust_no_error   train  0.599656  0.604797    1746               65                603
+        etc_thor_medium_no_trust   train  0.599656  0.604797    1746               65                603
+          etc_thor_high_no_trust   train  0.593356  0.598496    1746               46                621
+                   thor_baseline   train  0.582474  0.586661    1746                0                667
+   etc_direct_high_positive_only    test  0.680995  0.676798     442              170                  2
+                 direct_baseline    test  0.678733  0.674075     442              172                  0
+        etc_direct_high_no_trust    test  0.669683  0.667398     442              161                 11
+   etc_direct_high_negative_only    test  0.667421  0.664760     442              163                  9
+      etc_direct_medium_no_trust    test  0.660633  0.659430     442              157                 15
+etc_direct_medium_trust_no_error    test  0.619910  0.610471     442               11                161
+        etc_thor_medium_no_trust    test  0.619910  0.610471     442               11                161
+          etc_thor_high_no_trust    test  0.613122  0.599364     442                6                166
+                   thor_baseline    test  0.599548  0.578437     442                0                172
+   etc_direct_high_positive_only overall  0.659506  0.663444    2188              831                  8
+                 direct_baseline overall  0.657221  0.660807    2188              839                  0
+        etc_direct_high_no_trust overall  0.656764  0.660190    2188              787                 52
+   etc_direct_high_negative_only overall  0.654479  0.657545    2188              795                 44
+      etc_direct_medium_no_trust overall  0.650366  0.653890    2188              760                 80
+etc_direct_medium_trust_no_error overall  0.603748  0.608394    2188               76                764
+        etc_thor_medium_no_trust overall  0.603748  0.608394    2188               76                764
+          etc_thor_high_no_trust overall  0.597349  0.601525    2188               52                787
+                   thor_baseline overall  0.585923  0.588127    2188                0                839
