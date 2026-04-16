@@ -1,0 +1,59 @@
+Direct predictions: results\direct_isa_predictions.csv
+THOR predictions: results\thor_isa_predictions.csv
+ETC predictions: results\etc_isa_predictions.csv
+Analysis output: results\etc_error_analysis_predictions.csv
+Examples output: results\etc_error_examples_predictions.csv
+n_total: 2188
+
+Direct metrics
+accuracy: 0.657221
+macro_f1: 0.660807
+
+THOR metrics
+accuracy: 0.585923
+macro_f1: 0.588127
+
+ETC-ISA metrics
+accuracy: 0.650366
+macro_f1: 0.653890
+
+Diagnostic trigger counts
+not_triggered: 1349 (61.65%)
+triggered: 839 (38.35%)
+
+Controller decisions
+agreement_keep_shared_label: 1349 (61.65%)
+fallback_use_direct: 684 (31.26%)
+accept_missed_implicit_negative: 142 (6.49%)
+accept_missed_implicit_positive: 13 (0.59%)
+
+Diagnosed error types
+no_error: 2033 (92.92%)
+missed_implicit_negative: 142 (6.49%)
+missed_implicit_positive: 13 (0.59%)
+
+ETC change groups vs THOR
+unchanged_correct: 1002 (45.80%)
+unchanged_wrong: 426 (19.47%)
+fixed_by_etc: 421 (19.24%)
+broken_by_etc: 280 (12.80%)
+changed_still_wrong: 59 (2.70%)
+
+ETC-ISA confusion matrix
+               pred_positive  pred_negative  pred_neutral
+gold_positive            394             53           150
+gold_negative             24            508            87
+gold_neutral             184            267           521
+
+ETC change groups by gold label
+etc_change_group  broken_by_etc  changed_still_wrong  fixed_by_etc  unchanged_correct  unchanged_wrong
+polarity                                                                                              
+negative                     11                   25           189                319               75
+neutral                     170                   20           165                356              261
+positive                     99                   14            67                327               90
+
+ETC change groups by domain
+etc_change_group  broken_by_etc  changed_still_wrong  fixed_by_etc  unchanged_correct  unchanged_wrong
+domain                                                                                                
+laptop                      107                   27           194                405              158
+restaurant                  173                   32           227                597              268

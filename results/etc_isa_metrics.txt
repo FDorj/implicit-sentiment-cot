@@ -5,18 +5,18 @@ Output: results\etc_isa_predictions.csv
 trigger_policy: disagreement
 fallback_policy: direct
 trust_no_error_on_disagreement: False
-n_total: 20
-n_eval: 20
-n_diagnostic_triggered: 6
-accuracy: 0.800000
-macro_f1: 0.770136
+n_total: 2188
+n_eval: 2188
+n_diagnostic_triggered: 839
+accuracy: 0.650366
+macro_f1: 0.653890
 
               precision    recall  f1-score   support
 
-    positive     1.0000    0.8889    0.9412         9
-    negative     0.6250    1.0000    0.7692         5
-     neutral     0.7500    0.5000    0.6000         6
+    positive     0.6545    0.6600    0.6572       597
+    negative     0.6135    0.8207    0.7021       619
+     neutral     0.6873    0.5360    0.6023       972
 
-    accuracy                         0.8000        20
-   macro avg     0.7917    0.7963    0.7701        20
-weighted avg     0.8313    0.8000    0.7958        20
+    accuracy                         0.6504      2188
+   macro avg     0.6518    0.6722    0.6539      2188
+weighted avg     0.6575    0.6504    0.6455      2188
