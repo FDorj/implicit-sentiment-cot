@@ -1,0 +1,5 @@
+Given the sentence "{sentence}", which specific aspect of "{target}" is possibly mentioned?
+
+Return one concise aspect phrase. If no specific aspect is mentioned, return: general
+
+Aspect:

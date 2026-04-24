@@ -1,0 +1,11 @@
+Sentence: "{sentence}"
+Target: "{target}"
+The sentiment polarity is "{polarity_reasoning}".
+
+Based on these contexts, summarize and return the sentiment polarity only.
+
+Rules:
+- Output exactly one label from: positive, negative, neutral
+- Do not explain.
+
+Label:

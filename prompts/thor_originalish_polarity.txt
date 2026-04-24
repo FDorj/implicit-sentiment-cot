@@ -1,0 +1,9 @@
+Given the sentence "{sentence}", the opinion towards the mentioned aspect of "{target}" is "{opinion}".
+
+Based on such opinion, what is the sentiment polarity towards "{target}"?
+
+Answer briefly and include the sentiment cue if it is implicit.
+If the opinion is "no sentiment evidence", the sentiment polarity is neutral.
+Do not over-interpret factual mentions, list items, or unrelated events as sentiment.
+
+Sentiment polarity:

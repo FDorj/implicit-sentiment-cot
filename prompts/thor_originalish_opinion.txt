@@ -1,0 +1,9 @@
+Given the sentence "{sentence}", the mentioned aspect is about "{aspect}".
+
+Based on common sense, what is the implicit opinion towards the mentioned aspect of "{target}", and why?
+
+Answer with a short explanation focused on the target-aspect.
+Do not infer sentiment from a mere mention, list item, factual description, or unrelated event.
+If no implicit opinion can be inferred towards the target-aspect, answer: no sentiment evidence.
+
+Implicit opinion:

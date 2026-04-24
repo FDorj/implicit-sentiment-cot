@@ -25,12 +25,24 @@ class THORPipeline:
         polarity_prompt_path: str = "prompts/thor_polarity.txt",
         polarity_label_prompt_path: str = "prompts/thor_polarity_label.txt",
         model: str | None = None,
+        aspect_max_tokens: int = 6,
+        opinion_max_tokens: int = 24,
+        polarity_reasoning_max_tokens: int = 48,
+        polarity_label_max_tokens: int = 3,
+        aspect_max_words: int = 4,
+        temperature: float = 0.0,
     ):
         self.runner = PromptRunner(model=model)
         self.aspect_prompt_template = load_prompt(aspect_prompt_path)
         self.opinion_prompt_template = load_prompt(opinion_prompt_path)
         self.polarity_prompt_template = load_prompt(polarity_prompt_path)
         self.polarity_label_prompt_template = load_prompt(polarity_label_prompt_path)
+        self.aspect_max_tokens = aspect_max_tokens
+        self.opinion_max_tokens = opinion_max_tokens
+        self.polarity_reasoning_max_tokens = polarity_reasoning_max_tokens
+        self.polarity_label_max_tokens = polarity_label_max_tokens
+        self.aspect_max_words = aspect_max_words
+        self.temperature = temperature
 
     def infer_aspect(self, sentence: str, target: str) -> str:
         prompt = self.aspect_prompt_template.format(
@@ -39,14 +51,14 @@ class THORPipeline:
         )
         output = self.runner.run(
             prompt,
-            temperature=0.0,
-            max_tokens=6,
+            temperature=self.temperature,
+            max_tokens=self.aspect_max_tokens,
         ).strip()
 
         if not output:
             return "general"
 
-        normalized = clean_short_text(output, max_words=4, fallback="general").lower()
+        normalized = clean_short_text(output, max_words=self.aspect_max_words, fallback="general").lower()
 
         if normalized in {"none", "n/a", "na", "unknown"}:
             return "general"
@@ -61,8 +73,8 @@ class THORPipeline:
         )
         output = self.runner.run(
             prompt,
-            temperature=0.0,
-            max_tokens=24,
+            temperature=self.temperature,
+            max_tokens=self.opinion_max_tokens,
         ).strip()
 
         if not output:
@@ -79,20 +91,22 @@ class THORPipeline:
         )
         output = self.runner.run(
             prompt,
-            temperature=0.0,
-            max_tokens=48,
+            temperature=self.temperature,
+            max_tokens=self.polarity_reasoning_max_tokens,
         ).strip()
 
         return output
 
-    def infer_polarity_label(self, polarity_reasoning: str) -> tuple[str, str]:
+    def infer_polarity_label(self, sentence: str, target: str, polarity_reasoning: str) -> tuple[str, str]:
         prompt = self.polarity_label_prompt_template.format(
+            sentence=sentence,
+            target=target,
             polarity_reasoning=polarity_reasoning,
         )
         raw_output = self.runner.run(
             prompt,
             temperature=0.0,
-            max_tokens=3,
+            max_tokens=self.polarity_label_max_tokens,
         ).strip()
 
         return raw_output, normalize_label(raw_output)
@@ -113,6 +127,8 @@ class THORPipeline:
             opinion=opinion,
         )
         raw_polarity_label_output, prediction = self.infer_polarity_label(
+            sentence=sentence,
+            target=target,
             polarity_reasoning=polarity_reasoning,
         )
 

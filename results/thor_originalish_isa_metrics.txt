@@ -1,0 +1,23 @@
+Data: data/processed/semeval14_scapt_isa_only_clean.csv
+Runtime: backend=ollama, model=qwen3:8b
+Prompt variant: thor_originalish
+Output: results\thor_originalish_isa_predictions.csv
+aspect_max_tokens: 16
+opinion_max_tokens: 80
+polarity_reasoning_max_tokens: 80
+polarity_label_max_tokens: 8
+temperature: 0.00
+n_total: 20
+n_eval: 20
+accuracy: 0.750000
+macro_f1: 0.650794
+
+              precision    recall  f1-score   support
+
+    positive     1.0000    1.0000    1.0000         9
+    negative     0.5000    1.0000    0.6667         5
+     neutral     1.0000    0.1667    0.2857         6
+
+    accuracy                         0.7500        20
+   macro avg     0.8333    0.7222    0.6508        20
+weighted avg     0.8750    0.7500    0.7024        20
