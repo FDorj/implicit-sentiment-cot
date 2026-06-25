@@ -1,0 +1,13 @@
+Final pipeline validation
+row_count: 2188
+all_row_counts_equal: True
+row_counts: {'direct': 2188, 'thor': 2188, 'etc': 2188, 'selected': 2188}
+duplicate_key_counts: {'direct': 0, 'thor': 0, 'etc': 0, 'selected': 0}
+has_duplicate_keys: False
+direct_etc_aligned_rows: 2188
+thor_etc_aligned_rows: 2188
+etc_selected_aligned_rows: 2188
+direct_alignment_mismatches: 0
+thor_alignment_mismatches: 0
+diagnostic_columns_present: True
+selected_valid_labels: 2188

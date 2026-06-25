@@ -1,0 +1,75 @@
+id,source_sentence_id,sentence,target,from,to,polarity,domain,split,direct_raw_output,direct_prediction,aspect,opinion,polarity_reasoning,thor_raw_polarity_output,thor_prediction,diagnostic_raw_output,error_type,diagnostic_label,diagnostic_confidence,controller_prediction,controller_decision,diagnostic_triggered,selected_prediction,selected_controller_decision,selected_source,selected_policy_key,direct_correct,final_correct,direct_comparison_group
+382,22:0,Got this Mac Mini with OS X Mountain Lion for my wife.,OS X Mountain Lion,23,41,neutral,laptop,test,positive,positive,operating system,"Implicit opinion: No sentiment evidence
+
+The sentence mentions ""OS X Mountain Lion"" as a fact without expressing approval, disapproval, or any emotional evaluation towards the operating system.","Sentiment polarity: Neutral  
+Sentiment cue: Implicit opinion: No sentiment evidence",neutral,neutral,"error_type=no_error
+label=neutral
+confidence=high",no_error,neutral,high,positive,fallback_use_direct,True,neutral,train_calibrated_use_thor,thor,direct_prediction=positive|error_type=no_error|diagnostic_confidence=high|domain=laptop,False,True,gain_vs_direct
+389,267:1,"The Like New condition of the iMac MC309LL/A on Amazon is at $900+ level only, and it is a Quad-Core 2.5 GHz CPU (similar to the $799 Mini), with Radeon HD 6750M 512MB graphic card (this mini is integrated Intel 4000 card), and it even comes with wireless Apple Keyboard and Mouse, all put together in neat and nice package.",Quad-Core 2.5 GHz CPU,91,112,neutral,laptop,test,positive,positive,cpu model,no sentiment evidence,"Sentiment polarity: Neutral  
+Sentiment cue: None (no sentiment evidence)",neutral,neutral,"error_type=no_error
+label=neutral
+confidence=high",no_error,neutral,high,positive,fallback_use_direct,True,neutral,train_calibrated_use_thor,thor,direct_prediction=positive|error_type=no_error|diagnostic_confidence=high|domain=laptop,False,True,gain_vs_direct
+441,115:1,"After all was said and done, I essentially used that $450 savings to buy 16GB of RAM, TWO Seagate Momentus XT hybrid drives and an OWC upgrade kit to install the second hard drive.",16GB of RAM,73,84,neutral,laptop,test,positive,positive,capacity,"no sentiment evidence
+
+The statement describes the purchase of 16GB of RAM as a factual item without expressing approval, disapproval, or any emotional stance toward its capacity. There is no implicit opinion about the capacity of the RAM itself.","Sentiment polarity: neutral  
+Sentiment cue: none (no sentiment evidence)",neutral,neutral,"error_type=no_error
+label=neutral
+confidence=high",no_error,neutral,high,positive,fallback_use_direct,True,neutral,train_calibrated_use_thor,thor,direct_prediction=positive|error_type=no_error|diagnostic_confidence=high|domain=laptop,False,True,gain_vs_direct
+442,115:1,"After all was said and done, I essentially used that $450 savings to buy 16GB of RAM, TWO Seagate Momentus XT hybrid drives and an OWC upgrade kit to install the second hard drive.",Seagate Momentus XT hybrid drives,90,123,neutral,laptop,test,positive,positive,type,no sentiment evidence,"Sentiment polarity: Neutral  
+Sentiment cue: None (no sentiment evidence)",neutral,neutral,"error_type=no_error
+label=neutral
+confidence=high",no_error,neutral,high,positive,fallback_use_direct,True,neutral,train_calibrated_use_thor,thor,direct_prediction=positive|error_type=no_error|diagnostic_confidence=high|domain=laptop,False,True,gain_vs_direct
+443,115:1,"After all was said and done, I essentially used that $450 savings to buy 16GB of RAM, TWO Seagate Momentus XT hybrid drives and an OWC upgrade kit to install the second hard drive.",OWC upgrade kit,131,146,neutral,laptop,test,positive,positive,upgrade kit to install the second hard drive,no sentiment evidence,"Sentiment polarity: Neutral  
+Sentiment cue: None (no sentiment evidence)",neutral,neutral,"error_type=no_error
+label=neutral
+confidence=high",no_error,neutral,high,positive,fallback_use_direct,True,neutral,train_calibrated_use_thor,thor,direct_prediction=positive|error_type=no_error|diagnostic_confidence=high|domain=laptop,False,True,gain_vs_direct
+546,123:1,"Put a SSD and use a 21"" LED screen, this set up is silky smooth!","21"" LED screen",20,34,neutral,laptop,test,positive,positive,resolution,"no sentiment evidence
+
+The mention of ""21"" LED screen is a factual description of screen size, not resolution. The sentence does not provide any implicit opinion about the resolution of the screen.","Sentiment polarity: neutral  
+Sentiment cue: no sentiment evidence",neutral,neutral,"error_type=no_error
+label=neutral
+confidence=high",no_error,neutral,high,positive,fallback_use_direct,True,neutral,train_calibrated_use_thor,thor,direct_prediction=positive|error_type=no_error|diagnostic_confidence=high|domain=laptop,False,True,gain_vs_direct
+264,32894669#1075584#0,"For the price you pay for the food here, you'd expect it to be at least on par with other Japanese restaurants.",price,8,13,negative,restaurant,test,neutral,neutral,price paid for food,"Implicit opinion: Negative
+
+The sentence suggests that the price paid for the food is not justified by the quality, implying that the price is too high relative to the expected standard of other Japanese restaurants.",Sentiment polarity: Negative (Implicit),Negative,negative,"error_type=missed_implicit_negative
+label=negative
+confidence=high",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True,negative,train_calibrated_use_thor,thor,direct_prediction=neutral|error_type=missed_implicit_negative|diagnostic_confidence=high|domain=restaurant,False,True,gain_vs_direct
+265,32894669#1075584#0,"For the price you pay for the food here, you'd expect it to be at least on par with other Japanese restaurants.",food,30,34,negative,restaurant,test,neutral,neutral,quality,"Implicit opinion: Negative
+
+The statement implies that the quality of the food is not meeting expectations based on the price paid, suggesting that the food is not as good as it should be for the cost.",Sentiment polarity: Negative (Implicit),Negative,negative,"error_type=missed_implicit_negative
+label=negative
+confidence=high",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True,negative,train_calibrated_use_thor,thor,direct_prediction=neutral|error_type=missed_implicit_negative|diagnostic_confidence=high|domain=restaurant,False,True,gain_vs_direct
+1027,11351725#582163#3,It took about 2 1/2 hours to be served our 2 courses.,served,32,38,negative,restaurant,test,negative,negative,general,"Implicit opinion: no sentiment evidence
+
+The sentence provides a factual statement about the time taken to be served two courses, without expressing approval, disapproval, satisfaction, or dissatisfaction. Therefore, no implicit opinion about the aspect of ""served"" can be inferred.","Sentiment polarity: Neutral  
+Sentiment cue: Implicit opinion: no sentiment evidence",neutral,neutral,"error_type=no_error
+label=neutral
+confidence=high",no_error,neutral,high,negative,fallback_use_direct,True,neutral,train_calibrated_use_thor,thor,direct_prediction=negative|error_type=no_error|diagnostic_confidence=high|domain=restaurant,True,False,loss_vs_direct
+1127,11350390#802808#3,"I have never in my life sent back food before, but I simply had to, and the waiter argued with me over this.",food,34,38,negative,restaurant,test,negative,negative,preference for certain food items,"Implicit opinion: No sentiment evidence
+
+The statement does not provide direct evidence of a preference for certain food items. It focuses on the speaker's unusual action of returning food and the resulting conflict with the waiter, rather than expressing a preference for or against specific types of food.","Sentiment polarity: Neutral  
+(No sentiment evidence)",neutral,neutral,"error_type=no_error
+label=neutral
+confidence=high",no_error,neutral,high,negative,fallback_use_direct,True,neutral,train_calibrated_use_thor,thor,direct_prediction=negative|error_type=no_error|diagnostic_confidence=high|domain=restaurant,True,False,loss_vs_direct
+387,33071731#1007204#0,"Unfortunately, we chose this spot for lunch as we had done a lot of walking and ended up at the South St Seaport.",lunch,38,43,neutral,restaurant,test,neutral,neutral,location,"Implicit opinion: Negative
+
+Explanation: The speaker mentions choosing the location for lunch due to being tired from walking, implying that the location was not ideal or enjoyable for lunch. The use of ""unfortunately"" suggests a negative sentiment towards the choice of location for lunch.","Sentiment polarity: Negative  
+Sentiment cue: Implicit (use of ""unfortunately"")",Negative,negative,"error_type=missed_implicit_negative
+label=negative
+confidence=high",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True,negative,train_calibrated_use_thor,thor,direct_prediction=neutral|error_type=missed_implicit_negative|diagnostic_confidence=high|domain=restaurant,True,False,loss_vs_direct
+476,32892297#645108#1,"The food was definitely good, but when all was said and done, I just couldn't justify it for the price (including 2 drinks, $100/person)...",drinks,116,122,neutral,restaurant,test,neutral,neutral,type of drink,"Implicit opinion: Negative
+
+The speaker mentions the total cost including 2 drinks at $100/person, implying that the price for the drinks alone was high and not justified by the quality of the food, thus expressing a negative opinion towards the value of the drinks.",Sentiment polarity: Negative (Implicit),Negative,negative,"error_type=missed_implicit_negative
+label=negative
+confidence=high",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True,negative,train_calibrated_use_thor,thor,direct_prediction=neutral|error_type=missed_implicit_negative|diagnostic_confidence=high|domain=restaurant,True,False,loss_vs_direct
+544,11359790#823900#3,The manager then told us we could order from whatever menu we wanted but by that time we were so annoyed with the waiter and the resturant that we let and went some place else.,manager,4,11,neutral,restaurant,test,neutral,neutral,compensation for poor service,"Implicit opinion: Negative
+
+The manager's offer of menu choice does not compensate for the poor service experience, indicating the manager's attempt at compensation is seen as insufficient or insincere, leading to a negative implicit opinion.","Sentiment polarity: Negative  
+Sentiment cue: Implicit",Negative,negative,"error_type=missed_implicit_negative
+label=negative
+confidence=high",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True,negative,train_calibrated_use_thor,thor,direct_prediction=neutral|error_type=missed_implicit_negative|diagnostic_confidence=high|domain=restaurant,True,False,loss_vs_direct
+687,33060905#1138585#2,then she made a fuss about not being able to add 1 or 2 chairs on either end of the table for additional people.,table,84,89,neutral,restaurant,test,neutral,neutral,end of the table,"Implicit opinion: Negative
+
+Explanation: The mention of ""not being able to add 1 or 2 chairs on either end of the table"" implies a limitation or inconvenience related to the table's current setup, suggesting dissatisfaction with its arrangement or size.",Sentiment polarity: Negative (Implicit),Negative,negative,"error_type=missed_implicit_negative
+label=negative
+confidence=high",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True,negative,train_calibrated_use_thor,thor,direct_prediction=neutral|error_type=missed_implicit_negative|diagnostic_confidence=high|domain=restaurant,True,False,loss_vs_direct

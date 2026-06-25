@@ -1,0 +1,15 @@
+Final pipeline qualitative summary
+source_file: results\etc_thor_originalish_sc3_selected_isa_predictions.csv
+selected_examples: 14
+
+test split comparison counts
+gain_vs_direct: 26
+loss_vs_direct: 6
+both_correct: 294
+both_wrong: 116
+
+selected examples by group
+gain_vs_direct: 8
+loss_vs_direct: 6
+both_correct: 0
+both_wrong: 0

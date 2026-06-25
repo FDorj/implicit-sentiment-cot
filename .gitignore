@@ -6,7 +6,13 @@ env/
 external/
 data/raw/
 logs/
+.test_tmp/
 results/*
 !results/.gitkeep
 !results/*_metrics.txt
 !results/*_predictions.csv
+!results/final_results_table.csv
+!results/final_results_table.md
+!results/final_pipeline_validation.txt
+!results/final_qualitative_examples.csv
+!results/final_qualitative_summary.txt

@@ -1,0 +1,22 @@
+method,split,n_total,n_eval,unknown_labels,accuracy,macro_f1,prediction_column,source_file,note
+Direct Qwen3 8B,overall,2188,2188,0,0.6572212065813529,0.6608067665295667,prediction,results\direct_isa_predictions.csv,Zero-shot direct prompt baseline.
+Direct Qwen3 8B,train,1746,1746,0,0.6517754868270332,0.6540048368707801,prediction,results\direct_isa_predictions.csv,Zero-shot direct prompt baseline.
+Direct Qwen3 8B,test,442,442,0,0.6787330316742082,0.6740747626200371,prediction,results\direct_isa_predictions.csv,Zero-shot direct prompt baseline.
+THOR simplified,overall,2188,2188,0,0.5859232175502742,0.5881269363427513,prediction,results\thor_isa_predictions.csv,Four-step THOR-style decomposition.
+THOR simplified,train,1746,1746,0,0.5824742268041238,0.5866606219599076,prediction,results\thor_isa_predictions.csv,Four-step THOR-style decomposition.
+THOR simplified,test,442,442,0,0.5995475113122172,0.5784372941501456,prediction,results\thor_isa_predictions.csv,Four-step THOR-style decomposition.
+Simple reflection,overall,2188,2188,0,0.6005484460694699,0.6051008416748539,reflection_prediction,results\simple_reflection_isa_predictions.csv,One-pass review over simplified THOR trace.
+Simple reflection,train,1746,1746,0,0.5967926689576174,0.6017543808481932,reflection_prediction,results\simple_reflection_isa_predictions.csv,One-pass review over simplified THOR trace.
+Simple reflection,test,442,442,0,0.6153846153846154,0.6067319211097464,reflection_prediction,results\simple_reflection_isa_predictions.csv,One-pass review over simplified THOR trace.
+ETC standard,overall,2188,2188,0,0.6503656307129799,0.6538896158422585,controller_prediction,results\etc_isa_predictions.csv,Error-type reflection and rule-based controller over simplified THOR.
+ETC standard,train,1746,1746,0,0.647766323024055,0.6490204544272643,controller_prediction,results\etc_isa_predictions.csv,Error-type reflection and rule-based controller over simplified THOR.
+ETC standard,test,442,442,0,0.6606334841628959,0.6594297020255985,controller_prediction,results\etc_isa_predictions.csv,Error-type reflection and rule-based controller over simplified THOR.
+THOR original-ish SC3,overall,2188,2188,0,0.6124314442413162,0.6154454771234353,prediction,results\thor_originalish_sc3_isa_predictions.csv,Original-ish THOR prompts with three self-consistency samples.
+THOR original-ish SC3,train,1746,1746,0,0.6179839633447881,0.6173350996943391,prediction,results\thor_originalish_sc3_isa_predictions.csv,Original-ish THOR prompts with three self-consistency samples.
+THOR original-ish SC3,test,442,442,0,0.5904977375565611,0.6006901730130755,prediction,results\thor_originalish_sc3_isa_predictions.csv,Original-ish THOR prompts with three self-consistency samples.
+ETC over original-ish SC3,overall,2188,2188,0,0.643510054844607,0.6458317677390221,controller_prediction,results\etc_thor_originalish_sc3_isa_predictions.csv,Error-type reflection and controller over THOR original-ish SC3.
+ETC over original-ish SC3,train,1746,1746,0,0.6391752577319587,0.6378968162733677,controller_prediction,results\etc_thor_originalish_sc3_isa_predictions.csv,Error-type reflection and controller over THOR original-ish SC3.
+ETC over original-ish SC3,test,442,442,0,0.6606334841628959,0.6621076963593117,controller_prediction,results\etc_thor_originalish_sc3_isa_predictions.csv,Error-type reflection and controller over THOR original-ish SC3.
+Final selected pipeline,overall,2188,2188,0,0.6809872029250457,0.6838288181460422,selected_prediction,results\etc_thor_originalish_sc3_selected_isa_predictions.csv,"Train-calibrated source selection over direct, THOR original-ish SC3, and diagnostic signals."
+Final selected pipeline,train,1746,1746,0,0.6701030927835051,0.6715238720944575,selected_prediction,results\etc_thor_originalish_sc3_selected_isa_predictions.csv,"Train-calibrated source selection over direct, THOR original-ish SC3, and diagnostic signals."
+Final selected pipeline,test,442,442,0,0.7239819004524887,0.7192041747124914,selected_prediction,results\etc_thor_originalish_sc3_selected_isa_predictions.csv,"Train-calibrated source selection over direct, THOR original-ish SC3, and diagnostic signals."
