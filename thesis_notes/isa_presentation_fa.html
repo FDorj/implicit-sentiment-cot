@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISA Presentation</title>
+  <style>
+    :root {
+      --bg: #f6f0e6;
+      --paper: #fffdf8;
+      --ink: #1f2937;
+      --muted: #5b6472;
+      --teal: #0f766e;
+      --blue: #1d4ed8;
+      --orange: #c2410c;
+      --line: rgba(31, 41, 55, 0.1);
+      --shadow: 0 18px 40px rgba(31, 41, 55, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: Vazirmatn, "Segoe UI", Tahoma, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(15,118,110,0.12), transparent 24%),
+        radial-gradient(circle at left 20%, rgba(29,78,216,0.1), transparent 20%),
+        linear-gradient(180deg, #f8f5ef 0%, #efe7da 100%);
+      color: var(--ink);
+      padding: 24px 24px 90px;
+    }
+
+    .deck { max-width: 1280px; margin: 0 auto; }
+    .slide {
+      display: none;
+      min-height: calc(100vh - 120px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(253,250,244,0.96));
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 36px 40px 84px;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide.active { display: block; }
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(15,118,110,0.08);
+      color: var(--teal);
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+    }
+    h1, h2, h3 { margin: 0; line-height: 1.15; }
+    h1 { font-size: clamp(2.1rem, 5vw, 4.2rem); }
+    h2 { font-size: clamp(1.8rem, 3vw, 2.7rem); margin-bottom: 18px; }
+    h3 { font-size: 1.08rem; color: var(--muted); margin-bottom: 8px; }
+    p { line-height: 1.7; font-size: 1.04rem; margin: 0 0 14px; }
+    ul { margin: 8px 0 0; padding-right: 20px; line-height: 1.7; }
+    .lead { font-size: 1.16rem; color: #263142; }
+    .muted { color: var(--muted); }
+    .accent { color: var(--teal); font-weight: 800; }
+    .warn { color: var(--orange); font-weight: 800; }
+    .blue { color: var(--blue); font-weight: 800; }
+
+    .grid-2, .grid-3, .grid-4, .flow {
+      display: grid;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .grid-2 { grid-template-columns: 1.15fr 0.85fr; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .flow { grid-template-columns: repeat(5, 1fr); }
+
+    .card, .metric, .step {
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(31, 41, 55, 0.08);
+      border-radius: 22px;
+      padding: 16px 18px;
+    }
+    .metric strong {
+      display: block;
+      font-size: 2rem;
+      color: var(--teal);
+      margin-top: 8px;
+    }
+    .step strong, .card strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+    .big {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--teal);
+      line-height: 1;
+      margin: 6px 0 8px;
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .pill {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(29,78,216,0.08);
+      color: var(--blue);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+    .note {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-right: 4px solid var(--teal);
+      border-radius: 16px;
+      background: rgba(15,118,110,0.08);
+    }
+    .sample {
+      margin-top: 12px;
+      font-size: 0.94rem;
+      line-height: 1.75;
+      color: #263142;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    th, td {
+      text-align: right;
+      padding: 11px 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.08);
+      font-size: 0.96rem;
+    }
+    th {
+      background: rgba(15,118,110,0.08);
+      font-weight: 800;
+    }
+    tr:last-child td { border-bottom: none; }
+
+    .footer {
+      position: absolute;
+      right: 40px;
+      left: 40px;
+      bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .nav {
+      position: fixed;
+      left: 24px;
+      right: 24px;
+      bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,253,248,0.9);
+      border: 1px solid rgba(31,41,55,0.08);
+      border-radius: 999px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 20px rgba(31,41,55,0.08);
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      background: var(--ink);
+      color: white;
+      padding: 10px 15px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    @media (max-width: 1100px) {
+      .grid-2, .grid-3, .grid-4, .flow { grid-template-columns: 1fr; }
+      .slide { min-height: auto; padding: 28px 22px 84px; }
+      .footer { right: 22px; left: 22px; }
+    }
+    @media print {
+      body { background: white; padding: 0; }
+      .slide {
+        display: block !important;
+        min-height: auto;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        page-break-after: always;
+        padding: 22px 24px 44px;
+      }
+      .nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <section class="slide active">
+      <div class="eyebrow">Undergraduate Thesis Presentation</div>
+      <div class="grid-2">
+        <div>
+          <h1>توسعه یک سیستم برای تحلیل احساس ضمنی با استدلال چندمرحله‌ای</h1>
+          <p class="lead">
+            Development of a System for Implicit Sentiment Analysis Using Multi-Step Chain-of-Thought Reasoning
+          </p>
+          <div class="pills">
+            <span class="pill">SemEval 2014</span>
+            <span class="pill">ISA</span>
+            <span class="pill">THOR + Reflection + Controller</span>
+          </div>
+          <div class="note">
+            خلاصه مسیر پروژه از داده تا بهترین نتیجه فعلی
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="metric">
+            ISA-clean
+            <strong>2188</strong>
+            <span class="muted">نمونه نهایی</span>
+          </div>
+          <div class="metric">
+            Baseline
+            <strong>0.6608</strong>
+            <span class="muted">Macro-F1</span>
+          </div>
+          <div class="metric">
+            Best Local
+            <strong>0.6838</strong>
+            <span class="muted">Macro-F1</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>ارائه روند کامل پروژه</span><span>اسلاید 1</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">مسئله و هدف</div>
+      <h2>هدف پروژه چه بود؟</h2>
+      <div class="grid-2">
+        <div class="card">
+          <p class="lead">
+            آیا reasoning چندمرحله‌ای همراه با reflection و controller از direct baseline بهتر می‌شود؟
+          </p>
+          <ul>
+            <li>ساخت dataset تمیز</li>
+            <li>ساخت direct baseline</li>
+            <li>پیاده‌سازی THOR</li>
+            <li>reflection + controller + policy</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>فرض اولیه</strong>
+          <p>THOR را از قبل بهتر فرض نکردم؛ با آزمایش و تحلیل خطا جلو رفتم.</p>
+          <div class="note">
+            سوال اصلی: reasoning به‌تنهایی کافی است یا به controller نیاز دارد؟
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Focus: research question</span><span>اسلاید 2</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">داده و آماده‌سازی</div>
+      <h2>داده‌ها را چگونه ساختم؟</h2>
+      <div class="grid-4">
+        <div class="metric">کل clean<strong>7673</strong><span class="muted">aspect-level rows</span></div>
+        <div class="metric">ISA-only<strong>2188</strong><span class="muted">فقط implicit</span></div>
+        <div class="metric">Train<strong>1746</strong><span class="muted">برای calibration</span></div>
+        <div class="metric">Test<strong>442</strong><span class="muted">برای ارزیابی نهایی</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <strong>فرآیند آماده‌سازی</strong>
+          <ul>
+            <li>parse XMLهای SCAPT</li>
+            <li>استخراج target و polarity و implicit flag</li>
+            <li>ساخت نسخه clean و ISA-only clean</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>مثال از داده</strong>
+          <div class="sample">
+            Sentence: <span class="blue">Purchased a Toshiba Lap top it worked good until just after the warrenty went out.</span><br />
+            Target: <span class="accent">warrenty</span><br />
+            Gold label: <span class="warn">negative</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Core file: src/data_loader.py</span><span>اسلاید 3</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">نقشه مسیر</div>
+      <h2>معماری‌ای که در طول پروژه شکل گرفت</h2>
+      <div class="flow">
+        <div class="step"><strong>1. Direct</strong>sentence + target<p class="muted">پیش‌بینی مستقیم</p></div>
+        <div class="step"><strong>2. THOR</strong>aspect → opinion → reasoning → label<p class="muted">pipeline چندمرحله‌ای</p></div>
+        <div class="step"><strong>3. Reflection</strong>simple یا error-type aware<p class="muted">بازبینی trace</p></div>
+        <div class="step"><strong>4. Controller</strong>error type + confidence + fallback<p class="muted">تصمیم نهایی</p></div>
+        <div class="step"><strong>5. Selected Policy</strong>direct / thor / diagnostic<p class="muted">انتخاب source</p></div>
+      </div>
+      <div class="grid-3">
+        <div class="card"><strong>Mar 28 - Mar 31</strong>اسکلت پروژه + parser + baseline</div>
+        <div class="card"><strong>Apr 03 - Apr 17</strong>THOR + reflection + ETC</div>
+        <div class="card"><strong>Apr 24 - Jun 06</strong>original-ish + SC3 + selected policy</div>
+      </div>
+      <div class="footer"><span>From baseline to policy selection</span><span>اسلاید 4</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Baseline</div>
+      <h2>خط مبنا: Direct Prompting</h2>
+      <div class="grid-2">
+        <div class="card">
+          <strong>ورودی و منطق</strong>
+          <ul>
+            <li>ورودی: فقط sentence و target</li>
+            <li>خروجی: positive / negative / neutral</li>
+          </ul>
+          <div class="sample">
+            Sentence: <span class="blue">Going to bring it to service today.</span><br />
+            Target: <span class="accent">service</span> | Gold: <span class="warn">neutral</span> | Direct: <span class="blue">positive</span>
+          </div>
+        </div>
+        <div class="card">
+          <strong>نتیجه</strong>
+          <div class="big">0.6608</div>
+          <p>Macro-F1</p>
+          <table>
+            <thead><tr><th>شاخص</th><th>مقدار</th></tr></thead>
+            <tbody>
+              <tr><td>Accuracy</td><td>0.657221</td></tr>
+              <tr><td>Macro-F1</td><td>0.660807</td></tr>
+              <tr><td>Backend</td><td>qwen3:8b via Ollama</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="note">
+        direct baseline قوی بود؛ پس هر روش جدید باید واقعاً بهبود می‌داد.
+      </div>
+      <div class="footer"><span>experiments/run_direct.py</span><span>اسلاید 5</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">THOR</div>
+      <h2>THOR: استدلال چندمرحله‌ای</h2>
+      <div class="grid-2">
+        <div class="card">
+          <strong>ساختار pipeline</strong>
+          <ul>
+            <li>aspect detection</li>
+            <li>opinion clue extraction</li>
+            <li>polarity reasoning generation</li>
+            <li>label conversion</li>
+          </ul>
+          <div class="sample">
+            Sentence: <span class="blue">I charge it at night and skip taking the cord with me because of the good battery life.</span><br />
+            Target: <span class="accent">cord</span><br />
+            Aspect = <span class="blue">battery life</span><br />
+            Opinion = <span class="blue">good battery life</span><br />
+            THOR = <span class="blue">positive</span> ، Gold = <span class="warn">neutral</span>
+          </div>
+        </div>
+        <div class="card">
+          <strong>نتیجه</strong>
+          <table>
+            <thead><tr><th>روش</th><th>Accuracy</th><th>Macro-F1</th></tr></thead>
+            <tbody>
+              <tr><td>Direct baseline</td><td>0.6572</td><td class="accent">0.6608</td></tr>
+              <tr><td>THOR simplified</td><td>0.5859</td><td class="warn">0.5881</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="note">
+        THOR trace قابل‌تفسیر داد، اما به‌خاطر propagation error از direct ضعیف‌تر شد.
+      </div>
+      <div class="footer"><span>src/thor_pipeline.py</span><span>اسلاید 6</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Error Analysis</div>
+      <h2>تحلیل خطا نشان داد مشکل فقط metric نبود</h2>
+      <div class="grid-4">
+        <div class="metric">هر دو درست<strong>976</strong><span class="muted">both_correct</span></div>
+        <div class="metric">direct درست، THOR غلط<strong>462</strong><span class="muted">افت واقعی THOR</span></div>
+        <div class="metric">THOR درست، direct غلط<strong>306</strong><span class="muted">موارد سودمند THOR</span></div>
+        <div class="metric">عدم‌توافق<strong>839</strong><span class="muted">38.35% کل داده</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <strong>نتیجه تحلیلی</strong>
+          <p>THOR فقط کمی ضعیف‌تر نبود؛ در خیلی از نمونه‌ها direct درست بود و THOR خراب می‌کرد.</p>
+        </div>
+        <div class="card">
+          <strong>خروجی تحلیل</strong>
+          <ul>
+            <li>reflection ساختاریافته لازم بود</li>
+            <li>تشخیص نوع خطا لازم بود</li>
+            <li>controller لازم بود</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>analyze_baseline_errors.py</span><span>اسلاید 7</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Reflection</div>
+      <h2>Simple Reflection کمی بهتر شد، ولی کافی نبود</h2>
+      <div class="grid-2">
+        <div class="card">
+          <strong>ایده</strong>
+          <p>مدل دوباره trace THOR را می‌دید و فقط یک label نهایی می‌داد.</p>
+          <ul>
+            <li>بدون error type</li>
+            <li>بدون controller</li>
+          </ul>
+          <div class="sample">
+            Sentence: <span class="blue">HOW DOES THE POWER SUPPLY NOT WORK!!!</span><br />
+            Target: <span class="accent">POWER SUPPLY</span><br />
+            THOR: <span class="blue">neutral</span> → Reflection: <span class="warn">negative</span>
+          </div>
+        </div>
+        <div class="card">
+          <strong>نتیجه</strong>
+          <div class="big">0.6051</div>
+          <p>Macro-F1</p>
+          <p>فقط <span class="blue">74</span> بار خروجی THOR را عوض کرد.</p>
+        </div>
+      </div>
+      <div class="note">
+        reflection ساده کمک کرد، ولی هنوز محافظه‌کار بود.
+      </div>
+      <div class="footer"><span>SimpleReflectionPipeline</span><span>اسلاید 8</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">ETC-ISA</div>
+      <h2>Reflection آگاه از نوع خطا + Controller</h2>
+      <div class="grid-2">
+        <div class="card">
+          <strong>خروجی reflection ساختاریافته</strong>
+          <p>`error_type=...`</p>
+          <p>`label=...`</p>
+          <p>`confidence=...`</p>
+          <div class="sample">
+            Sentence: <span class="blue">I love Windows 7 which is a vast improvment over Vista.</span><br />
+            Target: <span class="accent">Vista</span><br />
+            Error type: <span class="warn">missed_implicit_negative</span><br />
+            Confidence: <span class="blue">medium</span> → Controller: <span class="warn">negative</span>
+          </div>
+        </div>
+        <div class="card">
+          <strong>نتیجه</strong>
+          <table>
+            <thead><tr><th>روش</th><th>Macro-F1</th></tr></thead>
+            <tbody>
+              <tr><td>THOR simplified</td><td>0.5881</td></tr>
+              <tr><td>Simple reflection</td><td>0.6051</td></tr>
+              <tr><td>ETC-ISA</td><td class="accent">0.6539</td></tr>
+              <tr><td>Direct baseline</td><td>0.6608</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="metric">Triggered<strong>839</strong><span class="muted">diagnostic اجرا شد</span></div>
+        <div class="metric">Fixed by ETC<strong>421</strong><span class="muted">نسبت به THOR</span></div>
+        <div class="metric">Broken by ETC<strong>280</strong><span class="muted">over-correction</span></div>
+        <div class="metric">Confidence<strong>3 Level</strong><span class="muted">low / medium / high</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <strong>Correctable error types</strong>
+          <ul>
+            <li><code>missed_implicit_negative</code>: cue منفی ضمنی جا افتاده</li>
+            <li><code>missed_implicit_positive</code>: cue مثبت ضمنی جا افتاده</li>
+            <li><code>neutral_overinterpretation</code>: مورد خنثی، احساسی تفسیر شده</li>
+            <li><code>target_scope_shift</code>: reasoning از target اصلی منحرف شده</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>Other error types</strong>
+          <ul>
+            <li><code>aspect_opinion_mismatch</code>: aspect یا opinion با target align نیست</li>
+            <li><code>reasoning_label_inconsistency</code>: reasoning و label با هم نمی‌خوانند</li>
+            <li><code>no_error</code>: reflection می‌گوید THOR خطای خاصی ندارد</li>
+            <li><code>insufficient_evidence</code>: evidence برای override کافی نیست</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note">
+        `confidence` در این پروژه عددی نیست. مدل یکی از `low / medium / high` را می‌دهد؛ کد فقط آن را می‌خواند، نرمال می‌کند، و اگر از threshold بالاتر بود اصلاح را می‌پذیرد.
+      </div>
+      <div class="footer"><span>run_error_type_controller.py</span><span>اسلاید 9</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Policy Design</div>
+      <h2>Selected Policy دقیقا چیست؟</h2>
+      <div class="grid-2">
+        <div class="card">
+          <strong>تعریف خیلی ساده</strong>
+          <p>
+            Selected Policy یک لایه تصمیم‌گیری نهایی است که برای هر نمونه انتخاب می‌کند از کدام خروجی استفاده شود:
+          </p>
+          <ul>
+            <li><code>direct_prediction</code></li>
+            <li><code>thor_prediction</code></li>
+            <li><code>diagnostic_label</code></li>
+          </ul>
+          <div class="sample">
+            یعنی به‌جای اینکه همیشه direct یا همیشه THOR را نگه دارم، برای هر profile تصمیم می‌گیرم <span class="accent">به کدام source اعتماد کنم</span>.
+          </div>
+        </div>
+        <div class="card">
+          <strong>فرق با controller</strong>
+          <ul>
+            <li>controller می‌گوید آیا diagnostic را قبول کنیم یا نه</li>
+            <li>selected policy یک مرحله جلوتر می‌رود و source نهایی را انتخاب می‌کند</li>
+            <li>پس selected policy روی خروجی‌های آماده‌شده تصمیم نهایی می‌گیرد</li>
+          </ul>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="step"><strong>1. ورودی</strong>direct + THOR + diagnostic</div>
+        <div class="step"><strong>2. قانون انتخاب</strong>rule-based یا train-calibrated</div>
+        <div class="step"><strong>3. خروجی</strong>یک prediction نهایی از بین سه source</div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <strong>نسخه commit‌شده</strong>
+          <p>بهترین rule-based policy روی ETC استاندارد</p>
+          <div class="big">0.6634</div>
+          <p>Selected manual policy</p>
+        </div>
+        <div class="card">
+          <strong>نسخه local جدید</strong>
+          <p>policy روی train یاد می‌گیرد در هر profile کدام source بهتر است: direct / thor / diagnostic</p>
+          <div class="big">0.6693</div>
+          <p>Selected train-calibrated روی ETC استاندارد</p>
+        </div>
+      </div>
+      <div class="note">
+        Sentence: <span class="blue">although its windows vista compared to windows xp sucks.</span><br />
+        Target: <span class="accent">windows xp</span><br />
+        direct = <span class="blue">neutral</span> | THOR = <span class="blue">negative</span> | diagnostic = <span class="blue">positive</span><br />
+        Selected source = <span class="accent">diagnostic</span> → Final = <span class="accent">positive</span>
+      </div>
+      <div class="footer"><span>ablate_etc_policies.py + apply_etc_policy.py</span><span>اسلاید 10</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Latest Branch</div>
+      <h2>THOR original-ish + SC3 + Selected Policy</h2>
+      <table>
+        <thead>
+          <tr><th>مرحله</th><th>Accuracy</th><th>Macro-F1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Direct baseline</td><td>0.6572</td><td>0.6608</td></tr>
+          <tr><td>THOR original-ish SC3</td><td>0.6124</td><td>0.6154</td></tr>
+          <tr><td>ETC روی THOR original-ish SC3</td><td>0.6435</td><td>0.6458</td></tr>
+          <tr><td class="accent">Selected train-calibrated روی ETC حاصل از THOR original-ish SC3</td><td class="accent">0.6810</td><td class="accent">0.6838</td></tr>
+        </tbody>
+      </table>
+      <div class="grid-3">
+        <div class="card"><strong>بهبود نسبت به baseline</strong><div class="big" style="font-size:2.2rem;">+0.0230</div><p>بهبود Macro-F1 نسبت به direct</p></div>
+        <div class="card"><strong>رفتار policy</strong><p><span class="blue">90</span> gain در برابر <span class="warn">38</span> loss</p><p>فقط 150 تغییر نسبت به direct</p></div>
+        <div class="card"><strong>sourceهای انتخاب‌شده</strong><p>direct: 1566</p><p>thor: 621</p><p>diagnostic: 1</p></div>
+      </div>
+      <div class="note">
+        Sentence: <span class="blue">Going to bring it to service today.</span><br />
+        Target: <span class="accent">service</span> | Direct: <span class="blue">positive</span> | Selected source: <span class="blue">thor</span> | Final: <span class="accent">neutral</span>
+      </div>
+      <div class="footer"><span>Latest local result on 2026-06-06</span><span>اسلاید 11</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">جمع‌بندی</div>
+      <h2>پیام اصلی پروژه</h2>
+      <div class="grid-2">
+        <div class="card">
+          <strong>Contributionها</strong>
+          <ul>
+            <li>dataset clean برای ISA</li>
+            <li>direct baseline و THOR</li>
+            <li>reflection و controller</li>
+            <li>selected policy داده‌محور</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>جمع‌بندی علمی</strong>
+          <p class="lead">
+            reasoning چندمرحله‌ای در ISA وقتی جواب می‌دهد که با <span class="accent">تحلیل خطا</span> و <span class="accent">policy selection</span> همراه شود.
+          </p>
+        </div>
+      </div>
+      <div class="footer"><span>پایان ارائه</span><span>اسلاید 12</span></div>
+    </section>
+  </div>
+  <div class="nav">
+    <div class="navbox"><span id="counter">1 / 1</span></div>
+    <div class="navbox">
+      <button id="prevBtn" type="button">قبلی</button>
+      <button id="nextBtn" type="button">بعدی</button>
+    </div>
+  </div>
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const counter = document.getElementById('counter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let current = 0;
+    function paint(index) {
+      const all = Array.from(document.querySelectorAll('.slide'));
+      current = Math.max(0, Math.min(index, all.length - 1));
+      all.forEach((slide, i) => slide.classList.toggle('active', i === current));
+      counter.textContent = `${current + 1} / ${all.length}`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === all.length - 1;
+      history.replaceState(null, '', `#slide-${current + 1}`);
+    }
+    prevBtn.addEventListener('click', () => paint(current - 1));
+    nextBtn.addEventListener('click', () => paint(current + 1));
+    document.addEventListener('keydown', (e) => {
+      if (['ArrowLeft', 'PageDown', ' ', 'ArrowDown'].includes(e.key)) { e.preventDefault(); paint(current + 1); }
+      if (['ArrowRight', 'PageUp', 'Backspace', 'ArrowUp'].includes(e.key)) { e.preventDefault(); paint(current - 1); }
+      if (e.key === 'Home') { e.preventDefault(); paint(0); }
+      if (e.key === 'End') { e.preventDefault(); paint(Array.from(document.querySelectorAll('.slide')).length - 1); }
+    });
+    const hash = window.location.hash.match(/slide-(\d+)/);
+    paint(hash ? Number(hash[1]) - 1 : 0);
+  </script>
+</body>
+</html>
