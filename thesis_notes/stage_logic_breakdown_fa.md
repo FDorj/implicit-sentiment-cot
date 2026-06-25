@@ -190,7 +190,7 @@ THOR هر نمونه را در 4 گام پردازش می‌کند:
 - THOR prediction: `positive`
 - اینجا THOR از target فاصله گرفته و sentiment مربوط به `battery life` را به `cord` نسبت داده است.
 
-## مرحله 4: تحلیل خطای direct در برابر THOR
+## مرحله 4: مقایسه خطای Direct و THOR
 
 ### فایل‌های اصلی
 
@@ -215,7 +215,7 @@ THOR هر نمونه را در 4 گام پردازش می‌کند:
 
 ### هدف
 
-- بفهمیم آیا THOR واقعاً کمک کرده یا فقط trace ساخته است.
+- بفهمیم THOR در چه مواردی به تصمیم بهتر کمک کرده و در چه مواردی فقط trace reasoning تولید کرده است.
 - بفهمیم disagreementها کجا هستند.
 
 ### نکته منطقی مهم
@@ -451,8 +451,8 @@ controller یک لایه تصمیم‌گیری rule-based است.
 
 1. direct، THOR و ETC merge می‌شوند.
 2. بررسی می‌شود ETC نسبت به THOR:
-   - کجا fix کرده
-   - کجا خراب کرده
+   - کجا باعث اصلاح پیش‌بینی شده
+   - کجا باعث افت تصمیم شده
    - کجا بدون تغییر مانده
 
 ### هدف
@@ -611,7 +611,7 @@ controller یک لایه تصمیم‌گیری rule-based است.
 - Diagnostic: `neutral`
 - ETC output: `positive`
 - Controller decision: `fallback_use_direct`
-- این نمونه نشان می‌دهد ETC روی backbone جدید هم هنوز می‌تواند به fallback نامناسب برگردد.
+- این نمونه نشان می‌دهد ETC روی backbone جدید هم در بعضی profileها ممکن است به fallback کم‌دقت‌تر برگردد.
 
 ## مرحله 16: selected train-calibrated policy
 
