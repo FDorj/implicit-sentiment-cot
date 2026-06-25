@@ -1,0 +1,72 @@
+id,source_sentence_id,sentence,target,from,to,polarity,domain,split,direct_raw_output,direct_prediction,aspect,opinion,polarity_reasoning,thor_raw_polarity_output,thor_prediction,diagnostic_raw_output,error_type,diagnostic_label,diagnostic_confidence,controller_prediction,controller_decision,diagnostic_triggered
+1,2339,I charge it at night and skip taking the cord with me because of the good battery life.,cord,41,45,neutral,laptop,train,negative,negative,portability,"Implicit opinion: Positive
+
+The speaker mentions skipping the cord due to good battery life, implying the device's cordless design enhances portability, thus expressing a positive sentiment toward the absence of a cord as it supports portability.","Sentiment polarity: Negative (Implicit)  
+Sentiment cue: ""skip taking the cord with me"" implies the speaker prefers not to use the cord, suggesting a negative sentiment toward the cord.",Negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
+3,1316,"The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the ""sales"" team, which is the retail shop which I bought my netbook from.",service center,27,41,negative,laptop,train,negative,negative,service center exchange policy,"Implicit opinion: Negative
+
+The speaker expresses dissatisfaction with the service center's policy, as it does not allow a 1-to-1 exchange, which implies frustration or disappointment with the service center's handling of the issue.",Sentiment polarity: Negative (Implicit),Negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
+4,1316,"The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the ""sales"" team, which is the retail shop which I bought my netbook from.","""sales"" team",109,121,negative,laptop,train,negative,negative,sales team,"Implicit opinion: Negative
+
+The speaker expresses frustration with the ""sales"" team, implying they are unhelpful and not equipped to resolve the issue, as the tech support redirected the concern to them. This suggests a negative implicit opinion towards the ""sales"" team.",Sentiment polarity: Negative (Implicit),Negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
+5,1316,"The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the ""sales"" team, which is the retail shop which I bought my netbook from.",tech guy,4,12,neutral,laptop,train,neutral,neutral,role,"Implicit opinion: Negative
+
+The ""tech guy"" is portrayed as dismissive and unhelpful by directing the customer's concern to the ""sales"" team, implying a lack of support and responsibility. This behavior suggests a negative implicit opinion towards the ""tech guy"" regarding his role.",Negative (Implicit),Negative,negative,"error_type=missed_implicit_negative
+label=negative
+confidence=high",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True
+11,76,"I even got my teenage son one, because of the features that it offers, like, iChat, Photobooth, garage band and more!",features,46,54,positive,laptop,train,positive,positive,"ichat, photobooth, garage band","Implicit opinion: Positive
+
+The speaker mentions the features (iChat, Photobooth, Garage Band) as reasons for purchasing the product, implying these features were seen as valuable and worth the purchase.","Sentiment polarity: Positive  
+Sentiment cue: Implicit",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
+12,76,"I even got my teenage son one, because of the features that it offers, like, iChat, Photobooth, garage band and more!",iChat,77,82,positive,laptop,train,positive,positive,ichats features,"Implicit opinion: Positive
+
+The speaker mentions ""iChat"" as one of the appealing features, suggesting they value its functionality and are willing to purchase the product for it, indicating a positive view towards iChat's features.",Positive (Implicit),Positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
+13,76,"I even got my teenage son one, because of the features that it offers, like, iChat, Photobooth, garage band and more!",Photobooth,84,94,positive,laptop,train,positive,positive,photobooth feature,"Implicit opinion: Positive
+
+The speaker mentions ""Photobooth"" as one of the appealing features, implying they find it valuable or enjoyable, which suggests a positive opinion toward the Photobooth feature.",Positive (Implicit),Positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
+14,76,"I even got my teenage son one, because of the features that it offers, like, iChat, Photobooth, garage band and more!",garage band,96,107,positive,laptop,train,positive,positive,feature set,"Implicit opinion: Positive
+
+The mention of ""garage band"" as one of the features included in the purchase implies a positive opinion, as it is presented as an appealing and noteworthy feature that influenced the decision to buy the product.",Positive (Implicit),Positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
+20,1630,I took it back for an Asus and same thing- blue screen which required me to remove the battery to reset.,battery,87,94,neutral,laptop,train,negative,negative,battery removal to reset,"Implicit opinion: Negative
+
+The speaker had to remove the battery to reset the device, implying that the battery's presence was causing a persistent issue (blue screen), which suggests dissatisfaction with the battery's performance or reliability.","Sentiment polarity: Negative (Implicit)  
+Sentiment cue: ""remove the battery to reset"" implies dissatisfaction with battery performance.",Negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
+22,38,"In the shop, these MacBooks are encased in a soft rubber enclosure - so you will never know about the razor edge until you buy it, get it home, break the seal and use it (very clever con).",edge,108,112,negative,laptop,train,negative,negative,edge design,"Implicit opinion: Negative
+
+The mention of the ""razor edge"" as something that is only revealed after purchasing, breaking the seal, and using the product implies that the edge design is potentially harmful or uncomfortable, suggesting a negative opinion towards the aspect of ""edge.""",Negative (Implicit),Negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
+23,337,"However, the multi-touch gestures and large tracking area make having an external mouse unnecessary (unless you're gaming).",multi-touch gestures,13,33,positive,laptop,train,positive,positive,multi-touch gestures functionality,"Implicit opinion: Positive
+
+The sentence suggests that multi-touch gestures and the large tracking area reduce the need for an external mouse, implying that these features are effective and convenient, thus expressing a positive opinion toward the functionality of multi-touch gestures.",Positive (Implicit),Positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
+24,337,"However, the multi-touch gestures and large tracking area make having an external mouse unnecessary (unless you're gaming).",tracking area,44,57,positive,laptop,train,positive,positive,tracking area size,"Implicit opinion: Positive
+
+The sentence suggests that a large tracking area reduces the need for an external mouse, implying that a larger tracking area is a beneficial feature.","Sentiment polarity: Positive  
+Sentiment cue: Implicit",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
+26,337,"However, the multi-touch gestures and large tracking area make having an external mouse unnecessary (unless you're gaming).",gaming,115,121,neutral,laptop,train,neutral,neutral,general,"Implicit opinion: Negative
+
+Explanation: The sentence implies that an external mouse is unnecessary for general use, but it specifically notes that one is needed ""unless you're gaming,"" suggesting that gaming may require an external mouse, thereby implying a negative view of relying on touch gestures for gaming.",Sentiment polarity: Negative (Implicit),Negative,negative,"error_type=missed_implicit_negative
+label=negative
+confidence=high",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True
+32,743,When I finally had everything running with all my software installed I plugged in my droid to recharge and the system crashed.,software,50,58,neutral,laptop,train,neutral,neutral,general,no sentiment evidence,"Sentiment polarity: Neutral  
+Sentiment cue: None (no sentiment evidence)",neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
+34,2587,"One suggestion I do have, is to not bother getting Microsoft office for the mac expecting it will work just like you knew it to on a PC.",Microsoft office for the mac,51,79,negative,laptop,train,negative,negative,user interface,"Implicit opinion: Negative
+
+The speaker implies that Microsoft Office for the Mac does not function as expected, suggesting dissatisfaction with its user interface compared to the PC version. The statement implies that the user interface is not intuitive or behaves differently from what the user anticipated.","Sentiment polarity: Negative  
+Sentiment cue: Implicit",Negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
+36,2227,"I also got the added bonus of a 30"" HD Monitor, which really helps to extend my screen and keep my eyes fresh!","30"" HD Monitor",32,46,positive,laptop,train,positive,positive,screen size,"Implicit opinion: Positive
+
+The speaker mentions the ""30"" HD Monitor as a bonus and states it ""really helps to extend my screen and keep my eyes fresh,"" indicating a positive sentiment towards the screen size and its benefits.",Positive (Implicit),Positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
+45,1254,"After numerous attempts of trying (including setting the clock in BIOS setup directly), I gave up(I am a techie).",clock in BIOS setup,57,76,negative,laptop,train,negative,negative,clock setting,"Implicit opinion: Negative
+
+The speaker expresses frustration and resignation after multiple failed attempts to set the clock in BIOS setup, indicating a negative opinion towards the difficulty and ineffectiveness of the process.","Sentiment polarity: Negative  
+Sentiment cue: Implicit (frustration, resignation, difficulty)",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
+48,839,I sent it back to Toshiba twice they covered it under the  warranty.,warranty,59,67,positive,laptop,train,positive,positive,warranty coverage,"Implicit opinion: Positive
+
+The speaker implies that the warranty provided by Toshiba was effective, as the product was covered under warranty after being sent back twice, suggesting satisfaction with the warranty coverage.",Sentiment polarity: Positive (Implicit),Positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
+49,696,I was looking for a mac which is portable and has all the features that I was looking for.,features,58,66,positive,laptop,train,neutral,neutral,general,"Implicit opinion: No sentiment evidence
+
+The sentence states that the user was looking for a Mac with ""all the features that I was looking for,"" which is a factual description of a requirement, not an expression of positive or negative sentiment toward the features themselves. There is no explicit or implicit opinion conveyed about the features beyond stating they were desired.","Sentiment polarity: Neutral  
+Sentiment cue: Implicit (no sentiment evidence)",neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
+51,1425,"In desparation, I called their Customer Service number and was told that my warranty had expired (2 days old) and that the priviledge of talking to a technician would cost me (""have your credit card ready"").",Customer Service number,31,54,neutral,laptop,train,negative,negative,access cost,"Implicit opinion: Negative
+
+The mention of having to prepare a credit card for the privilege of talking to a technician implies an additional cost, which suggests a negative opinion towards the ""access cost"" associated with the Customer Service number.","Sentiment polarity: Negative  
+Sentiment cue: Implicit (mention of having to prepare a credit card for a ""privilege"" implies an additional cost)",Negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False

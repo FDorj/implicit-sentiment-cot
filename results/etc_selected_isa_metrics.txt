@@ -1,33 +1,76 @@
-ETC predictions: results\etc_isa_predictions.csv
-Output: results\etc_selected_isa_predictions.csv
-fallback_policy: direct
-trust_no_error_on_disagreement: False
-min_correctable_confidence: high
-accepted_error_types: missed_implicit_positive
+ETC predictions: results/etc_isa_predictions.csv
+Output: results/etc_selected_isa_predictions.csv
+policy_mode: train_calibrated
+train_split: train
+key_columns: direct_prediction,error_type,diagnostic_confidence,domain
+candidate_sources: direct,thor,diagnostic
+default_source: direct
 n_total: 2188
 n_eval: 2188
-accuracy: 0.659506
-macro_f1: 0.663444
+accuracy: 0.665905
+macro_f1: 0.669348
 
               precision    recall  f1-score   support
 
-    positive     0.6552    0.6683    0.6617       597
-    negative     0.6421    0.7884    0.7078       619
-     neutral     0.6789    0.5720    0.6209       972
+    positive     0.6485    0.6767    0.6623       597
+    negative     0.6846    0.7189    0.7013       619
+     neutral     0.6645    0.6255    0.6444       972
 
-    accuracy                         0.6595      2188
-   macro avg     0.6587    0.6762    0.6634      2188
-weighted avg     0.6620    0.6595    0.6566      2188
+    accuracy                         0.6659      2188
+   macro avg     0.6659    0.6737    0.6693      2188
+weighted avg     0.6658    0.6659    0.6654      2188
 
 
 train metrics
 n_total: 1746
 n_eval: 1746
-accuracy: 0.654066
-macro_f1: 0.656692
+accuracy: 0.658076
+macro_f1: 0.661585
 
 test metrics
 n_total: 442
 n_eval: 442
-accuracy: 0.680995
-macro_f1: 0.676798
+accuracy: 0.696833
+macro_f1: 0.687921
+
+domain metrics
+laptop: accuracy=0.690236, macro_f1=0.672327, n=891
+restaurant: accuracy=0.649190, macro_f1=0.647757, n=1297
+
+change summary vs direct/thor
+changed_vs_direct: 152
+changed_vs_thor: 687
+gain_vs_direct: 78
+loss_vs_direct: 59
+
+selected source counts
+selected_source
+direct        1811
+diagnostic     352
+thor            25
+
+learned policy
+direct_prediction=negative, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=negative, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=restaurant -> direct
+direct_prediction=negative, error_type=missed_implicit_negative, diagnostic_confidence=medium, domain=laptop -> direct
+direct_prediction=negative, error_type=missed_implicit_negative, diagnostic_confidence=medium, domain=restaurant -> direct
+direct_prediction=negative, error_type=missed_implicit_positive, diagnostic_confidence=high, domain=laptop -> thor
+direct_prediction=negative, error_type=missed_implicit_positive, diagnostic_confidence=high, domain=restaurant -> thor
+direct_prediction=negative, error_type=missed_implicit_positive, diagnostic_confidence=medium, domain=laptop -> direct
+direct_prediction=negative, error_type=missed_implicit_positive, diagnostic_confidence=medium, domain=restaurant -> direct
+direct_prediction=negative, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=negative, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> diagnostic
+direct_prediction=negative, error_type=no_error, diagnostic_confidence=medium, domain=laptop -> direct
+direct_prediction=neutral, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=neutral, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=restaurant -> thor
+direct_prediction=neutral, error_type=missed_implicit_negative, diagnostic_confidence=medium, domain=laptop -> direct
+direct_prediction=neutral, error_type=missed_implicit_negative, diagnostic_confidence=medium, domain=restaurant -> direct
+direct_prediction=neutral, error_type=missed_implicit_positive, diagnostic_confidence=high, domain=laptop -> thor
+direct_prediction=neutral, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=neutral, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct
+direct_prediction=positive, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=positive, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=restaurant -> direct
+direct_prediction=positive, error_type=missed_implicit_positive, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=positive, error_type=missed_implicit_positive, diagnostic_confidence=high, domain=restaurant -> direct
+direct_prediction=positive, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=positive, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct

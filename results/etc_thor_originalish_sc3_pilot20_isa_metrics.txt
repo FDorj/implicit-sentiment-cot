@@ -1,0 +1,24 @@
+Direct predictions: results\direct_isa_predictions.csv
+THOR predictions: results/thor_originalish_sc3_isa_predictions.csv
+Runtime: backend=ollama, model=qwen3:8b
+Output: results/etc_thor_originalish_sc3_pilot20_isa_predictions.csv
+trigger_policy: disagreement
+fallback_policy: direct
+trust_no_error_on_disagreement: False
+min_correctable_confidence: medium
+accepted_error_types: aspect_opinion_mismatch,missed_implicit_negative,missed_implicit_positive,neutral_overinterpretation,reasoning_label_inconsistency,target_scope_shift
+n_total: 20
+n_eval: 20
+n_diagnostic_triggered: 2
+accuracy: 0.700000
+macro_f1: 0.619281
+
+              precision    recall  f1-score   support
+
+    positive     1.0000    0.8889    0.9412         9
+    negative     0.5000    1.0000    0.6667         5
+     neutral     0.5000    0.1667    0.2500         6
+
+    accuracy                         0.7000        20
+   macro avg     0.6667    0.6852    0.6193        20
+weighted avg     0.7250    0.7000    0.6652        20
