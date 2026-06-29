@@ -265,6 +265,48 @@
       border-radius: 8px;
       background: #f8fafc;
     }
+    .system-flow {
+      display: grid;
+      grid-template-columns: 0.75fr 1.35fr 1.05fr 1fr 1.15fr 0.85fr;
+      gap: 10px;
+      align-items: stretch;
+      margin-top: 18px;
+      position: relative;
+      z-index: 1;
+    }
+    .system-stack { display: grid; gap: 10px; }
+    .system-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 13px;
+      background: #fbfcff;
+      min-height: 132px;
+      border-top: 5px solid var(--teal);
+    }
+    .system-card:nth-child(3) { border-top-color: var(--amber); }
+    .system-card:nth-child(4) { border-top-color: var(--rose); }
+    .system-card:nth-child(5) { border-top-color: var(--indigo); }
+    .system-card strong {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 0.95rem;
+    }
+    .system-card p {
+      font-size: 0.86rem;
+      line-height: 1.42;
+    }
+    .system-card.output {
+      background: rgba(21, 128, 61, 0.08);
+      border-top-color: var(--green);
+    }
+    .system-note {
+      margin-top: 14px;
+      padding: 13px 15px;
+    }
+    .system-note p {
+      font-size: 0.94rem;
+      line-height: 1.48;
+    }
 
     .bars {
       display: grid;
@@ -371,7 +413,7 @@
         min-height: calc(100vh - 96px);
         padding: 26px 20px 78px;
       }
-      .grid-2, .grid-3, .grid-4, .flow, .timeline, .pipeline {
+      .grid-2, .grid-3, .grid-4, .flow, .timeline, .pipeline, .system-flow {
         grid-template-columns: 1fr;
       }
       .arrow { min-height: 40px; }
@@ -663,18 +705,42 @@
 
     <section class="slide">
       <div class="eyebrow">سیستم نهایی</div>
-      <h2>Pipeline نهایی</h2>
-      <div class="pipeline">
-        <div class="stack">
-          <div class="node"><strong>Direct Qwen3 8B</strong><p>sentence + target -> direct label</p></div>
-          <div class="node"><strong>THOR original-ish SC3</strong><p>aspect + opinion + reasoning + voted label</p></div>
+      <h2>Pipeline نهایی: هر نمونه چطور به یک label می‌رسد؟</h2>
+      <div class="system-flow">
+        <div class="system-card">
+          <strong>Input</strong>
+          <p>sentence + target، همراه با split و domain برای evaluation و policy profile.</p>
         </div>
-        <div class="connector">disagreement و diagnostic context</div>
-        <div class="stack">
-          <div class="node"><strong>Error-Type Reflection</strong><p>error type، proposed label، confidence</p></div>
-          <div class="node"><strong>Controller</strong><p>تصمیم میانی rule-based</p></div>
-          <div class="node"><strong>Train-Calibrated Selection</strong><p>انتخاب direct، THOR یا diagnostic source</p></div>
+        <div class="system-stack">
+          <div class="system-card">
+            <strong>Direct Qwen3 8B</strong>
+            <p><code>direct_prediction</code> را تولید می‌کند: یک label صفرشات و مستقیم.</p>
+          </div>
+          <div class="system-card">
+            <strong>THOR original-ish SC3</strong>
+            <p><code>thor_prediction</code> را همراه aspect، opinion و reasoning trace تولید می‌کند.</p>
+          </div>
         </div>
+        <div class="system-card">
+          <strong>Error-Type Reflection</strong>
+          <p>disagreement و trace را می‌خواند و <code>error_type</code>، <code>diagnostic_label</code> و confidence می‌دهد.</p>
+        </div>
+        <div class="system-card">
+          <strong>Controller</strong>
+          <p>از Direct، THOR و diagnostic signal یک label میانی محافظه‌کارانه و decision log می‌سازد.</p>
+        </div>
+        <div class="system-card">
+          <strong>Train-Calibrated Selector</strong>
+          <p>روی train یاد می‌گیرد برای هر profile کدام source بهتر است: direct label، error type، confidence و domain.</p>
+        </div>
+        <div class="system-card output">
+          <strong>Final Label</strong>
+          <p><code>selected_prediction</code> را خروجی می‌دهد و source نهایی را از Direct، THOR یا diagnostic انتخاب می‌کند.</p>
+        </div>
+      </div>
+      <div class="panel system-note">
+        <strong>نقطه تصمیم نهایی</strong>
+        <p>controller اصلاح‌های diagnostic را توضیح و محدود می‌کند؛ اما final selected pipeline با train-calibrated selector منبع واقعی خروجی را انتخاب می‌کند. در اجرای validate‌شده overall، sourceها این بودند: Direct: 1,566، THOR: 621، Diagnostic: 1.</p>
       </div>
       <div class="footer"><span>معماری نهایی</span><span>13</span></div>
       <div class="progress"><span></span></div>
