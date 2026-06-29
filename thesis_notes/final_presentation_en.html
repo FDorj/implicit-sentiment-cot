@@ -118,6 +118,9 @@
     .metrics-note { margin-top: 16px; }
     .metrics-note .reason { padding: 12px 14px; }
     .metrics-note p { font-size: 0.94rem; line-height: 1.45; }
+    .decision-rules { margin-top: 14px; }
+    .decision-rules .reason { padding: 12px 14px; }
+    .decision-rules p { font-size: 0.9rem; line-height: 1.42; }
 
     .panel, .metric, .step, .reason, .result-row {
       border: 1px solid var(--line);
@@ -450,7 +453,7 @@
       <div class="timeline">
         <div class="step"><strong>1. Prepare data</strong><p>Build a reproducible ISA-only dataset.</p></div>
         <div class="step"><strong>2. Direct baseline</strong><p>Establish a simple reference point.</p></div>
-        <div class="step"><strong>3. THOR-style reasoning</strong><p>Add interpretable multi-step traces.</p></div>
+        <div class="step"><strong>3. THOR + SC3</strong><p>Add interpretable traces and repeated reasoning.</p></div>
         <div class="step"><strong>4. Reflection</strong><p>Diagnose disagreement and likely errors.</p></div>
         <div class="step"><strong>5. Controller</strong><p>Convert diagnostic signals into decisions.</p></div>
         <div class="step"><strong>6. Source selection</strong><p>Learn when to trust each source.</p></div>
@@ -518,6 +521,28 @@
     </section>
 
     <section class="slide">
+      <div class="eyebrow">Self-Consistency</div>
+      <h2>Why repeated reasoning was tried</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <strong>Reason</strong>
+          <p>Reasoning prompts can vary with sampling. Running the THOR-style path multiple times can reduce single-run instability.</p>
+        </div>
+        <div class="panel">
+          <strong>Implementation</strong>
+          <p>THOR original-ish was sampled three times. Labels were aggregated with majority vote, while a representative trace was saved for analysis.</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="metric"><span class="value">SC3</span><span class="label">three reasoning samples</span></div>
+        <div class="metric"><span class="value">vote</span><span class="label">majority label</span></div>
+        <div class="metric"><span class="value">trace</span><span class="label">saved for reflection</span></div>
+      </div>
+      <div class="footer"><span>Self-consistency</span><span>7</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
       <div class="eyebrow">Observation</div>
       <h2>Reasoning trace was useful, but label accuracy needed more control</h2>
       <div class="grid-3">
@@ -529,7 +554,7 @@
         <strong>Design implication</strong>
         <p>The trace should not be discarded. It can support diagnosis and source selection, while the final label can still use other signals when they are more reliable.</p>
       </div>
-      <div class="footer"><span>Observation from evaluation</span><span>7</span></div>
+      <div class="footer"><span>Observation from evaluation</span><span>8</span></div>
       <div class="progress"><span></span></div>
     </section>
 
@@ -553,7 +578,7 @@
         <div class="arrow">if needed</div>
         <div class="step"><strong>Reflection</strong><p>diagnostic signal</p></div>
       </div>
-      <div class="footer"><span>Reflection stage</span><span>8</span></div>
+      <div class="footer"><span>Reflection stage</span><span>9</span></div>
       <div class="progress"><span></span></div>
     </section>
 
@@ -577,7 +602,7 @@
           <div class="reason"><strong>scope mismatch</strong><p>reasoning shifts away from target</p></div>
         </div>
       </div>
-      <div class="footer"><span>Error-type reflection</span><span>9</span></div>
+      <div class="footer"><span>Error-type reflection</span><span>10</span></div>
       <div class="progress"><span></span></div>
     </section>
 
@@ -591,31 +616,15 @@
       </div>
       <div class="panel" style="margin-top: 18px;">
         <strong>Implemented logic</strong>
-        <p>The controller reads direct label, THOR label, diagnostic label, error type, and confidence, then applies rule-based decision logic.</p>
+        <p>The controller reads direct label, THOR label, diagnostic label, error type, and confidence, then applies a conservative rule order.</p>
       </div>
-      <div class="footer"><span>Controller design</span><span>10</span></div>
-      <div class="progress"><span></span></div>
-    </section>
-
-    <section class="slide">
-      <div class="eyebrow">Self-Consistency</div>
-      <h2>Why repeated reasoning was tried</h2>
-      <div class="grid-2">
-        <div class="panel">
-          <strong>Reason</strong>
-          <p>Reasoning prompts can vary with sampling. Running the THOR-style path multiple times can reduce single-run instability.</p>
-        </div>
-        <div class="panel">
-          <strong>Implementation</strong>
-          <p>THOR original-ish was sampled three times. Labels were aggregated with majority vote, while a representative trace was saved for analysis.</p>
-        </div>
+      <div class="grid-4 decision-rules">
+        <div class="reason"><strong>1. Normalize</strong><p>Normalize labels, error type, and confidence before any decision.</p></div>
+        <div class="reason"><strong>2. Keep agreement</strong><p>If Direct and THOR agree, keep that shared label.</p></div>
+        <div class="reason"><strong>3. Accept correction</strong><p>If the error type is correctable and confidence meets the threshold, use the diagnostic label.</p></div>
+        <div class="reason"><strong>4. Fall back</strong><p>Otherwise use the fallback source, usually Direct; then THOR or diagnostic if needed.</p></div>
       </div>
-      <div class="grid-3">
-        <div class="metric"><span class="value">SC3</span><span class="label">three reasoning samples</span></div>
-        <div class="metric"><span class="value">vote</span><span class="label">majority label</span></div>
-        <div class="metric"><span class="value">trace</span><span class="label">saved for reflection</span></div>
-      </div>
-      <div class="footer"><span>Self-consistency</span><span>11</span></div>
+      <div class="footer"><span>Controller design</span><span>11</span></div>
       <div class="progress"><span></span></div>
     </section>
 

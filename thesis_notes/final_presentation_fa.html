@@ -124,6 +124,9 @@
     .metrics-note { margin-top: 16px; }
     .metrics-note .reason { padding: 12px 14px; }
     .metrics-note p { font-size: 0.94rem; line-height: 1.48; }
+    .decision-rules { margin-top: 14px; }
+    .decision-rules .reason { padding: 12px 14px; }
+    .decision-rules p { font-size: 0.9rem; line-height: 1.44; }
 
     .panel, .metric, .step, .reason, .result-row {
       border: 1px solid var(--line);
@@ -460,7 +463,7 @@
       <div class="timeline">
         <div class="step"><strong>1. آماده‌سازی داده</strong><p>ساخت dataset قابل تکرار مخصوص ISA.</p></div>
         <div class="step"><strong>2. Direct baseline</strong><p>داشتن یک نقطه مرجع ساده.</p></div>
-        <div class="step"><strong>3. THOR-style reasoning</strong><p>اضافه کردن traceهای چندمرحله‌ای قابل تفسیر.</p></div>
+        <div class="step"><strong>3. THOR + SC3</strong><p>اضافه کردن traceهای قابل تفسیر و reasoning تکراری.</p></div>
         <div class="step"><strong>4. Reflection</strong><p>تشخیص disagreement و خطاهای محتمل.</p></div>
         <div class="step"><strong>5. Controller</strong><p>تبدیل diagnostic signal به decision.</p></div>
         <div class="step"><strong>6. Source selection</strong><p>یادگیری اینکه در هر وضعیت به کدام source اعتماد کنیم.</p></div>
@@ -528,6 +531,28 @@
     </section>
 
     <section class="slide">
+      <div class="eyebrow">Self-Consistency</div>
+      <h2>چرا reasoning تکراری امتحان شد؟</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <strong>دلیل</strong>
+          <p>promptهای reasoning با sampling می‌توانند نوسان داشته باشند. اجرای چندباره مسیر THOR-style می‌تواند وابستگی به یک اجرای تصادفی را کمتر کند.</p>
+        </div>
+        <div class="panel">
+          <strong>پیاده‌سازی</strong>
+          <p>THOR original-ish سه بار sample شد. labelها با majority vote ترکیب شدند و یک trace نماینده برای analysis ذخیره شد.</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="metric"><span class="value">SC3</span><span class="label">سه reasoning sample</span></div>
+        <div class="metric"><span class="value">vote</span><span class="label">majority label</span></div>
+        <div class="metric"><span class="value">trace</span><span class="label">ذخیره برای reflection</span></div>
+      </div>
+      <div class="footer"><span>Self-consistency</span><span>7</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
       <div class="eyebrow">مشاهده</div>
       <h2>trace مفید بود، اما دقت label به کنترل بیشتری نیاز داشت</h2>
       <div class="grid-3">
@@ -539,7 +564,7 @@
         <strong>نتیجه طراحی</strong>
         <p>نباید trace را دور ریخت. حتی اگر label خود THOR همیشه قابل اعتماد نباشد، trace می‌تواند برای diagnosis و source selection استفاده شود؛ label نهایی هم می‌تواند از source قابل اعتمادتر انتخاب شود.</p>
       </div>
-      <div class="footer"><span>مشاهده از ارزیابی</span><span>7</span></div>
+      <div class="footer"><span>مشاهده از ارزیابی</span><span>8</span></div>
       <div class="progress"><span></span></div>
     </section>
 
@@ -563,7 +588,7 @@
         <div class="arrow">در صورت نیاز</div>
         <div class="step"><strong>Reflection</strong><p>سیگنال diagnostic</p></div>
       </div>
-      <div class="footer"><span>مرحله reflection</span><span>8</span></div>
+      <div class="footer"><span>مرحله reflection</span><span>9</span></div>
       <div class="progress"><span></span></div>
     </section>
 
@@ -587,7 +612,7 @@
           <div class="reason"><strong>scope mismatch</strong><p>reasoning از target اصلی دور شده است</p></div>
         </div>
       </div>
-      <div class="footer"><span>Error-type reflection</span><span>9</span></div>
+      <div class="footer"><span>Error-type reflection</span><span>10</span></div>
       <div class="progress"><span></span></div>
     </section>
 
@@ -601,31 +626,15 @@
       </div>
       <div class="panel" style="margin-top: 18px;">
         <strong>منطق پیاده‌سازی‌شده</strong>
-        <p>controller، direct label، THOR label، diagnostic label، error type و confidence را می‌خواند و بعد rule-based decision logic را اعمال می‌کند.</p>
+        <p>controller، direct label، THOR label، diagnostic label، error type و confidence را می‌خواند و بعد یک ترتیب تصمیم‌گیری محافظه‌کارانه را اجرا می‌کند.</p>
       </div>
-      <div class="footer"><span>طراحی controller</span><span>10</span></div>
-      <div class="progress"><span></span></div>
-    </section>
-
-    <section class="slide">
-      <div class="eyebrow">Self-Consistency</div>
-      <h2>چرا reasoning تکراری امتحان شد؟</h2>
-      <div class="grid-2">
-        <div class="panel">
-          <strong>دلیل</strong>
-          <p>promptهای reasoning با sampling می‌توانند نوسان داشته باشند. اجرای چندباره مسیر THOR-style می‌تواند وابستگی به یک اجرای تصادفی را کمتر کند.</p>
-        </div>
-        <div class="panel">
-          <strong>پیاده‌سازی</strong>
-          <p>THOR original-ish سه بار sample شد. labelها با majority vote ترکیب شدند و یک trace نماینده برای analysis ذخیره شد.</p>
-        </div>
+      <div class="grid-4 decision-rules">
+        <div class="reason"><strong>1. نرمال‌سازی</strong><p>قبل از تصمیم، labelها، error type و confidence نرمال می‌شوند.</p></div>
+        <div class="reason"><strong>2. حفظ توافق</strong><p>اگر Direct و THOR هم‌نظر باشند، همان label مشترک نگه داشته می‌شود.</p></div>
+        <div class="reason"><strong>3. قبول correction</strong><p>اگر error type قابل اصلاح باشد و confidence به threshold برسد، diagnostic label پذیرفته می‌شود.</p></div>
+        <div class="reason"><strong>4. fallback</strong><p>در غیر این صورت fallback استفاده می‌شود؛ معمولاً Direct، و بعد در صورت نیاز THOR یا diagnostic.</p></div>
       </div>
-      <div class="grid-3">
-        <div class="metric"><span class="value">SC3</span><span class="label">سه reasoning sample</span></div>
-        <div class="metric"><span class="value">vote</span><span class="label">majority label</span></div>
-        <div class="metric"><span class="value">trace</span><span class="label">ذخیره برای reflection</span></div>
-      </div>
-      <div class="footer"><span>Self-consistency</span><span>11</span></div>
+      <div class="footer"><span>طراحی controller</span><span>11</span></div>
       <div class="progress"><span></span></div>
     </section>
 
