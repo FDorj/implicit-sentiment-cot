@@ -404,6 +404,10 @@
         <div class="reason"><strong>Target-specific judgment</strong><p>The same sentence may contain multiple targets; the label must be assigned to one target only.</p></div>
         <div class="reason"><strong>Reasoning matters</strong><p>The model must connect target, aspect, implied opinion, and polarity.</p></div>
       </div>
+      <div class="panel" style="margin-top: 16px;">
+        <strong>Mini example</strong>
+        <p>Sentence: "Got this Mac Mini with OS X Mountain Lion for my wife." Target: "OS X Mountain Lion". The sentence mentions the target, but it does not imply sentiment toward it, so the correct label is neutral.</p>
+      </div>
       <div class="panel" style="margin-top: 18px;">
         <strong>Project question</strong>
         <p>Can multi-step reasoning become more useful for ISA when it is paired with error diagnosis, controller logic, and source selection?</p>
@@ -497,6 +501,10 @@
       <div class="panel" style="margin-top: 18px;">
         <strong>Reason for this choice</strong>
         <p>ISA often requires connecting target, aspect, implicit clue, and sentiment. THOR-style reasoning makes those intermediate assumptions visible and reusable for later diagnosis.</p>
+      </div>
+      <div class="panel" style="margin-top: 14px;">
+        <strong>Example trace</strong>
+        <p>Target -> aspect -> implied opinion -> label. For the OS X Mountain Lion case, the trace should notice that the target is only mentioned, so no opinion is implied and the label should stay neutral.</p>
       </div>
       <div class="footer"><span>THOR-style reasoning</span><span>6</span></div>
       <div class="progress"><span></span></div>
@@ -687,6 +695,10 @@
       <div class="panel" style="margin-top: 18px;">
         <strong>Why this matters</strong>
         <p>The final improvement is not only a metric-level effect. On the test split, the final system corrected more Direct errors than it introduced.</p>
+      </div>
+      <div class="panel" style="margin-top: 14px;">
+        <strong>Example gain</strong>
+        <p>For target "OS X Mountain Lion", Direct predicted positive from a factual mention, while the final system selected the neutral label.</p>
       </div>
       <div class="footer"><span>Qualitative analysis</span><span>15</span></div>
       <div class="progress"><span></span></div>
