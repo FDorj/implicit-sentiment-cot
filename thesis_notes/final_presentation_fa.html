@@ -467,7 +467,7 @@
       </div>
       <div class="grid-2 metrics-note">
         <div class="reason"><strong>Accuracy</strong><p>معنی: درصد نمونه‌های test که label درست گرفته‌اند. دلیل استفاده: یک معیار ساده و مستقیم از درست‌بودن کلی سیستم می‌دهد.</p></div>
-        <div class="reason"><strong>Macro-F1</strong><p>معنی: F1 برای کلاس‌های positive، negative و neutral جدا حساب می‌شود و بعد میانگین برابر گرفته می‌شود. دلیل استفاده: اجازه نمی‌دهد کلاس بزرگ‌تر نتیجه ارزیابی را کنترل کند.</p></div>
+        <div class="reason"><strong>Macro-F1</strong><p>خود F1 میانگین هارمونیک Precision و Recall است: <code>F1 = 2 * P * R / (P + R)</code>. در Macro-F1، F1 هر کلاس جدا حساب می‌شود و میانگین برابر گرفته می‌شود.</p></div>
       </div>
       <div class="footer"><span>منطق توسعه</span><span>4</span></div>
       <div class="progress"><span></span></div>
@@ -676,7 +676,7 @@
       <h2>نتایج نهایی روی test</h2>
       <div class="grid-2">
         <div class="reason"><strong>چرا accuracy؟</strong><p>accuracy درصد predictionهای درست را نشان می‌دهد. تفسیر آن ساده است و summary مستقیمی از عملکرد کلی می‌دهد.</p></div>
-        <div class="reason"><strong>چرا macro-F1؟</strong><p>macro-F1 میانگین F1 برای کلاس‌های positive، negative و neutral است؛ بنابراین نتیجه فقط تحت تاثیر بزرگ‌ترین کلاس قرار نمی‌گیرد.</p></div>
+        <div class="reason"><strong>چرا macro-F1؟</strong><p>F1 ترکیب Precision و Recall است: <code>F1 = 2 * P * R / (P + R)</code>. Macro-F1 میانگین برابر F1 کلاس‌هاست، پس بزرگ‌ترین کلاس نتیجه را کنترل نمی‌کند.</p></div>
       </div>
       <table>
         <thead>

@@ -457,7 +457,7 @@
       </div>
       <div class="grid-2 metrics-note">
         <div class="reason"><strong>Accuracy</strong><p>Meaning: the percentage of test examples with the correct label. Why used: it gives a simple overall correctness score.</p></div>
-        <div class="reason"><strong>Macro-F1</strong><p>Meaning: F1 is computed for positive, negative, and neutral, then averaged equally. Why used: it prevents the largest class from dominating evaluation.</p></div>
+        <div class="reason"><strong>Macro-F1</strong><p>F1 is the harmonic mean of precision and recall: <code>F1 = 2 * P * R / (P + R)</code>. Macro-F1 computes F1 for each class, then averages them equally.</p></div>
       </div>
       <div class="footer"><span>Development logic</span><span>4</span></div>
       <div class="progress"><span></span></div>
@@ -666,7 +666,7 @@
       <h2>Final test results</h2>
       <div class="grid-2">
         <div class="reason"><strong>Why accuracy</strong><p>Accuracy shows the overall percentage of correct predictions. It is easy to interpret and useful as a direct performance summary.</p></div>
-        <div class="reason"><strong>Why macro-F1</strong><p>Macro-F1 averages F1 across positive, negative, and neutral classes equally, so performance is not dominated by the largest class.</p></div>
+        <div class="reason"><strong>Why macro-F1</strong><p>F1 combines precision and recall: <code>F1 = 2 * P * R / (P + R)</code>. Macro-F1 averages class-level F1 equally, so the largest class does not dominate evaluation.</p></div>
       </div>
       <table>
         <thead>
