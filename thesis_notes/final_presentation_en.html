@@ -564,11 +564,11 @@
 
     <section class="slide">
       <div class="eyebrow">Self-Consistency</div>
-      <h2>Why repeated reasoning was tried</h2>
+      <h2>Self-consistency: repeat the reasoning, then vote</h2>
       <div class="grid-2">
         <div class="panel">
           <strong>Reason</strong>
-          <p>Reasoning prompts can vary with sampling. Running the THOR-style path multiple times can reduce single-run instability.</p>
+          <p>This repeats the same THOR-style reasoning from the previous slide. The goal is to reduce dependence on one sampled run.</p>
         </div>
         <div class="panel">
           <strong>Implementation</strong>
@@ -679,15 +679,19 @@
           <p>No single source was best in every situation. Some profiles favored Direct, some favored THOR, and some diagnostic signals were useful as decision context.</p>
         </div>
         <div class="panel">
-          <strong>Policy idea</strong>
-          <p>Use the train split to learn which source is most reliable for each profile, then apply that decision table to test without using test labels.</p>
+          <strong>What is a profile?</strong>
+          <p>A profile is the row key <code>direct_prediction + error_type + diagnostic_confidence + domain</code>. It is generated automatically for every row.</p>
         </div>
       </div>
-      <div class="grid-4">
-        <div class="reason"><strong>direct_prediction</strong><p>baseline label</p></div>
-        <div class="reason"><strong>error_type</strong><p>diagnostic category</p></div>
-        <div class="reason"><strong>confidence</strong><p>diagnostic strength</p></div>
-        <div class="reason"><strong>domain</strong><p>laptop or restaurant</p></div>
+      <div class="grid-4 decision-rules">
+        <div class="reason"><strong>1. Build profile</strong><p>Combine direct label, error type, confidence, and domain.</p></div>
+        <div class="reason"><strong>2. Group train rows</strong><p>Rows with the same profile are evaluated together on train labels.</p></div>
+        <div class="reason"><strong>3. Score sources</strong><p>Count which candidate is most often correct: Direct, THOR, or diagnostic.</p></div>
+        <div class="reason"><strong>4. Apply to test</strong><p>Use the learned source for the same profile; unseen profiles fall back to Direct.</p></div>
+      </div>
+      <div class="panel system-note">
+        <strong>Small example</strong>
+        <p><code>direct_prediction=positive, error_type=no_error, confidence=high, domain=laptop</code> learned to use THOR in the validated policy.</p>
       </div>
       <div class="footer"><span>Train-calibrated source selection</span><span>12</span></div>
       <div class="progress"><span></span></div>

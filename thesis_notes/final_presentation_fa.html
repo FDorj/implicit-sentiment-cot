@@ -574,11 +574,11 @@
 
     <section class="slide">
       <div class="eyebrow">Self-Consistency</div>
-      <h2>چرا reasoning تکراری امتحان شد؟</h2>
+      <h2>Self-consistency: تکرار reasoning و سپس vote</h2>
       <div class="grid-2">
         <div class="panel">
           <strong>دلیل</strong>
-          <p>promptهای reasoning با sampling می‌توانند نوسان داشته باشند. اجرای چندباره مسیر THOR-style می‌تواند وابستگی به یک اجرای تصادفی را کمتر کند.</p>
+          <p>این اسلاید همان THOR-style reasoning اسلاید قبل را تکرار می‌کند. هدف این است که نتیجه فقط به یک اجرای sampled وابسته نباشد.</p>
         </div>
         <div class="panel">
           <strong>پیاده‌سازی</strong>
@@ -689,15 +689,19 @@
           <p>هیچ sourceای در همه وضعیت‌ها بهترین نبود. بعضی profileها با Direct بهتر بودند، بعضی با THOR، و بعضی diagnostic signalها به عنوان context تصمیم مفید بودند.</p>
         </div>
         <div class="panel">
-          <strong>ایده policy</strong>
-          <p>از train split یاد بگیریم در هر profile کدام source قابل اعتمادتر است، سپس همان decision table را بدون استفاده از labelهای test روی test اعمال کنیم.</p>
+          <strong>profile چیست؟</strong>
+          <p>profile همان key ردیف است: <code>direct_prediction + error_type + diagnostic_confidence + domain</code>. این key برای هر ردیف خودکار ساخته می‌شود.</p>
         </div>
       </div>
-      <div class="grid-4">
-        <div class="reason"><strong>direct_prediction</strong><p>label پایه</p></div>
-        <div class="reason"><strong>error_type</strong><p>دسته diagnostic</p></div>
-        <div class="reason"><strong>confidence</strong><p>شدت اطمینان diagnostic</p></div>
-        <div class="reason"><strong>domain</strong><p>laptop یا restaurant</p></div>
+      <div class="grid-4 decision-rules">
+        <div class="reason"><strong>1. ساخت profile</strong><p>ترکیب direct label، error type، confidence و domain.</p></div>
+        <div class="reason"><strong>2. گروه‌بندی train</strong><p>ردیف‌هایی که profile یکسان دارند، روی labelهای train با هم بررسی می‌شوند.</p></div>
+        <div class="reason"><strong>3. امتیازدهی sourceها</strong><p>شمرده می‌شود کدام candidate بیشتر درست بوده: Direct، THOR یا diagnostic.</p></div>
+        <div class="reason"><strong>4. اعمال روی test</strong><p>برای همان profile از source یادگرفته‌شده استفاده می‌شود؛ profile ناشناخته به Direct fallback می‌کند.</p></div>
+      </div>
+      <div class="panel system-note">
+        <strong>مثال کوچک</strong>
+        <p><code>direct_prediction=positive, error_type=no_error, confidence=high, domain=laptop</code> در policy validate‌شده یاد گرفت از THOR استفاده کند.</p>
       </div>
       <div class="footer"><span>Train-calibrated source selection</span><span>12</span></div>
       <div class="progress"><span></span></div>
