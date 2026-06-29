@@ -61,6 +61,7 @@ Generated summary files:
 - `results/final_qualitative_summary.txt`
 - `thesis_notes/final_pipeline_fa.md`
 - `thesis_notes/final_project_report_fa.md`
+- `thesis_notes/final_presentation_en.html`
 - `thesis_notes/final_qualitative_examples_fa.md`
 - `thesis_notes/final_defense_summary_fa.md`
 

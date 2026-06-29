@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Implicit Sentiment Analysis Presentation</title>
+  <style>
+    :root {
+      --bg: #eef2f6;
+      --surface: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dde8;
+      --teal: #0f766e;
+      --indigo: #3730a3;
+      --amber: #b45309;
+      --rose: #be123c;
+      --green: #15803d;
+      --shadow: 0 18px 48px rgba(23, 32, 51, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        linear-gradient(135deg, rgba(15, 118, 110, 0.08), transparent 28%),
+        linear-gradient(315deg, rgba(180, 83, 9, 0.08), transparent 30%),
+        var(--bg);
+      color: var(--ink);
+      overflow: hidden;
+    }
+
+    .deck {
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .slide {
+      display: none;
+      width: min(1220px, 100%);
+      height: min(760px, calc(100vh - 96px));
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 34px 38px 76px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide.active { display: block; }
+    .slide::after {
+      content: "";
+      position: absolute;
+      right: -160px;
+      bottom: -170px;
+      width: 420px;
+      height: 420px;
+      border: 44px solid rgba(55, 48, 163, 0.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--teal);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      max-width: 950px;
+      font-size: clamp(2.5rem, 6vw, 5.1rem);
+      line-height: 1.03;
+      letter-spacing: 0;
+    }
+    h2 {
+      max-width: 960px;
+      font-size: clamp(1.9rem, 3.4vw, 3.25rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+      margin-bottom: 18px;
+    }
+    h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+    p {
+      font-size: 1.02rem;
+      line-height: 1.58;
+      color: #263246;
+    }
+    .lead {
+      max-width: 860px;
+      font-size: 1.22rem;
+      color: #39465c;
+      margin-top: 18px;
+    }
+
+    .grid-2, .grid-3, .grid-4, .flow, .timeline {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .grid-2 { grid-template-columns: 1.1fr 0.9fr; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .flow { grid-template-columns: repeat(5, 1fr); align-items: stretch; }
+    .timeline { grid-template-columns: repeat(6, 1fr); }
+
+    .panel, .metric, .step, .reason, .result-row {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcff;
+      padding: 15px 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .panel strong, .step strong, .reason strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--teal);
+      background: rgba(15, 118, 110, 0.1);
+      margin: 4px 5px 0 0;
+    }
+    .tag.indigo { color: var(--indigo); background: rgba(55, 48, 163, 0.1); }
+    .tag.amber { color: var(--amber); background: rgba(180, 83, 9, 0.12); }
+    .tag.rose { color: var(--rose); background: rgba(190, 18, 60, 0.1); }
+    .tag.green { color: var(--green); background: rgba(21, 128, 61, 0.1); }
+
+    .metric .value {
+      display: block;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--indigo);
+      margin: 4px 0 6px;
+    }
+    .metric .label { color: var(--muted); font-size: 0.9rem; }
+
+    .step {
+      min-height: 138px;
+      border-top: 5px solid var(--teal);
+    }
+    .step:nth-child(2) { border-top-color: var(--indigo); }
+    .step:nth-child(3) { border-top-color: var(--amber); }
+    .step:nth-child(4) { border-top-color: var(--rose); }
+    .step:nth-child(5) { border-top-color: var(--green); }
+
+    .arrow {
+      position: relative;
+      min-height: 112px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.86rem;
+      text-align: center;
+      padding: 10px;
+    }
+    .arrow::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: var(--line);
+    }
+    .arrow::after {
+      content: "";
+      position: absolute;
+      top: calc(50% - 5px);
+      right: 8%;
+      width: 10px;
+      height: 10px;
+      border-top: 2px solid var(--line);
+      border-right: 2px solid var(--line);
+      transform: rotate(45deg);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      font-size: 0.94rem;
+    }
+    th {
+      background: #f1f5f9;
+      color: #344054;
+      font-weight: 800;
+    }
+    tr:last-child td { border-bottom: none; }
+    .best td {
+      background: rgba(21, 128, 61, 0.08);
+      font-weight: 800;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: 1fr 0.9fr 1fr;
+      gap: 14px;
+      align-items: center;
+      margin-top: 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .stack { display: grid; gap: 12px; }
+    .node {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcff;
+    }
+    .node strong { display: block; margin-bottom: 6px; }
+    .connector {
+      display: grid;
+      place-items: center;
+      min-height: 180px;
+      color: var(--muted);
+      font-weight: 800;
+      text-align: center;
+      border: 1px dashed #b8c0cf;
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .bars {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .bar {
+      display: grid;
+      grid-template-columns: 180px 1fr 86px;
+      gap: 12px;
+      align-items: center;
+      font-size: 0.94rem;
+    }
+    .bar-track {
+      height: 16px;
+      background: #e7edf5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--indigo));
+      border-radius: 999px;
+    }
+
+    .footer {
+      position: absolute;
+      left: 38px;
+      right: 38px;
+      bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      z-index: 2;
+    }
+    .progress {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 5px;
+      background: #dbe3ee;
+    }
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--teal), var(--amber), var(--indigo));
+    }
+
+    .nav {
+      position: fixed;
+      left: 28px;
+      right: 28px;
+      bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .nav-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px;
+      box-shadow: 0 10px 24px rgba(23, 32, 51, 0.12);
+      pointer-events: auto;
+    }
+    button {
+      min-width: 80px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 14px;
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #eef2f6;
+      color: var(--ink);
+    }
+    .counter {
+      color: var(--muted);
+      font-weight: 800;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .deck { height: auto; padding: 14px; }
+      .slide {
+        height: auto;
+        min-height: calc(100vh - 96px);
+        padding: 26px 20px 78px;
+      }
+      .grid-2, .grid-3, .grid-4, .flow, .timeline, .pipeline {
+        grid-template-columns: 1fr;
+      }
+      .arrow { min-height: 40px; }
+      .arrow::before, .arrow::after { display: none; }
+      .bar { grid-template-columns: 1fr; }
+      .footer { left: 20px; right: 20px; }
+    }
+
+    @media print {
+      body { background: #fff; overflow: visible; }
+      .deck { display: block; height: auto; padding: 0; }
+      .slide {
+        display: block !important;
+        width: 100%;
+        height: auto;
+        min-height: 100vh;
+        border: 0;
+        box-shadow: none;
+        border-radius: 0;
+        page-break-after: always;
+      }
+      .nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide active">
+      <div class="eyebrow">Undergraduate Thesis</div>
+      <h1>Implicit Sentiment Analysis with Multi-Step Reasoning</h1>
+      <p class="lead">A prompt-based ISA system that combines direct prediction, THOR-style reasoning, structured reflection, controller logic, and train-calibrated source selection.</p>
+      <div class="grid-4">
+        <div class="metric"><span class="value">2,188</span><span class="label">ISA-only examples</span></div>
+        <div class="metric"><span class="value">442</span><span class="label">test examples</span></div>
+        <div class="metric"><span class="value">0.719</span><span class="label">final test macro-F1</span></div>
+        <div class="metric"><span class="value">0</span><span class="label">LLM fine-tuning runs</span></div>
+      </div>
+      <div class="footer"><span>Implicit Sentiment Analysis</span><span>1</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Problem</div>
+      <h2>Why implicit sentiment is harder</h2>
+      <div class="grid-3">
+        <div class="reason"><strong>No explicit sentiment word</strong><p>The polarity often comes from context, contrast, or common-sense implications.</p></div>
+        <div class="reason"><strong>Target-specific judgment</strong><p>The same sentence may contain multiple targets; the label must be assigned to one target only.</p></div>
+        <div class="reason"><strong>Reasoning matters</strong><p>The model must connect target, aspect, implied opinion, and polarity.</p></div>
+      </div>
+      <div class="panel" style="margin-top: 18px;">
+        <strong>Project question</strong>
+        <p>Can multi-step reasoning become more useful for ISA when it is paired with error diagnosis, controller logic, and source selection?</p>
+      </div>
+      <div class="footer"><span>Problem framing</span><span>2</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Data</div>
+      <h2>Dataset construction</h2>
+      <div class="grid-2">
+        <div>
+          <p>The project uses SCAPT-labeled SemEval 2014 Laptop and Restaurant data. The raw aspect-level XML data was parsed into clean CSV files, then filtered to implicit sentiment examples.</p>
+          <div class="tags">
+            <span class="tag">Laptop</span>
+            <span class="tag indigo">Restaurant</span>
+            <span class="tag amber">Positive</span>
+            <span class="tag rose">Negative</span>
+            <span class="tag green">Neutral</span>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top: 0;">
+          <div class="metric"><span class="value">1,746</span><span class="label">train</span></div>
+          <div class="metric"><span class="value">442</span><span class="label">test</span></div>
+          <div class="metric"><span class="value">972</span><span class="label">neutral</span></div>
+          <div class="metric"><span class="value">1,216</span><span class="label">positive + negative</span></div>
+        </div>
+      </div>
+      <div class="footer"><span>Data preparation</span><span>3</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Strategy</div>
+      <h2>Build, evaluate, diagnose, improve</h2>
+      <div class="timeline">
+        <div class="step"><strong>1. Prepare data</strong><p>Build a reproducible ISA-only dataset.</p></div>
+        <div class="step"><strong>2. Direct baseline</strong><p>Establish a simple reference point.</p></div>
+        <div class="step"><strong>3. THOR-style reasoning</strong><p>Add interpretable multi-step traces.</p></div>
+        <div class="step"><strong>4. Reflection</strong><p>Diagnose disagreement and likely errors.</p></div>
+        <div class="step"><strong>5. Controller</strong><p>Convert diagnostic signals into decisions.</p></div>
+        <div class="step"><strong>6. Source selection</strong><p>Learn when to trust each source.</p></div>
+      </div>
+      <div class="footer"><span>Development logic</span><span>4</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Baseline</div>
+      <h2>Direct Qwen3 8B baseline</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <strong>Why it was needed</strong>
+          <p>A direct zero-shot baseline gives a fair reference before adding reasoning, reflection, or controller logic.</p>
+          <p>Without this baseline, improvement from complex stages cannot be interpreted clearly.</p>
+        </div>
+        <div class="panel">
+          <strong>Logic implemented</strong>
+          <p>Input: sentence + target. Output: one normalized label from positive, negative, neutral.</p>
+          <div class="tags">
+            <span class="tag">sentence</span>
+            <span class="tag indigo">target</span>
+            <span class="tag green">label</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="metric"><span class="value">0.678733</span><span class="label">test accuracy</span></div>
+        <div class="metric"><span class="value">0.674075</span><span class="label">test macro-F1</span></div>
+      </div>
+      <div class="footer"><span>Direct baseline</span><span>5</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Reasoning</div>
+      <h2>Why THOR-style reasoning was added</h2>
+      <div class="flow">
+        <div class="step"><strong>Aspect</strong><p>What aspect of the target is implied?</p></div>
+        <div class="arrow">then</div>
+        <div class="step"><strong>Opinion</strong><p>What implicit opinion is suggested?</p></div>
+        <div class="arrow">then</div>
+        <div class="step"><strong>Polarity</strong><p>What sentiment follows from that opinion?</p></div>
+      </div>
+      <div class="panel" style="margin-top: 18px;">
+        <strong>Reason for this choice</strong>
+        <p>ISA often requires connecting target, aspect, implicit clue, and sentiment. THOR-style reasoning makes those intermediate assumptions visible and reusable for later diagnosis.</p>
+      </div>
+      <div class="footer"><span>THOR-style reasoning</span><span>6</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Observation</div>
+      <h2>Reasoning trace was useful, but label accuracy needed more control</h2>
+      <div class="grid-3">
+        <div class="metric"><span class="value">0.590498</span><span class="label">THOR original-ish SC3 test accuracy</span></div>
+        <div class="metric"><span class="value">0.600690</span><span class="label">THOR original-ish SC3 test macro-F1</span></div>
+        <div class="metric"><span class="value">Trace</span><span class="label">aspect + opinion + reasoning</span></div>
+      </div>
+      <div class="panel" style="margin-top: 18px;">
+        <strong>Design implication</strong>
+        <p>The trace should not be discarded. It can support diagnosis and source selection, while the final label can still use other signals when they are more reliable.</p>
+      </div>
+      <div class="footer"><span>Observation from evaluation</span><span>7</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Reflection</div>
+      <h2>Why reflection was added</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <strong>Problem found</strong>
+          <p>A reasoning chain can over-interpret neutral mentions, shift target scope, or produce a label inconsistent with its own reasoning.</p>
+        </div>
+        <div class="panel">
+          <strong>Reflection goal</strong>
+          <p>Use the generated trace to check whether the reasoning path contains a recognizable error and propose a correction when needed.</p>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="step"><strong>Direct</strong><p>simple signal</p></div>
+        <div class="arrow">compare</div>
+        <div class="step"><strong>THOR</strong><p>reasoning signal</p></div>
+        <div class="arrow">if needed</div>
+        <div class="step"><strong>Reflection</strong><p>diagnostic signal</p></div>
+      </div>
+      <div class="footer"><span>Reflection stage</span><span>8</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Structured Diagnosis</div>
+      <h2>Error-Type-Aware Reflection</h2>
+      <div class="grid-2">
+        <div>
+          <p>Free-form reflection is hard to control. The project therefore forced the diagnostic output into three fields.</p>
+          <div class="panel" style="margin-top: 14px;">
+            <strong>Structured output</strong>
+            <p>error_type = ...</p>
+            <p>label = ...</p>
+            <p>confidence = low / medium / high</p>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top: 0;">
+          <div class="reason"><strong>missed implicit positive</strong><p>positive signal not captured</p></div>
+          <div class="reason"><strong>missed implicit negative</strong><p>negative signal not captured</p></div>
+          <div class="reason"><strong>neutral overinterpretation</strong><p>factual mention treated as sentiment</p></div>
+          <div class="reason"><strong>scope mismatch</strong><p>reasoning shifts away from target</p></div>
+        </div>
+      </div>
+      <div class="footer"><span>Error-type reflection</span><span>9</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Controller</div>
+      <h2>Why a controller was necessary</h2>
+      <div class="grid-3">
+        <div class="reason"><strong>Reflection can over-correct</strong><p>A diagnostic label should not automatically replace all other predictions.</p></div>
+        <div class="reason"><strong>Confidence matters</strong><p>Low-confidence diagnostics should be treated differently from high-confidence ones.</p></div>
+        <div class="reason"><strong>Agreement is strong evidence</strong><p>If Direct and THOR agree, the controller can keep the shared label.</p></div>
+      </div>
+      <div class="panel" style="margin-top: 18px;">
+        <strong>Implemented logic</strong>
+        <p>The controller reads direct label, THOR label, diagnostic label, error type, and confidence, then applies rule-based decision logic.</p>
+      </div>
+      <div class="footer"><span>Controller design</span><span>10</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Self-Consistency</div>
+      <h2>Why repeated reasoning was tried</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <strong>Reason</strong>
+          <p>Reasoning prompts can vary with sampling. Running the THOR-style path multiple times can reduce single-run instability.</p>
+        </div>
+        <div class="panel">
+          <strong>Implementation</strong>
+          <p>THOR original-ish was sampled three times. Labels were aggregated with majority vote, while a representative trace was saved for analysis.</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="metric"><span class="value">SC3</span><span class="label">three reasoning samples</span></div>
+        <div class="metric"><span class="value">vote</span><span class="label">majority label</span></div>
+        <div class="metric"><span class="value">trace</span><span class="label">saved for reflection</span></div>
+      </div>
+      <div class="footer"><span>Self-consistency</span><span>11</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Source Selection</div>
+      <h2>Why train-calibrated selection was added</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <strong>Observation</strong>
+          <p>No single source was best in every situation. Some profiles favored Direct, some favored THOR, and some diagnostic signals were useful as decision context.</p>
+        </div>
+        <div class="panel">
+          <strong>Policy idea</strong>
+          <p>Use the train split to learn which source is most reliable for each profile, then apply that decision table to test without using test labels.</p>
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="reason"><strong>direct_prediction</strong><p>baseline label</p></div>
+        <div class="reason"><strong>error_type</strong><p>diagnostic category</p></div>
+        <div class="reason"><strong>confidence</strong><p>diagnostic strength</p></div>
+        <div class="reason"><strong>domain</strong><p>laptop or restaurant</p></div>
+      </div>
+      <div class="footer"><span>Train-calibrated source selection</span><span>12</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Final System</div>
+      <h2>Final pipeline</h2>
+      <div class="pipeline">
+        <div class="stack">
+          <div class="node"><strong>Direct Qwen3 8B</strong><p>sentence + target -> direct label</p></div>
+          <div class="node"><strong>THOR original-ish SC3</strong><p>aspect + opinion + reasoning + voted label</p></div>
+        </div>
+        <div class="connector">disagreement and diagnostic context</div>
+        <div class="stack">
+          <div class="node"><strong>Error-Type Reflection</strong><p>error type, proposed label, confidence</p></div>
+          <div class="node"><strong>Controller</strong><p>rule-based intermediate decision</p></div>
+          <div class="node"><strong>Train-Calibrated Selection</strong><p>choose direct, THOR, or diagnostic source</p></div>
+        </div>
+      </div>
+      <div class="footer"><span>Final architecture</span><span>13</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Results</div>
+      <h2>Final test results</h2>
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Test Accuracy</th><th>Test Macro-F1</th><th>Role</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Direct Qwen3 8B</td><td>0.678733</td><td>0.674075</td><td>reference baseline</td></tr>
+          <tr><td>THOR simplified</td><td>0.599548</td><td>0.578437</td><td>initial reasoning baseline</td></tr>
+          <tr><td>Simple reflection</td><td>0.615385</td><td>0.606732</td><td>free-form review</td></tr>
+          <tr><td>ETC standard</td><td>0.660633</td><td>0.659430</td><td>structured reflection + controller</td></tr>
+          <tr><td>THOR original-ish SC3</td><td>0.590498</td><td>0.600690</td><td>reasoning source with self-consistency</td></tr>
+          <tr><td>ETC over original-ish SC3</td><td>0.660633</td><td>0.662108</td><td>diagnosis over SC3 trace</td></tr>
+          <tr class="best"><td>Final selected pipeline</td><td>0.723982</td><td>0.719204</td><td>train-calibrated source selection</td></tr>
+        </tbody>
+      </table>
+      <div class="footer"><span>Evaluation</span><span>14</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Qualitative Check</div>
+      <h2>What changed against Direct</h2>
+      <div class="grid-4">
+        <div class="metric"><span class="value">26</span><span class="label">Direct wrong, final correct</span></div>
+        <div class="metric"><span class="value">6</span><span class="label">Direct correct, final wrong</span></div>
+        <div class="metric"><span class="value">294</span><span class="label">both correct</span></div>
+        <div class="metric"><span class="value">116</span><span class="label">both wrong</span></div>
+      </div>
+      <div class="bars">
+        <div class="bar"><span>Gains vs Direct</span><div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div><strong>26</strong></div>
+        <div class="bar"><span>Losses vs Direct</span><div class="bar-track"><div class="bar-fill" style="width: 23%; background: linear-gradient(90deg, var(--amber), var(--rose));"></div></div><strong>6</strong></div>
+      </div>
+      <div class="panel" style="margin-top: 18px;">
+        <strong>Why this matters</strong>
+        <p>The final improvement is not only a metric-level effect. On the test split, the final system corrected more Direct errors than it introduced.</p>
+      </div>
+      <div class="footer"><span>Qualitative analysis</span><span>15</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Implementation</div>
+      <h2>What was actually implemented</h2>
+      <div class="grid-3">
+        <div class="reason"><strong>Data layer</strong><p>SCAPT XML parsing, clean ISA-only CSVs, train/test preservation.</p></div>
+        <div class="reason"><strong>Prompt pipelines</strong><p>Direct, THOR-style reasoning, simple reflection, error-type reflection.</p></div>
+        <div class="reason"><strong>Decision layer</strong><p>Controller, policy ablation, train-calibrated source selection.</p></div>
+        <div class="reason"><strong>Evaluation</strong><p>Accuracy, macro-F1, split-wise result tables, validation checks.</p></div>
+        <div class="reason"><strong>Analysis</strong><p>Error analysis and qualitative examples for final behavior.</p></div>
+        <div class="reason"><strong>Tests</strong><p>Unit tests for normalization, diagnostic parsing, controller, policy, and final helpers.</p></div>
+      </div>
+      <div class="footer"><span>Implementation map</span><span>16</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Validation</div>
+      <h2>How the final chain was checked</h2>
+      <div class="grid-3">
+        <div class="metric"><span class="value">2,188</span><span class="label">rows in each final chain file</span></div>
+        <div class="metric"><span class="value">0</span><span class="label">duplicate keys</span></div>
+        <div class="metric"><span class="value">0</span><span class="label">Direct/THOR alignment mismatches</span></div>
+      </div>
+      <div class="panel" style="margin-top: 18px;">
+        <strong>Validation script</strong>
+        <p><code>experiments/run_final_pipeline.py</code> does not call the model again. It validates saved outputs and regenerates final result tables.</p>
+      </div>
+      <div class="footer"><span>Reproducibility</span><span>17</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Scope</div>
+      <h2>What was intentionally not claimed</h2>
+      <div class="grid-2">
+        <div class="reason"><strong>No LLM fine-tuning</strong><p>Qwen3 8B weights were not updated. The project is prompt-based plus train-calibrated source selection.</p></div>
+        <div class="reason"><strong>Flan-T5 not evaluated</strong><p>A HuggingFace runner scaffold exists, but Flan-T5 results are not part of the validated experiments.</p></div>
+        <div class="reason"><strong>No API model comparison</strong><p>OpenAI API or other external API models were not included in current result files.</p></div>
+        <div class="reason"><strong>THOR-style implementation</strong><p>The project uses a compatible THOR-style pipeline, not an exact reproduction of the official codebase.</p></div>
+      </div>
+      <div class="footer"><span>Limitations and claims</span><span>18</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Future Work</div>
+      <h2>Reasonable next steps</h2>
+      <div class="grid-3">
+        <div class="reason"><strong>Fine-tuned baseline</strong><p>Train a Flan-T5 or LoRA/QLoRA baseline under a controlled train/dev/test setup.</p></div>
+        <div class="reason"><strong>Model comparison</strong><p>Compare Qwen with API models or other local LLMs using the same final evaluation script.</p></div>
+        <div class="reason"><strong>Reasoning labels</strong><p>Create gold or pseudo-gold labels for aspect, opinion, and diagnostic stages.</p></div>
+        <div class="reason"><strong>Policy validation</strong><p>Use a separate validation split for policy tuning instead of learning only from train.</p></div>
+        <div class="reason"><strong>Both-wrong analysis</strong><p>Study cases where both Direct and the final system fail.</p></div>
+        <div class="reason"><strong>Robustness checks</strong><p>Repeat experiments with alternative prompts and seeds.</p></div>
+      </div>
+      <div class="footer"><span>Future work</span><span>19</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Takeaway</div>
+      <h2>Final message</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <strong>What the project shows</strong>
+          <p>For implicit sentiment analysis, multi-step reasoning is most useful when it is combined with diagnosis, controller logic, and source selection.</p>
+        </div>
+        <div class="panel">
+          <strong>Final result</strong>
+          <p>The final selected pipeline achieved <strong>0.723982 test accuracy</strong> and <strong>0.719204 test macro-F1</strong> without fine-tuning the language model.</p>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="step"><strong>Baseline</strong><p>measure</p></div>
+        <div class="arrow">then</div>
+        <div class="step"><strong>Reasoning</strong><p>explain</p></div>
+        <div class="arrow">then</div>
+        <div class="step"><strong>Selection</strong><p>decide</p></div>
+      </div>
+      <div class="footer"><span>Final takeaway</span><span>20</span></div>
+      <div class="progress"><span></span></div>
+    </section>
+  </main>
+
+  <nav class="nav">
+    <div class="nav-group">
+      <button type="button" class="secondary" id="prevBtn">Prev</button>
+      <span class="counter" id="counter">1 / 20</span>
+      <button type="button" id="nextBtn">Next</button>
+    </div>
+  </nav>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const counter = document.getElementById("counter");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    let index = 0;
+
+    function render() {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === index);
+        const progress = slide.querySelector(".progress span");
+        if (progress) {
+          progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+        }
+      });
+      counter.textContent = `${index + 1} / ${slides.length}`;
+      prevBtn.disabled = index === 0;
+      nextBtn.disabled = index === slides.length - 1;
+    }
+
+    function move(delta) {
+      index = Math.min(slides.length - 1, Math.max(0, index + delta));
+      render();
+    }
+
+    prevBtn.addEventListener("click", () => move(-1));
+    nextBtn.addEventListener("click", () => move(1));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown") move(1);
+      if (event.key === "ArrowLeft" || event.key === "PageUp") move(-1);
+      if (event.key === "Home") { index = 0; render(); }
+      if (event.key === "End") { index = slides.length - 1; render(); }
+    });
+    render();
+  </script>
+</body>
+</html>
