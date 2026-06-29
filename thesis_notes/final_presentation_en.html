@@ -115,6 +115,9 @@
     .grid-4 { grid-template-columns: repeat(4, 1fr); }
     .flow { grid-template-columns: repeat(5, 1fr); align-items: stretch; }
     .timeline { grid-template-columns: repeat(6, 1fr); }
+    .metrics-note { margin-top: 16px; }
+    .metrics-note .reason { padding: 12px 14px; }
+    .metrics-note p { font-size: 0.94rem; line-height: 1.45; }
 
     .panel, .metric, .step, .reason, .result-row {
       border: 1px solid var(--line);
@@ -451,6 +454,10 @@
         <div class="step"><strong>4. Reflection</strong><p>Diagnose disagreement and likely errors.</p></div>
         <div class="step"><strong>5. Controller</strong><p>Convert diagnostic signals into decisions.</p></div>
         <div class="step"><strong>6. Source selection</strong><p>Learn when to trust each source.</p></div>
+      </div>
+      <div class="grid-2 metrics-note">
+        <div class="reason"><strong>Accuracy</strong><p>Meaning: the percentage of test examples with the correct label. Why used: it gives a simple overall correctness score.</p></div>
+        <div class="reason"><strong>Macro-F1</strong><p>Meaning: F1 is computed for positive, negative, and neutral, then averaged equally. Why used: it prevents the largest class from dominating evaluation.</p></div>
       </div>
       <div class="footer"><span>Development logic</span><span>4</span></div>
       <div class="progress"><span></span></div>
