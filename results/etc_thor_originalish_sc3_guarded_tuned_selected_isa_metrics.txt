@@ -1,0 +1,87 @@
+ETC predictions: results/etc_thor_originalish_sc3_isa_predictions.csv
+Output: results/etc_thor_originalish_sc3_guarded_tuned_selected_isa_predictions.csv
+policy_mode: guarded_train_calibrated
+train_split: train
+key_columns: direct_prediction,thor_prediction,error_type,diagnostic_confidence,domain
+candidate_sources: direct,thor,diagnostic
+default_source: direct
+min_support: 10
+min_margin_default: 2
+min_margin_second: 0
+min_relative_gain: 0.050000
+n_total: 2188
+n_eval: 2188
+accuracy: 0.679616
+macro_f1: 0.682278
+
+              precision    recall  f1-score   support
+
+    positive     0.6650    0.6650    0.6650       597
+    negative     0.6662    0.8191    0.7348       619
+     neutral     0.7024    0.5998    0.6471       972
+
+    accuracy                         0.6796      2188
+   macro avg     0.6779    0.6946    0.6823      2188
+weighted avg     0.6820    0.6796    0.6768      2188
+
+
+train metrics
+n_total: 1746
+n_eval: 1746
+accuracy: 0.668385
+macro_f1: 0.669583
+
+test metrics
+n_total: 442
+n_eval: 442
+accuracy: 0.723982
+macro_f1: 0.719119
+
+domain metrics
+laptop: accuracy=0.698092, macro_f1=0.676287, n=891
+restaurant: accuracy=0.666924, macro_f1=0.672028, n=1297
+
+change summary vs direct/thor
+changed_vs_direct: 141
+changed_vs_thor: 518
+gain_vs_direct: 87
+loss_vs_direct: 38
+
+selected source counts
+selected_source
+direct    2047
+thor       141
+
+learned policy
+direct_prediction=negative, thor_prediction=negative, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct (support=273, scores=diagnostic:209,direct:209,thor:209, best=direct:209, margin_default=0, margin_second=0, relative_gain=0.000000, fallback_reason=)
+direct_prediction=negative, thor_prediction=negative, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct (support=254, scores=diagnostic:168,direct:168,thor:168, best=direct:168, margin_default=0, margin_second=0, relative_gain=0.000000, fallback_reason=)
+direct_prediction=negative, thor_prediction=neutral, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=restaurant -> direct (support=1, scores=diagnostic:1,direct:1,thor:0, best=direct:1, margin_default=0, margin_second=0, relative_gain=0.000000, fallback_reason=)
+direct_prediction=negative, thor_prediction=neutral, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct (support=42, scores=diagnostic:13,direct:27,thor:13, best=direct:27, margin_default=0, margin_second=14, relative_gain=0.000000, fallback_reason=)
+direct_prediction=negative, thor_prediction=neutral, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> thor (support=38, scores=diagnostic:23,direct:10,thor:23, best=thor:23, margin_default=13, margin_second=0, relative_gain=0.342105, fallback_reason=)
+direct_prediction=negative, thor_prediction=positive, error_type=missed_implicit_negative, diagnostic_confidence=medium, domain=laptop -> direct (support=2, scores=diagnostic:0,direct:0,thor:1, best=thor:1, margin_default=1, margin_second=1, relative_gain=0.500000, fallback_reason=low_support)
+direct_prediction=negative, thor_prediction=positive, error_type=missed_implicit_positive, diagnostic_confidence=high, domain=laptop -> direct (support=4, scores=diagnostic:1,direct:1,thor:1, best=direct:1, margin_default=0, margin_second=0, relative_gain=0.000000, fallback_reason=)
+direct_prediction=negative, thor_prediction=positive, error_type=missed_implicit_positive, diagnostic_confidence=high, domain=restaurant -> direct (support=4, scores=diagnostic:1,direct:2,thor:1, best=direct:2, margin_default=0, margin_second=1, relative_gain=0.000000, fallback_reason=)
+direct_prediction=negative, thor_prediction=positive, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct (support=7, scores=diagnostic:1,direct:3,thor:1, best=direct:3, margin_default=0, margin_second=2, relative_gain=0.000000, fallback_reason=)
+direct_prediction=negative, thor_prediction=positive, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> thor (support=10, scores=diagnostic:5,direct:2,thor:5, best=thor:5, margin_default=3, margin_second=0, relative_gain=0.300000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=negative, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=laptop -> direct (support=49, scores=diagnostic:16,direct:29,thor:16, best=direct:29, margin_default=0, margin_second=13, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=negative, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=restaurant -> thor (support=50, scores=diagnostic:26,direct:17,thor:26, best=thor:26, margin_default=9, margin_second=0, relative_gain=0.180000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=negative, error_type=missed_implicit_negative, diagnostic_confidence=medium, domain=laptop -> direct (support=18, scores=diagnostic:4,direct:13,thor:4, best=direct:13, margin_default=0, margin_second=9, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=negative, error_type=missed_implicit_negative, diagnostic_confidence=medium, domain=restaurant -> direct (support=8, scores=diagnostic:1,direct:5,thor:1, best=direct:5, margin_default=0, margin_second=4, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=negative, error_type=missed_implicit_positive, diagnostic_confidence=medium, domain=laptop -> direct (support=1, scores=diagnostic:1,direct:0,thor:0, best=diagnostic:1, margin_default=1, margin_second=1, relative_gain=1.000000, fallback_reason=low_support)
+direct_prediction=neutral, thor_prediction=negative, error_type=missed_implicit_positive, diagnostic_confidence=medium, domain=restaurant -> direct (support=1, scores=diagnostic:0,direct:1,thor:0, best=direct:1, margin_default=0, margin_second=1, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=negative, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct (support=5, scores=diagnostic:0,direct:3,thor:0, best=direct:3, margin_default=0, margin_second=3, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=negative, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct (support=9, scores=diagnostic:4,direct:3,thor:4, best=thor:4, margin_default=1, margin_second=0, relative_gain=0.111111, fallback_reason=low_support)
+direct_prediction=neutral, thor_prediction=negative, error_type=reasoning_label_inconsistency, diagnostic_confidence=high, domain=restaurant -> direct (support=1, scores=diagnostic:0,direct:1,thor:0, best=direct:1, margin_default=0, margin_second=1, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=neutral, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct (support=103, scores=diagnostic:82,direct:82,thor:82, best=direct:82, margin_default=0, margin_second=0, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=neutral, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct (support=205, scores=diagnostic:147,direct:147,thor:147, best=direct:147, margin_default=0, margin_second=0, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=positive, error_type=missed_implicit_negative, diagnostic_confidence=medium, domain=restaurant -> direct (support=1, scores=diagnostic:0,direct:1,thor:0, best=direct:1, margin_default=0, margin_second=1, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=positive, error_type=missed_implicit_positive, diagnostic_confidence=high, domain=laptop -> direct (support=1, scores=diagnostic:0,direct:1,thor:0, best=direct:1, margin_default=0, margin_second=1, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=positive, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct (support=86, scores=diagnostic:27,direct:56,thor:27, best=direct:56, margin_default=0, margin_second=29, relative_gain=0.000000, fallback_reason=)
+direct_prediction=neutral, thor_prediction=positive, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct (support=106, scores=diagnostic:45,direct:51,thor:45, best=direct:51, margin_default=0, margin_second=6, relative_gain=0.000000, fallback_reason=)
+direct_prediction=positive, thor_prediction=negative, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=laptop -> direct (support=5, scores=diagnostic:1,direct:0,thor:1, best=thor:1, margin_default=1, margin_second=0, relative_gain=0.200000, fallback_reason=low_support)
+direct_prediction=positive, thor_prediction=negative, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=restaurant -> direct (support=6, scores=diagnostic:1,direct:3,thor:1, best=direct:3, margin_default=0, margin_second=2, relative_gain=0.000000, fallback_reason=)
+direct_prediction=positive, thor_prediction=negative, error_type=missed_implicit_positive, diagnostic_confidence=high, domain=restaurant -> direct (support=2, scores=diagnostic:1,direct:1,thor:1, best=direct:1, margin_default=0, margin_second=0, relative_gain=0.000000, fallback_reason=)
+direct_prediction=positive, thor_prediction=neutral, error_type=no_error, diagnostic_confidence=high, domain=laptop -> thor (support=10, scores=diagnostic:7,direct:3,thor:7, best=thor:7, margin_default=4, margin_second=0, relative_gain=0.400000, fallback_reason=)
+direct_prediction=positive, thor_prediction=neutral, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct (support=49, scores=diagnostic:22,direct:24,thor:21, best=direct:24, margin_default=0, margin_second=2, relative_gain=0.000000, fallback_reason=)
+direct_prediction=positive, thor_prediction=positive, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct (support=110, scores=diagnostic:65,direct:65,thor:65, best=direct:65, margin_default=0, margin_second=0, relative_gain=0.000000, fallback_reason=)
+direct_prediction=positive, thor_prediction=positive, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct (support=285, scores=diagnostic:209,direct:209,thor:209, best=direct:209, margin_default=0, margin_second=0, relative_gain=0.000000, fallback_reason=)

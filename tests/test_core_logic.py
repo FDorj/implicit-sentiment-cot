@@ -3,7 +3,7 @@ from io import StringIO
 
 import pandas as pd
 
-from experiments.apply_etc_policy import apply_train_calibrated_policy
+from experiments.apply_etc_policy import apply_guarded_train_calibrated_policy, apply_train_calibrated_policy
 from src.controller import select_final_label
 from src.reflection_pipeline import parse_diagnostic_output
 from src.utils import normalize_label
@@ -102,6 +102,166 @@ class CoreLogicTests(unittest.TestCase):
         self.assertEqual(decisions, ["train_calibrated_use_thor"] * 3)
         self.assertIn(("positive", "no_error", "high", "laptop"), learned_policy)
 
+    def test_guarded_policy_falls_back_when_profile_support_is_too_small(self):
+        df = pd.DataFrame(
+            [
+                {
+                    "split": "train",
+                    "domain": "laptop",
+                    "polarity": "neutral",
+                    "direct_prediction": "positive",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "positive",
+                    "error_type": "no_error",
+                    "diagnostic_confidence": "high",
+                },
+                {
+                    "split": "train",
+                    "domain": "laptop",
+                    "polarity": "neutral",
+                    "direct_prediction": "positive",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "positive",
+                    "error_type": "no_error",
+                    "diagnostic_confidence": "high",
+                },
+                {
+                    "split": "test",
+                    "domain": "laptop",
+                    "polarity": "neutral",
+                    "direct_prediction": "positive",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "positive",
+                    "error_type": "no_error",
+                    "diagnostic_confidence": "high",
+                },
+            ]
+        )
+
+        predictions, decisions, sources, _, learned_policy, policy_metadata = apply_guarded_train_calibrated_policy(
+            df,
+            key_columns=[
+                "direct_prediction",
+                "thor_prediction",
+                "error_type",
+                "diagnostic_confidence",
+                "domain",
+            ],
+            min_support=3,
+            min_margin_default=1,
+            min_margin_second=1,
+            min_relative_gain=0.0,
+        )
+
+        key = ("positive", "neutral", "no_error", "high", "laptop")
+        self.assertEqual(sources, ["direct", "direct", "direct"])
+        self.assertEqual(predictions, ["positive", "positive", "positive"])
+        self.assertEqual(decisions, ["guarded_train_calibrated_use_direct_low_support"] * 3)
+        self.assertEqual(learned_policy[key], "direct")
+        self.assertEqual(policy_metadata[key]["fallback_reason"], "low_support")
+
+    def test_guarded_policy_falls_back_when_best_source_margin_is_too_small(self):
+        rows = []
+        for polarity in ["neutral"] * 6 + ["positive"] * 5:
+            rows.append(
+                {
+                    "split": "train",
+                    "domain": "restaurant",
+                    "polarity": polarity,
+                    "direct_prediction": "positive",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "negative",
+                    "error_type": "no_error",
+                    "diagnostic_confidence": "high",
+                }
+            )
+        rows.append(
+            {
+                "split": "test",
+                "domain": "restaurant",
+                "polarity": "neutral",
+                "direct_prediction": "positive",
+                "thor_prediction": "neutral",
+                "diagnostic_label": "negative",
+                "error_type": "no_error",
+                "diagnostic_confidence": "high",
+            }
+        )
+        df = pd.DataFrame(rows)
+
+        predictions, decisions, sources, _, learned_policy, policy_metadata = apply_guarded_train_calibrated_policy(
+            df,
+            key_columns=[
+                "direct_prediction",
+                "thor_prediction",
+                "error_type",
+                "diagnostic_confidence",
+                "domain",
+            ],
+            min_support=5,
+            min_margin_default=2,
+            min_margin_second=1,
+            min_relative_gain=0.0,
+        )
+
+        key = ("positive", "neutral", "no_error", "high", "restaurant")
+        self.assertEqual(sources[-1], "direct")
+        self.assertEqual(predictions[-1], "positive")
+        self.assertEqual(decisions[-1], "guarded_train_calibrated_use_direct_low_default_margin")
+        self.assertEqual(learned_policy[key], "direct")
+        self.assertEqual(policy_metadata[key]["fallback_reason"], "low_default_margin")
+
+    def test_guarded_policy_uses_best_source_when_support_and_margins_are_strong(self):
+        rows = []
+        for polarity in ["neutral"] * 8 + ["positive"] * 2:
+            rows.append(
+                {
+                    "split": "train",
+                    "domain": "laptop",
+                    "polarity": polarity,
+                    "direct_prediction": "positive",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "positive",
+                    "error_type": "no_error",
+                    "diagnostic_confidence": "high",
+                }
+            )
+        rows.append(
+            {
+                "split": "test",
+                "domain": "laptop",
+                "polarity": "neutral",
+                "direct_prediction": "positive",
+                "thor_prediction": "neutral",
+                "diagnostic_label": "positive",
+                "error_type": "no_error",
+                "diagnostic_confidence": "high",
+            }
+        )
+        df = pd.DataFrame(rows)
+
+        predictions, decisions, sources, _, learned_policy, policy_metadata = apply_guarded_train_calibrated_policy(
+            df,
+            key_columns=[
+                "direct_prediction",
+                "thor_prediction",
+                "error_type",
+                "diagnostic_confidence",
+                "domain",
+            ],
+            min_support=5,
+            min_margin_default=2,
+            min_margin_second=1,
+            min_relative_gain=0.05,
+        )
+
+        key = ("positive", "neutral", "no_error", "high", "laptop")
+        self.assertEqual(sources[-1], "thor")
+        self.assertEqual(predictions[-1], "neutral")
+        self.assertEqual(decisions[-1], "guarded_train_calibrated_use_thor")
+        self.assertEqual(learned_policy[key], "thor")
+        self.assertEqual(policy_metadata[key]["fallback_reason"], "")
+
 
 class FinalResultsHelperTests(unittest.TestCase):
     def test_compute_method_metrics_returns_overall_train_and_test_rows(self):
@@ -172,6 +332,20 @@ class FinalResultsHelperTests(unittest.TestCase):
         self.assertEqual(summary["diagnostic_columns_present"], True)
         self.assertEqual(summary["direct_alignment_mismatches"], 0)
         self.assertEqual(summary["thor_alignment_mismatches"], 0)
+
+
+class PolicyAblationHelperTests(unittest.TestCase):
+    def test_guarded_ablation_grid_includes_requested_threshold_candidates(self):
+        from experiments.ablate_guarded_etc_policy import build_policy_configs
+
+        configs = build_policy_configs()
+        names = {config["name"] for config in configs}
+
+        self.assertEqual(len(configs), 110)
+        self.assertIn("current_key_unguarded", names)
+        self.assertIn("richer_key_unguarded", names)
+        self.assertIn("guarded_richer_s10_md2_ms1_rg0p05", names)
+        self.assertIn("guarded_current_s20_md3_ms2_rg0p03", names)
 
 
 class QualitativeExamplesTests(unittest.TestCase):

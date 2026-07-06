@@ -34,6 +34,14 @@ CANDIDATE_SOURCES_RAW = os.getenv(
     "direct,thor,diagnostic",
 ).strip()
 DEFAULT_SOURCE = os.getenv("ETC_SELECTED_DEFAULT_SOURCE", "direct").strip().lower()
+GUARDED_KEY_COLUMNS_RAW = os.getenv(
+    "ETC_SELECTED_GUARDED_KEY_COLUMNS",
+    "direct_prediction,thor_prediction,error_type,diagnostic_confidence,domain",
+).strip()
+GUARDED_MIN_SUPPORT = int(os.getenv("ETC_SELECTED_MIN_SUPPORT", "10"))
+GUARDED_MIN_MARGIN_DEFAULT = int(os.getenv("ETC_SELECTED_MIN_MARGIN_DEFAULT", "2"))
+GUARDED_MIN_MARGIN_SECOND = int(os.getenv("ETC_SELECTED_MIN_MARGIN_SECOND", "1"))
+GUARDED_MIN_RELATIVE_GAIN = float(os.getenv("ETC_SELECTED_MIN_RELATIVE_GAIN", "0.05"))
 
 BASE_REQUIRED_COLUMNS = [
     "polarity",
@@ -105,6 +113,90 @@ def learn_calibrated_policy(
     return policy
 
 
+def score_sources(group: pd.DataFrame, candidate_sources: list[str]) -> dict[str, int]:
+    return {
+        source: int((group[SOURCE_TO_COLUMN[source]] == group["polarity"]).sum())
+        for source in candidate_sources
+    }
+
+
+def best_source_by_score(scores: dict[str, int], candidate_sources: list[str]) -> tuple[str, int]:
+    best_source = candidate_sources[0]
+    best_score = -1
+    for source in candidate_sources:
+        score = scores[source]
+        if score > best_score:
+            best_score = score
+            best_source = source
+
+    return best_source, best_score
+
+
+def learn_guarded_calibrated_policy(
+    df: pd.DataFrame,
+    key_columns: list[str],
+    candidate_sources: list[str],
+    default_source: str,
+    train_split: str,
+    min_support: int,
+    min_margin_default: int,
+    min_margin_second: int,
+    min_relative_gain: float,
+) -> tuple[dict[tuple, str], dict[tuple, dict]]:
+    train_df = df[df["split"].astype(str).str.lower() == train_split].copy()
+    if train_df.empty:
+        raise ValueError(f"No rows found for ETC_SELECTED_TRAIN_SPLIT={train_split!r}")
+
+    policy: dict[tuple, str] = {}
+    metadata: dict[tuple, dict] = {}
+    score_sources_order = list(dict.fromkeys([*candidate_sources, default_source]))
+
+    for key, group in train_df.groupby(key_columns, dropna=False):
+        normalized_key = key if isinstance(key, tuple) else (key,)
+        support = len(group)
+        scores = score_sources(group, score_sources_order)
+        best_source, best_score = best_source_by_score(scores, score_sources_order)
+        sorted_scores = sorted(scores.values(), reverse=True)
+        second_score = sorted_scores[1] if len(sorted_scores) > 1 else best_score
+        default_score = scores[default_source]
+        margin_default = best_score - default_score
+        margin_second = best_score - second_score
+        relative_gain = (best_score / support) - (default_score / support)
+
+        selected_source = best_source
+        fallback_reason = ""
+        if best_source != default_source:
+            if support < min_support:
+                selected_source = default_source
+                fallback_reason = "low_support"
+            elif margin_default < min_margin_default:
+                selected_source = default_source
+                fallback_reason = "low_default_margin"
+            elif margin_second < min_margin_second:
+                selected_source = default_source
+                fallback_reason = "low_second_margin"
+            elif relative_gain < min_relative_gain:
+                selected_source = default_source
+                fallback_reason = "low_relative_gain"
+
+        policy[normalized_key] = selected_source
+        metadata[normalized_key] = {
+            "source": selected_source,
+            "support": support,
+            "scores": scores,
+            "best_source": best_source,
+            "best_score": best_score,
+            "second_score": second_score,
+            "default_score": default_score,
+            "margin_default": margin_default,
+            "margin_second": margin_second,
+            "relative_gain": relative_gain,
+            "fallback_reason": fallback_reason,
+        }
+
+    return policy, metadata
+
+
 def apply_manual_policy(df: pd.DataFrame) -> tuple[list[str], list[str], list[str], list[str]]:
     accepted_error_types = parse_accepted_error_types(ACCEPT_ERROR_TYPES_RAW)
     predictions = []
@@ -164,6 +256,57 @@ def apply_train_calibrated_policy(df: pd.DataFrame) -> tuple[list[str], list[str
     return predictions, decisions, sources, policy_keys, policy
 
 
+def apply_guarded_train_calibrated_policy(
+    df: pd.DataFrame,
+    key_columns: list[str] | None = None,
+    candidate_sources: list[str] | None = None,
+    default_source: str = DEFAULT_SOURCE,
+    train_split: str = TRAIN_SPLIT,
+    min_support: int = GUARDED_MIN_SUPPORT,
+    min_margin_default: int = GUARDED_MIN_MARGIN_DEFAULT,
+    min_margin_second: int = GUARDED_MIN_MARGIN_SECOND,
+    min_relative_gain: float = GUARDED_MIN_RELATIVE_GAIN,
+) -> tuple[list[str], list[str], list[str], list[str], dict[tuple, str], dict[tuple, dict]]:
+    selected_key_columns = key_columns or parse_csv_list(GUARDED_KEY_COLUMNS_RAW)
+    selected_candidate_sources = candidate_sources or parse_csv_list(CANDIDATE_SOURCES_RAW)
+    validate_sources(selected_candidate_sources, default_source)
+    require_columns(df, selected_key_columns, ETC_PATH)
+
+    policy, policy_metadata = learn_guarded_calibrated_policy(
+        df=df,
+        key_columns=selected_key_columns,
+        candidate_sources=selected_candidate_sources,
+        default_source=default_source,
+        train_split=train_split,
+        min_support=min_support,
+        min_margin_default=min_margin_default,
+        min_margin_second=min_margin_second,
+        min_relative_gain=min_relative_gain,
+    )
+
+    predictions = []
+    decisions = []
+    sources = []
+    policy_keys = []
+
+    for _, row in df.iterrows():
+        key = tuple(row[col] for col in selected_key_columns)
+        source = policy.get(key, default_source)
+        prediction = row[SOURCE_TO_COLUMN[source]]
+        metadata = policy_metadata.get(key)
+        fallback_reason = "unseen_profile" if metadata is None else metadata["fallback_reason"]
+        decision = f"guarded_train_calibrated_use_{source}"
+        if fallback_reason:
+            decision = f"{decision}_{fallback_reason}"
+
+        predictions.append(prediction)
+        decisions.append(decision)
+        sources.append(source)
+        policy_keys.append("|".join(f"{col}={row[col]}" for col in selected_key_columns))
+
+    return predictions, decisions, sources, policy_keys, policy, policy_metadata
+
+
 def write_split_metrics(f, df: pd.DataFrame) -> None:
     for split in ["train", "test"]:
         split_df = df[df["split"].astype(str).str.lower() == split].copy()
@@ -209,10 +352,20 @@ def main() -> None:
     require_columns(df, BASE_REQUIRED_COLUMNS, ETC_PATH)
 
     learned_policy: dict[tuple, str] = {}
+    learned_policy_metadata: dict[tuple, dict] = {}
     if POLICY_MODE == "manual":
         predictions, decisions, sources, policy_keys = apply_manual_policy(df)
     elif POLICY_MODE == "train_calibrated":
         predictions, decisions, sources, policy_keys, learned_policy = apply_train_calibrated_policy(df)
+    elif POLICY_MODE == "guarded_train_calibrated":
+        (
+            predictions,
+            decisions,
+            sources,
+            policy_keys,
+            learned_policy,
+            learned_policy_metadata,
+        ) = apply_guarded_train_calibrated_policy(df)
     else:
         raise ValueError(f"Unsupported ETC_SELECTED_POLICY_MODE: {POLICY_MODE}")
 
@@ -237,9 +390,17 @@ def main() -> None:
             f.write(f"accepted_error_types: {','.join(sorted(accepted_error_types))}\n")
         else:
             f.write(f"train_split: {TRAIN_SPLIT}\n")
-            f.write(f"key_columns: {','.join(parse_csv_list(KEY_COLUMNS_RAW))}\n")
+            key_columns = parse_csv_list(KEY_COLUMNS_RAW)
+            if POLICY_MODE == "guarded_train_calibrated":
+                key_columns = parse_csv_list(GUARDED_KEY_COLUMNS_RAW)
+            f.write(f"key_columns: {','.join(key_columns)}\n")
             f.write(f"candidate_sources: {','.join(parse_csv_list(CANDIDATE_SOURCES_RAW))}\n")
             f.write(f"default_source: {DEFAULT_SOURCE}\n")
+            if POLICY_MODE == "guarded_train_calibrated":
+                f.write(f"min_support: {GUARDED_MIN_SUPPORT}\n")
+                f.write(f"min_margin_default: {GUARDED_MIN_MARGIN_DEFAULT}\n")
+                f.write(f"min_margin_second: {GUARDED_MIN_MARGIN_SECOND}\n")
+                f.write(f"min_relative_gain: {GUARDED_MIN_RELATIVE_GAIN:.6f}\n")
 
         f.write(f"n_total: {metrics['n_total']}\n")
         f.write(f"n_eval: {metrics['n_eval']}\n")
@@ -259,11 +420,30 @@ def main() -> None:
         if learned_policy:
             f.write("\nlearned policy\n")
             for key, source in sorted(learned_policy.items()):
+                key_columns = parse_csv_list(KEY_COLUMNS_RAW)
+                if POLICY_MODE == "guarded_train_calibrated":
+                    key_columns = parse_csv_list(GUARDED_KEY_COLUMNS_RAW)
                 key_text = ", ".join(
                     f"{column}={value}"
-                    for column, value in zip(parse_csv_list(KEY_COLUMNS_RAW), key)
+                    for column, value in zip(key_columns, key)
                 )
-                f.write(f"{key_text} -> {source}\n")
+                metadata = learned_policy_metadata.get(key)
+                if metadata:
+                    scores_text = ",".join(
+                        f"{score_source}:{score}"
+                        for score_source, score in sorted(metadata["scores"].items())
+                    )
+                    f.write(
+                        f"{key_text} -> {source} "
+                        f"(support={metadata['support']}, scores={scores_text}, "
+                        f"best={metadata['best_source']}:{metadata['best_score']}, "
+                        f"margin_default={metadata['margin_default']}, "
+                        f"margin_second={metadata['margin_second']}, "
+                        f"relative_gain={metadata['relative_gain']:.6f}, "
+                        f"fallback_reason={metadata['fallback_reason']})\n"
+                    )
+                else:
+                    f.write(f"{key_text} -> {source}\n")
 
     print("Done.")
     print(f"Saved selected ETC predictions to: {OUTPUT_PATH}")
