@@ -1,0 +1,59 @@
+ETC predictions: results\etc_thor_originalish_sc3_isa_predictions.csv
+THOR SC predictions: results\thor_originalish_sc3_isa_predictions.csv
+Current selected predictions: results\etc_thor_originalish_sc3_selected_isa_predictions.csv
+Output predictions: results\meta_selector_predictions.csv
+Output metrics CSV: results\meta_selector_ablation_metrics.csv
+Selected meta model: tree_depth5_leaf10
+
+Feature sets: base agreement/vote features + train-calibrated current/rich profile stats
+Profile keys: [('current_profile', ['direct_prediction', 'error_type', 'diagnostic_confidence', 'domain']), ('rich_profile', ['direct_prediction', 'thor_prediction', 'error_type', 'diagnostic_confidence', 'domain'])]
+
+validation model selection
+                model  validation_accuracy  validation_macro_f1
+   tree_depth5_leaf10             0.631579             0.627814
+   tree_depth5_leaf20             0.631579             0.627814
+gb_depth2_n100_lr0p05             0.631579             0.627814
+   tree_depth3_leaf10             0.624714             0.624355
+    logistic_balanced             0.581236             0.584445
+
+summary metrics
+                   method   split  n_eval  accuracy  macro_f1                                         note
+oracle_source_upper_bound overall    2188  0.770110  0.772749            uses gold labels to choose source
+   current_final_selected overall    2188  0.680987  0.683829                                             
+            meta_selector overall    2188  0.677331  0.679426 selected validation model=tree_depth5_leaf10
+          direct_baseline overall    2188  0.657221  0.660807                                             
+    controller_prediction overall    2188  0.643510  0.645832                                             
+         diagnostic_label overall    2188  0.612888  0.615827                                             
+            thor_baseline overall    2188  0.612431  0.615445                                             
+oracle_source_upper_bound    test     442  0.785068  0.779511            uses gold labels to choose source
+   current_final_selected    test     442  0.723982  0.719204                                             
+            meta_selector    test     442  0.719457  0.713452 selected validation model=tree_depth5_leaf10
+          direct_baseline    test     442  0.678733  0.674075                                             
+    controller_prediction    test     442  0.660633  0.662108                                             
+            thor_baseline    test     442  0.590498  0.600690                                             
+         diagnostic_label    test     442  0.588235  0.596704                                             
+oracle_source_upper_bound   train    1746  0.766323  0.768082            uses gold labels to choose source
+   current_final_selected   train    1746  0.670103  0.671524                                             
+            meta_selector   train    1746  0.666667  0.667357 selected validation model=tree_depth5_leaf10
+          direct_baseline   train    1746  0.651775  0.654005                                             
+    controller_prediction   train    1746  0.639175  0.637897                                             
+         diagnostic_label   train    1746  0.619129  0.618439                                             
+            thor_baseline   train    1746  0.617984  0.617335                                             
+
+test macro-F1 gaps
+oracle_minus_current_final: 0.060307
+oracle_minus_meta_selector: 0.066059
+meta_selector_minus_direct: 0.039377
+current_final_minus_meta_selector: 0.005752
+
+
+oracle source counts
+oracle_source
+direct        1941
+thor           246
+diagnostic       1
+
+meta-selector source counts
+meta_selector_source
+direct    2059
+thor       129

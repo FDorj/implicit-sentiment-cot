@@ -348,6 +348,143 @@ class PolicyAblationHelperTests(unittest.TestCase):
         self.assertIn("guarded_current_s20_md3_ms2_rg0p03", names)
 
 
+class MetaSelectorHelperTests(unittest.TestCase):
+    def test_oracle_selects_first_correct_source_and_falls_back_to_direct(self):
+        from experiments.run_meta_selector import oracle_select_sources
+
+        df = pd.DataFrame(
+            [
+                {
+                    "polarity": "negative",
+                    "direct_prediction": "neutral",
+                    "thor_prediction": "negative",
+                    "diagnostic_label": "positive",
+                },
+                {
+                    "polarity": "positive",
+                    "direct_prediction": "positive",
+                    "thor_prediction": "positive",
+                    "diagnostic_label": "neutral",
+                },
+                {
+                    "polarity": "neutral",
+                    "direct_prediction": "positive",
+                    "thor_prediction": "negative",
+                    "diagnostic_label": "negative",
+                },
+            ]
+        )
+
+        predictions, sources = oracle_select_sources(df)
+
+        self.assertEqual(predictions, ["negative", "positive", "positive"])
+        self.assertEqual(sources, ["thor", "direct", "direct"])
+
+    def test_build_meta_features_adds_agreement_and_vote_margin_features(self):
+        from experiments.run_meta_selector import build_meta_features
+
+        df = pd.DataFrame(
+            [
+                {
+                    "direct_prediction": "positive",
+                    "thor_prediction": "negative",
+                    "diagnostic_label": "negative",
+                    "controller_prediction": "negative",
+                    "error_type": "missed_implicit_negative",
+                    "diagnostic_confidence": "high",
+                    "diagnostic_triggered": True,
+                    "domain": "laptop",
+                    "sc_vote_counts": "negative:2;positive:1",
+                }
+            ]
+        )
+
+        features = build_meta_features(df)
+
+        self.assertEqual(features.loc[0, "direct_thor_agreement"], "no")
+        self.assertEqual(features.loc[0, "direct_diagnostic_agreement"], "no")
+        self.assertEqual(features.loc[0, "thor_diagnostic_agreement"], "yes")
+        self.assertEqual(features.loc[0, "all_sources_agree"], "no")
+        self.assertEqual(features.loc[0, "sc_top_vote_count"], 2)
+        self.assertEqual(features.loc[0, "sc_vote_margin"], 1)
+        self.assertAlmostEqual(features.loc[0, "sc_top_vote_share"], 2 / 3)
+
+    def test_profile_calibration_features_capture_train_source_margins(self):
+        from experiments.run_meta_selector import build_profile_calibration_features
+
+        df = pd.DataFrame(
+            [
+                {
+                    "polarity": "neutral",
+                    "domain": "laptop",
+                    "direct_prediction": "positive",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "positive",
+                    "error_type": "no_error",
+                    "diagnostic_confidence": "high",
+                },
+                {
+                    "polarity": "positive",
+                    "domain": "laptop",
+                    "direct_prediction": "positive",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "positive",
+                    "error_type": "no_error",
+                    "diagnostic_confidence": "high",
+                },
+                {
+                    "polarity": "neutral",
+                    "domain": "laptop",
+                    "direct_prediction": "positive",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "negative",
+                    "error_type": "no_error",
+                    "diagnostic_confidence": "high",
+                },
+                {
+                    "polarity": "neutral",
+                    "domain": "laptop",
+                    "direct_prediction": "positive",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "positive",
+                    "error_type": "no_error",
+                    "diagnostic_confidence": "high",
+                },
+                {
+                    "polarity": "negative",
+                    "domain": "restaurant",
+                    "direct_prediction": "negative",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "negative",
+                    "error_type": "no_error",
+                    "diagnostic_confidence": "high",
+                },
+            ]
+        )
+
+        features = build_profile_calibration_features(
+            df,
+            train_indices=[0, 1, 2],
+            key_columns=[
+                "direct_prediction",
+                "thor_prediction",
+                "error_type",
+                "diagnostic_confidence",
+                "domain",
+            ],
+            prefix="rich_profile",
+        )
+
+        self.assertEqual(features.loc[3, "rich_profile_support"], 3)
+        self.assertEqual(features.loc[3, "rich_profile_best_source"], "thor")
+        self.assertEqual(features.loc[3, "rich_profile_direct_correct_count"], 1)
+        self.assertEqual(features.loc[3, "rich_profile_thor_correct_count"], 2)
+        self.assertAlmostEqual(features.loc[3, "rich_profile_thor_correct_rate"], 2 / 3)
+        self.assertEqual(features.loc[3, "rich_profile_margin_vs_direct"], 1)
+        self.assertEqual(features.loc[4, "rich_profile_support"], 0)
+        self.assertEqual(features.loc[4, "rich_profile_best_source"], "unknown")
+
+
 class QualitativeExamplesTests(unittest.TestCase):
     def test_add_direct_comparison_group_marks_gain_and_loss(self):
         from src.qualitative_examples import add_direct_comparison_group
