@@ -1,0 +1,24 @@
+Data: data/processed/semeval14_scapt_isa_only_clean.csv
+Runtime: backend=openai_compatible, model=Gemini-2.5-Flash
+Variant: originalish
+Self-consistency samples: 3
+Temperature: 0.70
+Output: results/gemini_25_flash_thor_originalish_sc3_test5_predictions.csv
+data_split: test
+debug_n: 5
+n_total: 5
+n_eval: 5
+n_invalid: 0
+valid_prediction_rate: 1.000000
+accuracy: 0.800000
+macro_f1: 0.600000
+
+              precision    recall  f1-score   support
+
+    positive     1.0000    1.0000    1.0000         2
+    negative     0.6667    1.0000    0.8000         2
+     neutral     0.0000    0.0000    0.0000         1
+
+    accuracy                         0.8000         5
+   macro avg     0.5556    0.6667    0.6000         5
+weighted avg     0.6667    0.8000    0.7200         5

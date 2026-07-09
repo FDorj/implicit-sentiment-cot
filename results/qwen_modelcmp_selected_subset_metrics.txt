@@ -1,0 +1,62 @@
+ETC predictions: results/qwen_modelcmp_etc_subset_predictions.csv
+Output: results/qwen_modelcmp_selected_subset_predictions.csv
+policy_mode: train_calibrated
+train_split: train
+key_columns: direct_prediction,error_type,diagnostic_confidence,domain
+candidate_sources: direct,thor,diagnostic
+default_source: direct
+n_total: 240
+n_eval: 240
+accuracy: 0.716667
+macro_f1: 0.714844
+
+              precision    recall  f1-score   support
+
+    positive     0.7910    0.6625    0.7211        80
+    negative     0.7500    0.8625    0.8023        80
+     neutral     0.6173    0.6250    0.6211        80
+
+    accuracy                         0.7167       240
+   macro avg     0.7194    0.7167    0.7148       240
+weighted avg     0.7194    0.7167    0.7148       240
+
+
+train metrics
+n_total: 150
+n_eval: 150
+accuracy: 0.713333
+macro_f1: 0.710702
+
+test metrics
+n_total: 90
+n_eval: 90
+accuracy: 0.722222
+macro_f1: 0.721903
+
+domain metrics
+laptop: accuracy=0.750000, macro_f1=0.747293, n=120
+restaurant: accuracy=0.683333, macro_f1=0.680773, n=120
+
+change summary vs direct/thor
+changed_vs_direct: 4
+changed_vs_thor: 67
+gain_vs_direct: 3
+loss_vs_direct: 0
+
+selected source counts
+selected_source
+direct    236
+thor        4
+
+learned policy
+direct_prediction=negative, error_type=missed_implicit_positive, diagnostic_confidence=high, domain=laptop -> thor
+direct_prediction=negative, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=negative, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct
+direct_prediction=neutral, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=neutral, error_type=missed_implicit_negative, diagnostic_confidence=high, domain=restaurant -> thor
+direct_prediction=neutral, error_type=missed_implicit_negative, diagnostic_confidence=medium, domain=laptop -> direct
+direct_prediction=neutral, error_type=missed_implicit_negative, diagnostic_confidence=medium, domain=restaurant -> direct
+direct_prediction=neutral, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=neutral, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct
+direct_prediction=positive, error_type=no_error, diagnostic_confidence=high, domain=laptop -> direct
+direct_prediction=positive, error_type=no_error, diagnostic_confidence=high, domain=restaurant -> direct

@@ -1,0 +1,53 @@
+Input predictions: results\meta_selector_predictions.csv
+Output predictions: results\residual_meta_selector_predictions.csv
+Output metrics CSV: results\residual_meta_selector_ablation_metrics.csv
+Selected residual model: current_final_noop
+Selected validation threshold: inf
+Selection rule: keep current final unless best candidate score exceeds current score by threshold.
+
+validation model/threshold selection top rows
+             model  threshold  validation_accuracy  validation_macro_f1  validation_overrides  validation_gains  validation_losses  guard_allowed
+current_final_noop        inf             0.670481             0.672189                     0                 0                  0           True
+tree_depth5_leaf10   0.180000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.190000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.200000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.210000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.220000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.230000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.240000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.250000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.260000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.270000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.280000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.290000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.300000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.310000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.320000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.330000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.340000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.350000             0.672769             0.674609                     1                 1                  0          False
+tree_depth5_leaf10   0.360000             0.672769             0.674609                     1                 1                  0          False
+
+summary metrics
+                         method   split  n_eval  accuracy  macro_f1                                               note
+      oracle_source_upper_bound overall    2188  0.770110  0.772749                                   uses gold labels
+         current_final_selected overall    2188  0.680987  0.683829                                                   
+         residual_meta_selector overall    2188  0.680987  0.683829 candidate scorer=current_final_noop; threshold=inf
+source_classifier_meta_selector overall    2188  0.677331  0.679426                                                   
+                direct_baseline overall    2188  0.657221  0.660807                                                   
+      oracle_source_upper_bound    test     442  0.785068  0.779511                                   uses gold labels
+         current_final_selected    test     442  0.723982  0.719204                                                   
+         residual_meta_selector    test     442  0.723982  0.719204 candidate scorer=current_final_noop; threshold=inf
+source_classifier_meta_selector    test     442  0.719457  0.713452                                                   
+                direct_baseline    test     442  0.678733  0.674075                                                   
+      oracle_source_upper_bound   train    1746  0.766323  0.768082                                   uses gold labels
+         current_final_selected   train    1746  0.670103  0.671524                                                   
+         residual_meta_selector   train    1746  0.670103  0.671524 candidate scorer=current_final_noop; threshold=inf
+source_classifier_meta_selector   train    1746  0.666667  0.667357                                                   
+                direct_baseline   train    1746  0.651775  0.654005                                                   
+
+test residual changes
+test_overrides: 0
+test_gains_vs_current: 0
+test_losses_vs_current: 0
+

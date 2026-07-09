@@ -1,0 +1,24 @@
+Data: data/processed/gemini_model_comparison_subset_train150_test90.csv
+Runtime: backend=openai_compatible, model=Gemini-2.5-Flash
+Variant: originalish
+Self-consistency samples: 3
+Temperature: 0.70
+Output: results/gemini_modelcmp_thor_originalish_sc3_subset_predictions.csv
+data_split: all
+debug_n: all
+n_total: 240
+n_eval: 240
+n_invalid: 0
+valid_prediction_rate: 1.000000
+accuracy: 0.787500
+macro_f1: 0.775404
+
+              precision    recall  f1-score   support
+
+    positive     0.7474    0.8875    0.8114        80
+    negative     0.8085    0.9500    0.8736        80
+     neutral     0.8235    0.5250    0.6412        80
+
+    accuracy                         0.7875       240
+   macro avg     0.7931    0.7875    0.7754       240
+weighted avg     0.7931    0.7875    0.7754       240

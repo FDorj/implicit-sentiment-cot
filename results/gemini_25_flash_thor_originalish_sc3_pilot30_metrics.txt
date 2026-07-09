@@ -1,0 +1,24 @@
+Data: data/processed/gemini_thor_pilot30_test_balanced.csv
+Runtime: backend=openai_compatible, model=Gemini-2.5-Flash
+Variant: originalish
+Self-consistency samples: 3
+Temperature: 0.70
+Output: results/gemini_25_flash_thor_originalish_sc3_pilot30_predictions.csv
+data_split: test
+debug_n: all
+n_total: 30
+n_eval: 30
+n_invalid: 0
+valid_prediction_rate: 1.000000
+accuracy: 0.533333
+macro_f1: 0.519368
+
+              precision    recall  f1-score   support
+
+    positive     0.4615    0.6000    0.5217        10
+    negative     0.5833    0.7000    0.6364        10
+     neutral     0.6000    0.3000    0.4000        10
+
+    accuracy                         0.5333        30
+   macro avg     0.5483    0.5333    0.5194        30
+weighted avg     0.5483    0.5333    0.5194        30

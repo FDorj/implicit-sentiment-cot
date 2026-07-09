@@ -1,0 +1,16 @@
+id,source_sentence_id,sentence,target,from,to,polarity,domain,split,direct_raw_output,direct_prediction,aspect,opinion,polarity_reasoning,thor_raw_polarity_output,thor_prediction,diagnostic_raw_output,error_type,diagnostic_label,diagnostic_confidence,controller_prediction,controller_decision,diagnostic_triggered
+7,958:1,"Other than not being a fan of click pads (industry standard these days) and the lousy internal speakers, it's hard for me to find things about this notebook I don't like, especially considering the $350 price tag.",price tag,203,212,positive,laptop,test,positive,positive,monetary value,"Implicit opinion: Positive.
+
+Explanation: The phrase ""especially considering the $350 price tag"" emphasizes that the notebook's few flaws are even more forgivable, and its overall quality more impressive, given its low cost, indicating it is considered a good value.","Positive, cue: ""especially considering the $350 price tag""",Positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
+8,958:1,"Other than not being a fan of click pads (industry standard these days) and the lousy internal speakers, it's hard for me to find things about this notebook I don't like, especially considering the $350 price tag.",click pads,30,40,negative,laptop,test,negative,negative,general,"Implicit opinion: Negative.
+
+Explanation: The phrase ""not being a fan of click pads"" explicitly states a dislike for them.","Sentiment polarity: Negative
+Sentiment cue: not being a fan of",Negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
+9,282:9,No installation disk (DVD) is included.,installation disk (DVD),3,26,neutral,laptop,test,negative,negative,inclusion,"Implicit opinion: Negative.
+
+Explanation: The statement highlights the *absence* of an item that is traditionally or potentially useful for users (for installation, backup, or reinstallation), implying a potential inconvenience or lack of a desired component.","Sentiment polarity: Negative.
+Sentiment cue: No...is included.",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
+20,663:1,"Super light, super sexy and everything just works.",works,44,49,positive,laptop,test,positive,positive,reliability,"Implicit opinion: Positive. The phrase ""everything just works"" implicitly conveys satisfaction with the product's flawless and",Sentiment polarity: Positive (Implicit cue: everything just works),positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
+33,910:1,"This laptop has only 2 USB ports, and they are both on the same side.",USB ports,23,32,negative,laptop,test,negative,negative,placement,"Implicit opinion: Negative
+Explanation: Having both USB ports on the same side can be inconvenient, as it limits flexibility and can make it awkward to use multiple peripherals simultaneously, especially if they are bulky or require space.","Sentiment polarity: Negative
+Sentiment cue: inconvenient, limits flexibility, awkward",Negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False

@@ -1,0 +1,13 @@
+Subset: data\processed\gemini_model_comparison_subset_train150_test90.csv
+
+qwen_direct
+train: accuracy=0.693333, macro_f1=0.692725, n=150
+test: accuracy=0.722222, macro_f1=0.721903, n=90
+
+qwen_thor_originalish_sc3
+train: accuracy=0.673333, macro_f1=0.666052, n=150
+test: accuracy=0.622222, macro_f1=0.606450, n=90
+
+qwen_etc_controller
+train: accuracy=0.700000, macro_f1=0.693890, n=150
+test: accuracy=0.700000, macro_f1=0.698256, n=90

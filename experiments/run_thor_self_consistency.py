@@ -11,11 +11,11 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.evaluator import VALID_LABELS, evaluate_predictions
-from src.experiment_config import describe_runtime, parse_debug_n, result_path
+from src.experiment_config import data_path, describe_runtime, parse_debug_n, result_path
 from src.thor_pipeline import THORPipeline
 
 
-DATA_PATH = "data/processed/semeval14_scapt_isa_only_clean.csv"
+DATA_PATH = data_path()
 VARIANT = os.getenv("THOR_SC_VARIANT", "originalish").strip().lower()
 SC_N = int(os.getenv("THOR_SC_N", "3"))
 TEMPERATURE = float(os.getenv("THOR_SC_TEMPERATURE", "0.7"))
@@ -26,6 +26,7 @@ METRICS_PATH = result_path(OUTPUT_STEM, "metrics.txt", "THOR_SC_METRICS_PATH")
 DEBUG_N = parse_debug_n(default=5)
 RESUME = os.getenv("RESUME_THOR_SC", "0") == "1"
 SAVE_EVERY = int(os.getenv("SAVE_EVERY", "5"))
+DATA_SPLIT = os.getenv("DATA_SPLIT", "").strip().lower()
 
 OUTPUT_COLUMNS = [
     "sc_raw_runs",
@@ -37,6 +38,23 @@ OUTPUT_COLUMNS = [
     "raw_polarity_output",
     "prediction",
 ]
+
+
+def select_experiment_rows(
+    df: pd.DataFrame,
+    data_split: str = "",
+    debug_n: int | None = None,
+) -> pd.DataFrame:
+    selected_df = df
+    if data_split:
+        selected_df = selected_df[selected_df["split"].astype(str).str.lower() == data_split]
+        if selected_df.empty:
+            raise ValueError(f"No rows found for DATA_SPLIT={data_split!r}.")
+
+    if debug_n is not None:
+        selected_df = selected_df.head(debug_n)
+
+    return selected_df.copy()
 
 
 def build_pipeline() -> THORPipeline:
@@ -89,8 +107,12 @@ def save_outputs(df: pd.DataFrame):
         f.write(f"Self-consistency samples: {SC_N}\n")
         f.write(f"Temperature: {TEMPERATURE:.2f}\n")
         f.write(f"Output: {OUTPUT_PATH}\n")
+        f.write(f"data_split: {DATA_SPLIT or 'all'}\n")
+        f.write(f"debug_n: {DEBUG_N if DEBUG_N is not None else 'all'}\n")
         f.write(f"n_total: {metrics['n_total']}\n")
         f.write(f"n_eval: {metrics['n_eval']}\n")
+        f.write(f"n_invalid: {metrics['n_invalid']}\n")
+        f.write(f"valid_prediction_rate: {metrics['valid_prediction_rate']:.6f}\n")
         f.write(f"accuracy: {metrics['accuracy']:.6f}\n")
         f.write(f"macro_f1: {metrics['macro_f1']:.6f}\n\n")
         f.write(metrics["report"])
@@ -102,8 +124,7 @@ def main():
     Path("results").mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(DATA_PATH)
-    if DEBUG_N is not None:
-        df = df.head(DEBUG_N).copy()
+    df = select_experiment_rows(df, data_split=DATA_SPLIT, debug_n=DEBUG_N)
 
     for col in OUTPUT_COLUMNS:
         if col not in df.columns:

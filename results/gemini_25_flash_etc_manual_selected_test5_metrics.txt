@@ -1,0 +1,41 @@
+ETC predictions: results/gemini_25_flash_etc_test5_predictions.csv
+Output: results/gemini_25_flash_etc_manual_selected_test5_predictions.csv
+policy_mode: manual
+fallback_policy: direct
+trust_no_error_on_disagreement: False
+min_correctable_confidence: high
+accepted_error_types: missed_implicit_positive
+n_total: 5
+n_eval: 5
+accuracy: 0.800000
+macro_f1: 0.600000
+
+              precision    recall  f1-score   support
+
+    positive     1.0000    1.0000    1.0000         2
+    negative     0.6667    1.0000    0.8000         2
+     neutral     0.0000    0.0000    0.0000         1
+
+    accuracy                         0.8000         5
+   macro avg     0.5556    0.6667    0.6000         5
+weighted avg     0.6667    0.8000    0.7200         5
+
+
+test metrics
+n_total: 5
+n_eval: 5
+accuracy: 0.800000
+macro_f1: 0.600000
+
+domain metrics
+laptop: accuracy=0.800000, macro_f1=0.600000, n=5
+
+change summary vs direct/thor
+changed_vs_direct: 0
+changed_vs_thor: 0
+gain_vs_direct: 0
+loss_vs_direct: 0
+
+selected source counts
+selected_source
+manual_controller    5

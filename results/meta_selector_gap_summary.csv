@@ -1,0 +1,16 @@
+section,oracle_source,count,domain,direct_to_thor_transition,error_type,diagnostic_confidence,meta_selector_source
+headroom_by_oracle_source,thor,21,,,,,
+headroom_by_oracle_source,direct,6,,,,,
+headroom_by_domain,,18,restaurant,,,,
+headroom_by_domain,,9,laptop,,,,
+headroom_by_direct_to_thor_transition,,8,,neutral->positive,,,
+headroom_by_direct_to_thor_transition,,7,,negative->neutral,,,
+headroom_by_direct_to_thor_transition,,6,,neutral->negative,,,
+headroom_by_direct_to_thor_transition,,5,,positive->neutral,,,
+headroom_by_direct_to_thor_transition,,1,,positive->negative,,,
+headroom_by_error_type_confidence,,19,,,no_error,high,
+headroom_by_error_type_confidence,,7,,,missed_implicit_negative,high,
+headroom_by_error_type_confidence,,1,,,missed_implicit_positive,medium,
+meta_miss_by_oracle_source,thor,21,,,,,
+meta_miss_by_oracle_source,direct,6,,,,,
+meta_regression_by_meta_source,,2,,,,,direct

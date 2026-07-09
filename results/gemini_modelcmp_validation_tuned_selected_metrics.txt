@@ -1,0 +1,43 @@
+ETC predictions: results/gemini_modelcmp_etc_subset_predictions.csv
+Tuning CSV: results/gemini_modelcmp_validation_tuned_policy_ablation.csv
+Output: results/gemini_modelcmp_validation_tuned_selected_predictions.csv
+selection_basis: validation_macro_f1_then_accuracy
+validation_fraction: 0.333333
+validation_seeds: 0,1,2,3,4,5,6,7,8,9
+selected_policy: guarded_current_s2_md1_ms0_rg0p00
+selected_mean_validation_accuracy: 0.758333
+selected_mean_validation_macro_f1: 0.741829
+selected_validation_n_eval_sum: 480
+n_tuned_configs: 272
+n_total: 240
+n_eval: 240
+accuracy: 0.800000
+macro_f1: 0.791642
+
+              precision    recall  f1-score   support
+
+    positive     0.7579    0.9000    0.8229        80
+    negative     0.8222    0.9250    0.8706        80
+     neutral     0.8364    0.5750    0.6815        80
+
+    accuracy                         0.8000       240
+   macro avg     0.8055    0.8000    0.7916       240
+weighted avg     0.8055    0.8000    0.7916       240
+
+
+train metrics
+n_total: 150
+n_eval: 150
+accuracy: 0.786667
+macro_f1: 0.774647
+
+test metrics
+n_total: 90
+n_eval: 90
+accuracy: 0.822222
+macro_f1: 0.818461
+
+selected source counts
+selected_source
+direct    218
+thor       22

@@ -1,0 +1,22 @@
+method,split,n_total,n_eval,accuracy,macro_f1,prediction_column,note
+direct_baseline,overall,2188,2188,0.6572212065813529,0.6608067665295667,direct_prediction,
+direct_baseline,train,1746,1746,0.6517754868270332,0.6540048368707801,direct_prediction,
+direct_baseline,test,442,442,0.6787330316742082,0.6740747626200371,direct_prediction,
+thor_baseline,overall,2188,2188,0.6124314442413162,0.6154454771234353,thor_prediction,
+thor_baseline,train,1746,1746,0.6179839633447881,0.6173350996943391,thor_prediction,
+thor_baseline,test,442,442,0.5904977375565611,0.6006901730130755,thor_prediction,
+diagnostic_label,overall,2188,2188,0.6128884826325411,0.6158271298109174,diagnostic_label,
+diagnostic_label,train,1746,1746,0.6191294387170676,0.6184390581227607,diagnostic_label,
+diagnostic_label,test,442,442,0.5882352941176471,0.596703518018235,diagnostic_label,
+controller_prediction,overall,2188,2188,0.643510054844607,0.6458317677390221,controller_prediction,
+controller_prediction,train,1746,1746,0.6391752577319587,0.6378968162733677,controller_prediction,
+controller_prediction,test,442,442,0.6606334841628959,0.6621076963593117,controller_prediction,
+current_final_selected,overall,2188,2188,0.6809872029250457,0.6838288181460422,selected_prediction,
+current_final_selected,train,1746,1746,0.6701030927835051,0.6715238720944575,selected_prediction,
+current_final_selected,test,442,442,0.7239819004524887,0.7192041747124914,selected_prediction,
+oracle_source_upper_bound,overall,2188,2188,0.770109689213894,0.7727493838423428,oracle_prediction,uses gold labels to choose source
+oracle_source_upper_bound,train,1746,1746,0.7663230240549829,0.7680818652779139,oracle_prediction,uses gold labels to choose source
+oracle_source_upper_bound,test,442,442,0.7850678733031674,0.7795112058170348,oracle_prediction,uses gold labels to choose source
+logistic_source_ranker,overall,2188,2188,0.6645338208409507,0.6651302219718903,logistic_source_ranker_prediction,"regularized logistic regression, C=1.0"
+logistic_source_ranker,train,1746,1746,0.652348224513173,0.6535342841661193,logistic_source_ranker_prediction,"regularized logistic regression, C=1.0"
+logistic_source_ranker,test,442,442,0.7126696832579186,0.6979130195349982,logistic_source_ranker_prediction,"regularized logistic regression, C=1.0"

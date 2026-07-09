@@ -1,0 +1,46 @@
+ETC predictions: results/etc_thor_originalish_sc3_isa_predictions.csv
+THOR SC predictions: results/thor_originalish_sc3_isa_predictions.csv
+Current selected predictions: results/etc_thor_originalish_sc3_selected_isa_predictions.csv
+Output predictions: results/logistic_source_ranker_qwen_predictions.csv
+Output metrics CSV: results/logistic_source_ranker_qwen_ablation_metrics.csv
+Logistic C: 1.0
+Training rows: 1746 samples, 5238 source candidates
+
+Feature columns
+categorical: ['candidate_source', 'candidate_prediction', 'direct_prediction', 'thor_prediction', 'diagnostic_label', 'controller_prediction', 'error_type', 'diagnostic_confidence', 'domain', 'diagnostic_triggered', 'direct_thor_agreement', 'direct_diagnostic_agreement', 'thor_diagnostic_agreement', 'candidate_agrees_direct', 'candidate_agrees_thor', 'candidate_agrees_diagnostic']
+numeric: ['source_index', 'sc_top_vote_count', 'sc_vote_margin', 'sc_top_vote_share', 'sc_vote_unique_labels']
+
+summary metrics
+                   method   split  n_total  n_eval  accuracy  macro_f1                 prediction_column                                   note
+oracle_source_upper_bound overall     2188    2188  0.770110  0.772749                 oracle_prediction      uses gold labels to choose source
+   current_final_selected overall     2188    2188  0.680987  0.683829               selected_prediction                                       
+   logistic_source_ranker overall     2188    2188  0.664534  0.665130 logistic_source_ranker_prediction regularized logistic regression, C=1.0
+          direct_baseline overall     2188    2188  0.657221  0.660807                 direct_prediction                                       
+    controller_prediction overall     2188    2188  0.643510  0.645832             controller_prediction                                       
+         diagnostic_label overall     2188    2188  0.612888  0.615827                  diagnostic_label                                       
+            thor_baseline overall     2188    2188  0.612431  0.615445                   thor_prediction                                       
+oracle_source_upper_bound    test      442     442  0.785068  0.779511                 oracle_prediction      uses gold labels to choose source
+   current_final_selected    test      442     442  0.723982  0.719204               selected_prediction                                       
+   logistic_source_ranker    test      442     442  0.712670  0.697913 logistic_source_ranker_prediction regularized logistic regression, C=1.0
+          direct_baseline    test      442     442  0.678733  0.674075                 direct_prediction                                       
+    controller_prediction    test      442     442  0.660633  0.662108             controller_prediction                                       
+            thor_baseline    test      442     442  0.590498  0.600690                   thor_prediction                                       
+         diagnostic_label    test      442     442  0.588235  0.596704                  diagnostic_label                                       
+oracle_source_upper_bound   train     1746    1746  0.766323  0.768082                 oracle_prediction      uses gold labels to choose source
+   current_final_selected   train     1746    1746  0.670103  0.671524               selected_prediction                                       
+          direct_baseline   train     1746    1746  0.651775  0.654005                 direct_prediction                                       
+   logistic_source_ranker   train     1746    1746  0.652348  0.653534 logistic_source_ranker_prediction regularized logistic regression, C=1.0
+    controller_prediction   train     1746    1746  0.639175  0.637897             controller_prediction                                       
+         diagnostic_label   train     1746    1746  0.619129  0.618439                  diagnostic_label                                       
+            thor_baseline   train     1746    1746  0.617984  0.617335                   thor_prediction                                       
+
+logistic source counts
+logistic_source_ranker_source
+direct    2006
+thor       182
+
+oracle source counts
+oracle_source
+direct        1941
+thor           246
+diagnostic       1

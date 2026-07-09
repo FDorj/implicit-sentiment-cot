@@ -1,0 +1,23 @@
+Data: data/processed/gemini_model_comparison_subset_train150_test90.csv
+Runtime: backend=openai_compatible, model=Gemini-2.5-Flash
+Output: results/gemini_modelcmp_direct_subset_predictions.csv
+data_split: all
+debug_n: all
+resume: True
+save_every: 5
+n_total: 240
+n_eval: 240
+n_invalid: 0
+valid_prediction_rate: 1.000000
+accuracy: 0.754167
+macro_f1: 0.741729
+
+              precision    recall  f1-score   support
+
+    positive     0.7030    0.8875    0.7845        80
+    negative     0.8068    0.8875    0.8452        80
+     neutral     0.7647    0.4875    0.5954        80
+
+    accuracy                         0.7542       240
+   macro avg     0.7582    0.7542    0.7417       240
+weighted avg     0.7582    0.7542    0.7417       240

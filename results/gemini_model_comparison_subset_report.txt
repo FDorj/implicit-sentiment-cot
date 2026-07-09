@@ -1,0 +1,21 @@
+Data source: data\processed\semeval14_scapt_isa_only_clean.csv
+Subset output: data\processed\gemini_model_comparison_subset_train150_test90.csv
+Seed: 20260709
+n_total: 240
+Split counts
+split
+test      90
+train    150
+
+Split / domain / polarity counts
+polarity          negative  neutral  positive
+split domain                                 
+test  laptop            15       15        15
+      restaurant        15       15        15
+train laptop            25       25        25
+      restaurant        25       25        25
+
+Qwen subset files
+direct: results\qwen_modelcmp_direct_subset_predictions.csv
+thor: results\qwen_modelcmp_thor_originalish_sc3_subset_predictions.csv
+etc: results\qwen_modelcmp_etc_subset_predictions.csv

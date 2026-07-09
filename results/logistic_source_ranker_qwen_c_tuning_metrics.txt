@@ -1,0 +1,35 @@
+ETC predictions: results\etc_thor_originalish_sc3_isa_predictions.csv
+THOR SC predictions: results\thor_originalish_sc3_isa_predictions.csv
+Calibration rows: 1309
+Validation rows: 437
+C candidates: [0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0]
+Selected C from train validation: 0.01
+
+validation tuning
+        C  validation_accuracy  validation_macro_f1
+ 0.010000             0.663616             0.659234
+ 0.030000             0.663616             0.657560
+ 0.100000             0.663616             0.657560
+ 0.300000             0.663616             0.657560
+ 1.000000             0.663616             0.657560
+ 3.000000             0.663616             0.657560
+10.000000             0.663616             0.657560
+
+final summary
+          method split  accuracy  macro_f1    n
+current_selected  test  0.723982  0.719204  442
+          direct  test  0.678733  0.674075  442
+  logistic_tuned  test  0.678733  0.674075  442
+      controller  test  0.660633  0.662108  442
+            thor  test  0.590498  0.600690  442
+      diagnostic  test  0.588235  0.596704  442
+current_selected train  0.670103  0.671524 1746
+          direct train  0.651775  0.654005 1746
+  logistic_tuned train  0.651775  0.654005 1746
+      controller train  0.639175  0.637897 1746
+      diagnostic train  0.619129  0.618439 1746
+            thor train  0.617984  0.617335 1746
+
+source counts
+logistic_source_ranker_tuned_source
+direct    2188

@@ -1,0 +1,23 @@
+Data: data/processed/semeval14_scapt_isa_only_clean.csv
+Runtime: backend=openai_compatible, model=Gemini-2.5-Flash
+Output: results/gemini_25_flash_direct_test_isa_predictions.csv
+data_split: test
+debug_n: all
+resume: True
+save_every: 10
+n_total: 442
+n_eval: 442
+n_invalid: 0
+valid_prediction_rate: 1.000000
+accuracy: 0.665158
+macro_f1: 0.673994
+
+              precision    recall  f1-score   support
+
+    positive     0.5550    0.9464    0.6997       112
+    negative     0.5802    0.9268    0.7136        82
+     neutral     0.9333    0.4516    0.6087       248
+
+    accuracy                         0.6652       442
+   macro avg     0.6895    0.7750    0.6740       442
+weighted avg     0.7719    0.6652    0.6512       442

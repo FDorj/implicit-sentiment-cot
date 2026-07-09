@@ -1,0 +1,91 @@
+Meta-selector gap report
+Input: results\meta_selector_predictions.csv
+Rows: overall=2188, test=442
+
+Core test counts
+current final correct: 320/442
+meta-selector correct: 318/442
+oracle correct: 347/442
+current wrong: 122
+all available sources wrong: 95
+headroom cases where current is wrong but oracle is correct: 27
+meta gains over current: 0
+meta misses available headroom: 27
+meta regressions vs current: 2
+
+Headroom by oracle source
+oracle_source
+thor      21
+direct     6
+
+Headroom by domain
+domain
+restaurant    18
+laptop         9
+
+Headroom by direct->thor transition
+direct_to_thor_transition
+neutral->positive     8
+negative->neutral     7
+neutral->negative     6
+positive->neutral     5
+positive->negative    1
+
+Headroom by current->oracle source
+current_to_oracle_source
+direct->thor    21
+thor->direct     6
+
+Headroom by current->oracle label
+current_to_oracle_label
+negative->neutral     9
+neutral->positive     8
+positive->neutral     5
+neutral->negative     4
+positive->negative    1
+
+Headroom by error_type + diagnostic_confidence
+              error_type diagnostic_confidence  count
+                no_error                  high     19
+missed_implicit_negative                  high      7
+missed_implicit_positive                medium      1
+
+SC signal inside headroom
+unanimous SC votes: 20/27
+average SC vote margin: 2.481
+average SC top vote share: 0.914
+
+Meta miss by oracle source
+oracle_source
+thor      21
+direct     6
+
+Meta regression by meta source
+meta_selector_source
+direct    2
+
+Top headroom rows
+ id     domain polarity direct_prediction thor_prediction diagnostic_label current_selected_source oracle_source meta_selector_source               error_type diagnostic_confidence       sc_vote_counts
+385     laptop  neutral          negative         neutral          neutral                  direct          thor               direct                 no_error                  high neutral:2;positive:1
+458     laptop  neutral          negative         neutral          neutral                  direct          thor               direct                 no_error                  high            neutral:3
+470     laptop  neutral          negative         neutral          neutral                  direct          thor               direct                 no_error                  high            neutral:3
+472     laptop  neutral          negative         neutral          neutral                  direct          thor               direct                 no_error                  high            neutral:3
+498     laptop positive           neutral        positive         positive                  direct          thor               direct                 no_error                  high           positive:3
+515     laptop  neutral          negative         neutral          neutral                  direct          thor               direct                 no_error                  high negative:1;neutral:2
+526     laptop positive           neutral        positive         negative                  direct          thor               direct missed_implicit_negative                  high           positive:3
+568     laptop positive           neutral        positive         positive                  direct          thor               direct                 no_error                  high           positive:3
+619     laptop negative           neutral        negative         negative                  direct          thor               direct missed_implicit_negative                  high negative:2;neutral:1
+350 restaurant positive           neutral        positive         positive                  direct          thor               direct                 no_error                  high neutral:1;positive:2
+362 restaurant positive           neutral        positive         positive                  direct          thor               direct                 no_error                  high           positive:3
+366 restaurant  neutral          positive         neutral          neutral                  direct          thor               direct                 no_error                  high            neutral:3
+387 restaurant  neutral           neutral        negative         negative                    thor        direct                 thor missed_implicit_negative                  high           negative:3
+476 restaurant  neutral           neutral        negative         negative                    thor        direct                 thor missed_implicit_negative                  high           negative:3
+538 restaurant positive           neutral        positive         positive                  direct          thor               direct                 no_error                  high           positive:3
+539 restaurant positive           neutral        positive         positive                  direct          thor               direct                 no_error                  high           positive:3
+544 restaurant  neutral           neutral        negative         negative                    thor        direct                 thor missed_implicit_negative                  high           negative:3
+648 restaurant positive           neutral        positive         positive                  direct          thor               direct                 no_error                  high           positive:3
+684 restaurant negative          positive        negative         negative                  direct          thor               direct missed_implicit_negative                  high           negative:3
+687 restaurant  neutral           neutral        negative         negative                    thor        direct                 thor missed_implicit_negative                  high           negative:3
+
+Case CSV: results\meta_selector_gap_cases.csv
+Summary CSV: results\meta_selector_gap_summary.csv

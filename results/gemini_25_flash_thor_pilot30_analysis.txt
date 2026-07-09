@@ -1,0 +1,79 @@
+Direct predictions: results\gemini_25_flash_direct_pilot30_predictions.csv
+THOR predictions: results\gemini_25_flash_thor_originalish_sc3_pilot30_predictions.csv
+Comparison output: results\gemini_25_flash_thor_pilot30_comparison.csv
+n: 30
+
+metrics
+direct: accuracy=0.266667, macro_f1=0.254545
+thor_sc3: accuracy=0.533333, macro_f1=0.519368
+agreement_else_direct: accuracy=0.266667, macro_f1=0.254545
+neutral_on_disagreement: accuracy=0.366667, macro_f1=0.368922
+oracle_direct_or_thor: accuracy=0.533333, macro_f1=0.518939
+
+change groups
+change_group
+same_wrong       14
+fixed_by_thor     8
+same_correct      8
+
+by gold/change group
+change_group  fixed_by_thor  same_correct  same_wrong
+polarity                                             
+negative                  3             4           3
+neutral                   3             0           7
+positive                  2             4           4
+
+direct/thor agreement
+direct_thor_agreement
+agree       21
+disagree     9
+
+agreement correctness
+change_group           fixed_by_thor  same_correct  same_wrong
+direct_thor_agreement                                         
+False                              8             0           1
+True                               0             8          13
+
+THOR vote margins
+  id polarity direct_prediction thor_prediction  direct_correct  thor_correct                  sc_labels        sc_vote_counts  change_group
+ 684 negative           neutral        positive           False         False positive,positive,positive            positive:3    same_wrong
+ 983 negative          positive        positive           False         False positive,positive,positive            positive:3    same_wrong
+1043 negative           neutral        negative           False          True negative,negative,negative            negative:3 fixed_by_thor
+1054 negative           neutral        negative           False          True  neutral,negative,negative  negative:2;neutral:1 fixed_by_thor
+  16 negative           neutral        negative           False          True negative,negative,negative            negative:3 fixed_by_thor
+ 203 negative           neutral         neutral           False         False    neutral,neutral,neutral             neutral:3    same_wrong
+ 264 negative          negative        negative            True          True negative,negative,negative            negative:3  same_correct
+ 265 negative          negative        negative            True          True negative,negative,negative            negative:3  same_correct
+ 315 negative          negative        negative            True          True negative,negative,negative            negative:3  same_correct
+ 342 negative          negative        negative            True          True negative,negative,negative            negative:3  same_correct
+ 385  neutral          positive        positive           False         False positive,positive,positive            positive:3    same_wrong
+ 386  neutral          positive        positive           False         False positive,positive,positive            positive:3    same_wrong
+ 518  neutral          positive         neutral           False          True   positive,neutral,neutral  neutral:2;positive:1 fixed_by_thor
+ 538  neutral          positive        positive           False         False positive,positive,positive            positive:3    same_wrong
+ 617  neutral          positive        positive           False         False  neutral,positive,positive  neutral:1;positive:2    same_wrong
+1074  neutral          positive        positive           False         False positive,positive,positive            positive:3    same_wrong
+   9  neutral          negative         neutral           False          True   neutral,neutral,positive  neutral:2;positive:1 fixed_by_thor
+  18  neutral          negative        negative           False         False negative,negative,negative            negative:3    same_wrong
+  19  neutral          negative        negative           False         False  negative,negative,neutral  negative:2;neutral:1    same_wrong
+ 164  neutral          positive         neutral           False          True   neutral,positive,neutral  neutral:2;positive:1 fixed_by_thor
+ 690 positive          negative        negative           False         False negative,negative,positive negative:2;positive:1    same_wrong
+ 446 positive          negative        negative           False         False negative,negative,negative            negative:3    same_wrong
+ 498 positive           neutral        positive           False          True positive,positive,positive            positive:3 fixed_by_thor
+ 595 positive           neutral         neutral           False         False    neutral,neutral,neutral             neutral:3    same_wrong
+ 689 positive          negative        negative           False         False negative,negative,positive negative:2;positive:1    same_wrong
+ 642 positive           neutral        positive           False          True positive,positive,positive            positive:3 fixed_by_thor
+ 145 positive          positive        positive            True          True positive,positive,positive            positive:3  same_correct
+ 154 positive          positive        positive            True          True positive,positive,positive            positive:3  same_correct
+ 164 positive          positive        positive            True          True positive,positive,positive            positive:3  same_correct
+ 349 positive          positive        positive            True          True positive,positive,positive            positive:3  same_correct
+
+THOR classification report
+              precision    recall  f1-score   support
+
+    positive     0.4615    0.6000    0.5217        10
+    negative     0.5833    0.7000    0.6364        10
+     neutral     0.6000    0.3000    0.4000        10
+
+    accuracy                         0.5333        30
+   macro avg     0.5483    0.5333    0.5194        30
+weighted avg     0.5483    0.5333    0.5194        30

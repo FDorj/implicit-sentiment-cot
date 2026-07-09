@@ -3,6 +3,13 @@ import os
 import re
 
 
+DEFAULT_DATA_PATH = "data/processed/semeval14_scapt_isa_only_clean.csv"
+
+
+def data_path(default: str = DEFAULT_DATA_PATH) -> str:
+    return os.getenv("DATA_PATH", default)
+
+
 def parse_debug_n(default: int | None = 20) -> int | None:
     raw_value = os.getenv("DEBUG_N")
     if raw_value is None:
@@ -26,6 +33,8 @@ def get_model_id() -> str:
     backend = os.getenv("PROMPT_BACKEND", "ollama").strip().lower()
     if backend == "hf":
         return os.getenv("HF_MODEL", "google/flan-t5-large")
+    if backend in {"openai_compatible", "openai-compatible", "openai"}:
+        return os.getenv("OPENAI_COMPAT_MODEL", "Gemini-2.5-Flash")
 
     return os.getenv("OLLAMA_MODEL", "qwen3:8b")
 

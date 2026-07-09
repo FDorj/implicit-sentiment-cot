@@ -1,0 +1,17 @@
+Data: data/processed/semeval14_scapt_isa_only_clean.csv
+Runtime: backend=openai_compatible, model=Gemini-2.5-Flash
+Output: results\gemini_25_flash_direct_isa_predictions.csv
+n_total: 20
+n_eval: 20
+accuracy: 0.800000
+macro_f1: 0.738095
+
+              precision    recall  f1-score   support
+
+    positive     1.0000    1.0000    1.0000         9
+    negative     0.5556    1.0000    0.7143         5
+     neutral     1.0000    0.3333    0.5000         6
+
+    accuracy                         0.8000        20
+   macro avg     0.8519    0.7778    0.7381        20
+weighted avg     0.8889    0.8000    0.7786        20

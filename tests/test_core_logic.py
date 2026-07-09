@@ -347,6 +347,73 @@ class PolicyAblationHelperTests(unittest.TestCase):
         self.assertIn("guarded_richer_s10_md2_ms1_rg0p05", names)
         self.assertIn("guarded_current_s20_md3_ms2_rg0p03", names)
 
+    def test_validation_tuning_selects_policy_by_validation_only(self):
+        from experiments.tune_guarded_etc_policy import select_best_validation_config
+
+        rows = pd.DataFrame(
+            [
+                {"policy": "looks_good_on_test", "split": "validation", "macro_f1": 0.60, "accuracy": 0.60},
+                {"policy": "looks_good_on_test", "split": "test", "macro_f1": 0.99, "accuracy": 0.99},
+                {"policy": "chosen_by_validation", "split": "validation", "macro_f1": 0.80, "accuracy": 0.70},
+                {"policy": "chosen_by_validation", "split": "test", "macro_f1": 0.50, "accuracy": 0.50},
+            ]
+        )
+
+        selected = select_best_validation_config(rows)
+
+        self.assertEqual(selected["policy"], "chosen_by_validation")
+
+    def test_validation_tuning_averages_repeated_validation_runs(self):
+        from experiments.tune_guarded_etc_policy import select_best_validation_config
+
+        rows = pd.DataFrame(
+            [
+                {"policy": "volatile", "split": "validation", "macro_f1": 1.00, "accuracy": 1.00},
+                {"policy": "volatile", "split": "validation", "macro_f1": 0.20, "accuracy": 0.20},
+                {"policy": "stable", "split": "validation", "macro_f1": 0.70, "accuracy": 0.70},
+                {"policy": "stable", "split": "validation", "macro_f1": 0.70, "accuracy": 0.70},
+            ]
+        )
+
+        selected = select_best_validation_config(rows)
+
+        self.assertEqual(selected["policy"], "stable")
+        self.assertAlmostEqual(selected["macro_f1"], 0.70)
+
+    def test_validation_tuning_tie_breaks_toward_simpler_guard(self):
+        from experiments.tune_guarded_etc_policy import select_best_validation_config
+
+        rows = pd.DataFrame(
+            [
+                {
+                    "policy": "guarded_current_s2_md1_ms1_rg0p03",
+                    "mode": "guarded",
+                    "split": "validation",
+                    "macro_f1": 0.80,
+                    "accuracy": 0.80,
+                    "min_support": 2,
+                    "min_margin_default": 1,
+                    "min_margin_second": 1,
+                    "min_relative_gain": 0.03,
+                },
+                {
+                    "policy": "guarded_current_s2_md1_ms0_rg0p00",
+                    "mode": "guarded",
+                    "split": "validation",
+                    "macro_f1": 0.80,
+                    "accuracy": 0.80,
+                    "min_support": 2,
+                    "min_margin_default": 1,
+                    "min_margin_second": 0,
+                    "min_relative_gain": 0.0,
+                },
+            ]
+        )
+
+        selected = select_best_validation_config(rows)
+
+        self.assertEqual(selected["policy"], "guarded_current_s2_md1_ms0_rg0p00")
+
 
 class MetaSelectorHelperTests(unittest.TestCase):
     def test_oracle_selects_first_correct_source_and_falls_back_to_direct(self):
@@ -483,6 +550,158 @@ class MetaSelectorHelperTests(unittest.TestCase):
         self.assertEqual(features.loc[3, "rich_profile_margin_vs_direct"], 1)
         self.assertEqual(features.loc[4, "rich_profile_support"], 0)
         self.assertEqual(features.loc[4, "rich_profile_best_source"], "unknown")
+
+    def test_residual_candidate_rows_expand_each_source(self):
+        from experiments.run_residual_meta_selector import build_candidate_rows
+
+        df = pd.DataFrame(
+            [
+                {
+                    "polarity": "neutral",
+                    "direct_prediction": "positive",
+                    "thor_prediction": "neutral",
+                    "diagnostic_label": "neutral",
+                    "current_selected_source": "direct",
+                    "current_selected_prediction": "positive",
+                }
+            ],
+            index=[10],
+        )
+        row_features = pd.DataFrame({"sc_vote_margin": [3]}, index=[10])
+
+        candidates = build_candidate_rows(df, row_features, [10])
+
+        self.assertEqual(candidates["candidate_source"].tolist(), ["direct", "thor", "diagnostic"])
+        self.assertEqual(candidates["candidate_prediction"].tolist(), ["positive", "neutral", "neutral"])
+        self.assertEqual(candidates["candidate_correct"].tolist(), [False, True, True])
+        self.assertEqual(candidates["candidate_is_current"].tolist(), ["yes", "no", "no"])
+        self.assertEqual(candidates["row_index"].tolist(), [10, 10, 10])
+        self.assertEqual(candidates["current_to_candidate_label"].tolist(), ["positive->positive", "positive->neutral", "positive->neutral"])
+        self.assertEqual(candidates["direct_to_thor_label"].tolist(), ["positive->neutral"] * 3)
+
+    def test_text_features_capture_negation_contrast_and_target_position(self):
+        from experiments.run_residual_meta_selector import build_text_features
+
+        df = pd.DataFrame(
+            [
+                {
+                    "sentence": "The screen is not bright, but the keyboard is excellent!",
+                    "target": "keyboard",
+                    "from": 34,
+                    "to": 42,
+                },
+                {
+                    "sentence": "Battery life is fine.",
+                    "target": "battery",
+                    "from": 0,
+                    "to": 7,
+                },
+            ]
+        )
+
+        features = build_text_features(df)
+
+        self.assertEqual(features.loc[0, "has_negation_cue"], "yes")
+        self.assertEqual(features.loc[0, "has_contrast_cue"], "yes")
+        self.assertEqual(features.loc[0, "has_exclamation"], "yes")
+        self.assertEqual(features.loc[0, "target_position_bucket"], "middle")
+        self.assertGreater(features.loc[0, "sentence_word_count"], features.loc[1, "sentence_word_count"])
+        self.assertEqual(features.loc[1, "has_negation_cue"], "no")
+        self.assertEqual(features.loc[1, "target_position_bucket"], "early")
+
+    def test_residual_selector_overrides_only_when_score_margin_is_large_enough(self):
+        from experiments.run_residual_meta_selector import select_residual_predictions
+
+        df = pd.DataFrame(
+            [
+                {
+                    "current_selected_source": "direct",
+                    "current_selected_prediction": "positive",
+                },
+                {
+                    "current_selected_source": "thor",
+                    "current_selected_prediction": "negative",
+                },
+            ],
+            index=[20, 21],
+        )
+        scores = pd.DataFrame(
+            [
+                {
+                    "row_index": 20,
+                    "candidate_source": "direct",
+                    "candidate_prediction": "positive",
+                    "score": 0.55,
+                },
+                {
+                    "row_index": 20,
+                    "candidate_source": "thor",
+                    "candidate_prediction": "neutral",
+                    "score": 0.70,
+                },
+                {
+                    "row_index": 20,
+                    "candidate_source": "diagnostic",
+                    "candidate_prediction": "neutral",
+                    "score": 0.68,
+                },
+                {
+                    "row_index": 21,
+                    "candidate_source": "direct",
+                    "candidate_prediction": "neutral",
+                    "score": 0.62,
+                },
+                {
+                    "row_index": 21,
+                    "candidate_source": "thor",
+                    "candidate_prediction": "negative",
+                    "score": 0.58,
+                },
+                {
+                    "row_index": 21,
+                    "candidate_source": "diagnostic",
+                    "candidate_prediction": "neutral",
+                    "score": 0.59,
+                },
+            ]
+        )
+
+        predictions, sources = select_residual_predictions(df, scores, threshold=0.10)
+
+        self.assertEqual(predictions.loc[20], "neutral")
+        self.assertEqual(sources.loc[20], "thor")
+        self.assertEqual(predictions.loc[21], "negative")
+        self.assertEqual(sources.loc[21], "thor")
+
+    def test_residual_candidate_guard_requires_improvement_without_losses(self):
+        from experiments.run_residual_meta_selector import residual_candidate_allowed
+
+        baseline_macro_f1 = 0.70
+
+        self.assertTrue(
+            residual_candidate_allowed(
+                {"macro_f1": 0.71, "gains": 2, "losses": 0},
+                baseline_macro_f1,
+            )
+        )
+        self.assertFalse(
+            residual_candidate_allowed(
+                {"macro_f1": 0.71, "gains": 1, "losses": 0},
+                baseline_macro_f1,
+            )
+        )
+        self.assertFalse(
+            residual_candidate_allowed(
+                {"macro_f1": 0.72, "gains": 4, "losses": 1},
+                baseline_macro_f1,
+            )
+        )
+        self.assertFalse(
+            residual_candidate_allowed(
+                {"macro_f1": 0.70, "gains": 1, "losses": 0},
+                baseline_macro_f1,
+            )
+        )
 
 
 class QualitativeExamplesTests(unittest.TestCase):

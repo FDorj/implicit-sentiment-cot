@@ -1,0 +1,24 @@
+Direct predictions: results/gemini_25_flash_direct_test5_predictions.csv
+THOR predictions: results/gemini_25_flash_thor_originalish_sc3_test5_predictions.csv
+Runtime: backend=ollama, model=qwen3:8b
+Output: results/gemini_25_flash_etc_test5_predictions.csv
+trigger_policy: disagreement
+fallback_policy: direct
+trust_no_error_on_disagreement: False
+min_correctable_confidence: medium
+accepted_error_types: aspect_opinion_mismatch,missed_implicit_negative,missed_implicit_positive,neutral_overinterpretation,reasoning_label_inconsistency,target_scope_shift
+n_total: 5
+n_eval: 5
+n_diagnostic_triggered: 0
+accuracy: 0.800000
+macro_f1: 0.600000
+
+              precision    recall  f1-score   support
+
+    positive     1.0000    1.0000    1.0000         2
+    negative     0.6667    1.0000    0.8000         2
+     neutral     0.0000    0.0000    0.0000         1
+
+    accuracy                         0.8000         5
+   macro avg     0.5556    0.6667    0.6000         5
+weighted avg     0.6667    0.8000    0.7200         5

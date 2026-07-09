@@ -1,0 +1,42 @@
+ETC predictions: results/qwen_modelcmp_etc_subset_predictions.csv
+Tuning CSV: results/qwen_modelcmp_validation_tuned_policy_ablation.csv
+Output: results/qwen_modelcmp_validation_tuned_selected_predictions.csv
+selection_basis: validation_macro_f1_then_accuracy
+validation_fraction: 0.333333
+validation_seeds: 0,1,2,3,4,5,6,7,8,9
+selected_policy: guarded_current_s2_md1_ms1_rg0p00
+selected_mean_validation_accuracy: 0.731250
+selected_mean_validation_macro_f1: 0.726013
+selected_validation_n_eval_sum: 480
+n_tuned_configs: 272
+n_total: 240
+n_eval: 240
+accuracy: 0.704167
+macro_f1: 0.703440
+
+              precision    recall  f1-score   support
+
+    positive     0.7879    0.6500    0.7123        80
+    negative     0.7444    0.8375    0.7882        80
+     neutral     0.5952    0.6250    0.6098        80
+
+    accuracy                         0.7042       240
+   macro avg     0.7092    0.7042    0.7034       240
+weighted avg     0.7092    0.7042    0.7034       240
+
+
+train metrics
+n_total: 150
+n_eval: 150
+accuracy: 0.693333
+macro_f1: 0.692725
+
+test metrics
+n_total: 90
+n_eval: 90
+accuracy: 0.722222
+macro_f1: 0.721903
+
+selected source counts
+selected_source
+direct    240

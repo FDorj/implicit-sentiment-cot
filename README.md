@@ -105,6 +105,28 @@ Run the lightweight tests:
 python -B -m unittest discover -s tests -v
 ```
 
+Run a small OpenAI-compatible gateway pilot, for example Gemini through an AI gateway:
+
+```powershell
+$env:PROMPT_BACKEND="openai_compatible"
+$env:OPENAI_COMPAT_BASE_URL="<gateway-url-ending-with-/v1>"
+$env:OPENAI_COMPAT_MODEL="Gemini-2.5-Flash"
+$env:OPENAI_COMPAT_API_KEY="<optional-if-the-gateway-url-already-contains-auth>"
+$env:OPENAI_COMPAT_MIN_MAX_TOKENS="128"
+$env:OPENAI_COMPAT_MAX_RETRIES="6"
+$env:OPENAI_COMPAT_RETRY_SLEEP_SECONDS="10"
+$env:OPENAI_COMPAT_EMPTY_LENGTH_RETRIES="2"
+$env:EXPERIMENT_ID="gemini_25_flash"
+$env:DATA_SPLIT="test"
+$env:DEBUG_N="all"
+$env:RESUME_DIRECT="1"
+$env:SAVE_EVERY="10"
+python -B experiments/run_direct.py
+```
+
+The scripts read environment variables. Keep gateway URLs and API keys in your shell environment, or in a local ignored `.env` file only if your shell/tool loads it. Do not commit credentials.
+For Gemini gateways that spend output budget on reasoning tokens, keep `OPENAI_COMPAT_MIN_MAX_TOKENS` high enough to avoid empty `finish_reason=length` responses.
+
 Regenerate the final result table and validate the final pipeline chain:
 
 ```powershell
@@ -138,7 +160,7 @@ python -B experiments/extract_qualitative_examples.py
 
 - No language model fine-tuning has been performed.
 - Flan-T5/HuggingFace has not been tested or evaluated.
-- OpenAI API results are not part of the current result files.
+- Gemini/OpenAI-compatible gateway results are not part of the current validated result files.
 - `run_final_pipeline.py` summarizes saved outputs; it does not rerun Qwen/Ollama inference.
 
 ## Notes

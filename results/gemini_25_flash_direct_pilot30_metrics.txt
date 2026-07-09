@@ -1,0 +1,19 @@
+Data: data\processed\gemini_thor_pilot30_test_balanced.csv
+Source direct predictions: results\gemini_25_flash_direct_test_isa_predictions.csv
+Output: results\gemini_25_flash_direct_pilot30_predictions.csv
+n_total: 30
+n_eval: 30
+n_invalid: 0
+valid_prediction_rate: 1.000000
+accuracy: 0.266667
+macro_f1: 0.254545
+
+              precision    recall  f1-score   support
+
+    positive     0.3333    0.4000    0.3636        10
+    negative     0.4000    0.4000    0.4000        10
+     neutral     0.0000    0.0000    0.0000        10
+
+    accuracy                         0.2667        30
+   macro avg     0.2444    0.2667    0.2545        30
+weighted avg     0.2444    0.2667    0.2545        30

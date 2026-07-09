@@ -1,0 +1,52 @@
+Pilot data: data\processed\gemini_thor_pilot30_test_balanced.csv
+Pilot direct predictions: results\gemini_25_flash_direct_pilot30_predictions.csv
+Rows: 30
+Class counts
+polarity
+positive    10
+negative    10
+neutral     10
+
+Selection reasons
+pilot_reason
+gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong                        11
+gemini_direct_wrong,qwen_direct_wrong,direct_disagreement,both_direct_wrong     8
+qwen_direct_wrong,direct_disagreement                                           8
+gemini_direct_wrong,direct_disagreement                                         3
+
+Gemini direct metrics on pilot30
+accuracy: 0.266667
+macro_f1: 0.254545
+
+
+Selected ids
+id=684, gold=negative, gemini=neutral, qwen=positive, priority=26, reason=gemini_direct_wrong,qwen_direct_wrong,direct_disagreement,both_direct_wrong
+id=983, gold=negative, gemini=positive, qwen=positive, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=1043, gold=negative, gemini=neutral, qwen=neutral, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=1054, gold=negative, gemini=neutral, qwen=neutral, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=16, gold=negative, gemini=neutral, qwen=negative, priority=13, reason=gemini_direct_wrong,direct_disagreement
+id=203, gold=negative, gemini=neutral, qwen=negative, priority=13, reason=gemini_direct_wrong,direct_disagreement
+id=264, gold=negative, gemini=negative, qwen=neutral, priority=11, reason=qwen_direct_wrong,direct_disagreement
+id=265, gold=negative, gemini=negative, qwen=neutral, priority=11, reason=qwen_direct_wrong,direct_disagreement
+id=315, gold=negative, gemini=negative, qwen=neutral, priority=11, reason=qwen_direct_wrong,direct_disagreement
+id=342, gold=negative, gemini=negative, qwen=neutral, priority=11, reason=qwen_direct_wrong,direct_disagreement
+id=385, gold=neutral, gemini=positive, qwen=negative, priority=26, reason=gemini_direct_wrong,qwen_direct_wrong,direct_disagreement,both_direct_wrong
+id=386, gold=neutral, gemini=positive, qwen=negative, priority=26, reason=gemini_direct_wrong,qwen_direct_wrong,direct_disagreement,both_direct_wrong
+id=518, gold=neutral, gemini=positive, qwen=negative, priority=26, reason=gemini_direct_wrong,qwen_direct_wrong,direct_disagreement,both_direct_wrong
+id=538, gold=neutral, gemini=positive, qwen=negative, priority=26, reason=gemini_direct_wrong,qwen_direct_wrong,direct_disagreement,both_direct_wrong
+id=617, gold=neutral, gemini=positive, qwen=negative, priority=26, reason=gemini_direct_wrong,qwen_direct_wrong,direct_disagreement,both_direct_wrong
+id=1074, gold=neutral, gemini=positive, qwen=negative, priority=26, reason=gemini_direct_wrong,qwen_direct_wrong,direct_disagreement,both_direct_wrong
+id=9, gold=neutral, gemini=negative, qwen=negative, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=18, gold=neutral, gemini=negative, qwen=negative, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=19, gold=neutral, gemini=negative, qwen=negative, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=164, gold=neutral, gemini=positive, qwen=positive, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=690, gold=positive, gemini=negative, qwen=neutral, priority=26, reason=gemini_direct_wrong,qwen_direct_wrong,direct_disagreement,both_direct_wrong
+id=446, gold=positive, gemini=negative, qwen=negative, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=498, gold=positive, gemini=neutral, qwen=neutral, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=595, gold=positive, gemini=neutral, qwen=neutral, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=689, gold=positive, gemini=negative, qwen=negative, priority=23, reason=gemini_direct_wrong,qwen_direct_wrong,both_direct_wrong
+id=642, gold=positive, gemini=neutral, qwen=positive, priority=13, reason=gemini_direct_wrong,direct_disagreement
+id=145, gold=positive, gemini=positive, qwen=negative, priority=11, reason=qwen_direct_wrong,direct_disagreement
+id=154, gold=positive, gemini=positive, qwen=neutral, priority=11, reason=qwen_direct_wrong,direct_disagreement
+id=164, gold=positive, gemini=positive, qwen=negative, priority=11, reason=qwen_direct_wrong,direct_disagreement
+id=349, gold=positive, gemini=positive, qwen=neutral, priority=11, reason=qwen_direct_wrong,direct_disagreement
