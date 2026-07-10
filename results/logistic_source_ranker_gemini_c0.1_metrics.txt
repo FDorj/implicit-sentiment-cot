@@ -1,0 +1,44 @@
+ETC predictions: results/gemini_modelcmp_etc_subset_predictions.csv
+THOR SC predictions: results/gemini_modelcmp_thor_originalish_sc3_subset_predictions.csv
+Current selected predictions: results/gemini_modelcmp_validation_tuned_selected_predictions.csv
+Output predictions: results/logistic_source_ranker_gemini_c0.1_predictions.csv
+Output metrics CSV: results/logistic_source_ranker_gemini_c0.1_ablation_metrics.csv
+Logistic C: 0.1
+Training rows: 150 samples, 450 source candidates
+
+Feature columns
+categorical: ['candidate_source', 'candidate_prediction', 'direct_prediction', 'thor_prediction', 'diagnostic_label', 'controller_prediction', 'error_type', 'diagnostic_confidence', 'domain', 'diagnostic_triggered', 'direct_thor_agreement', 'direct_diagnostic_agreement', 'thor_diagnostic_agreement', 'candidate_agrees_direct', 'candidate_agrees_thor', 'candidate_agrees_diagnostic']
+numeric: ['source_index', 'sc_top_vote_count', 'sc_vote_margin', 'sc_top_vote_share', 'sc_vote_unique_labels']
+
+summary metrics
+                   method   split  n_total  n_eval  accuracy  macro_f1                 prediction_column                                   note
+oracle_source_upper_bound overall      240     240  0.858333  0.851930                 oracle_prediction      uses gold labels to choose source
+         diagnostic_label overall      240     198  0.833333  0.807604                  diagnostic_label
+   current_final_selected overall      240     240  0.800000  0.791642               selected_prediction
+            thor_baseline overall      240     240  0.787500  0.775404                   thor_prediction
+   logistic_source_ranker overall      240     240  0.787500  0.775404 logistic_source_ranker_prediction regularized logistic regression, C=0.1
+          direct_baseline overall      240     240  0.754167  0.741729                 direct_prediction
+    controller_prediction overall      240     240  0.754167  0.741729             controller_prediction
+oracle_source_upper_bound    test       90      90  0.888889  0.885981                 oracle_prediction      uses gold labels to choose source
+   current_final_selected    test       90      90  0.822222  0.818461               selected_prediction
+          direct_baseline    test       90      90  0.811111  0.804886                 direct_prediction
+    controller_prediction    test       90      90  0.811111  0.804886             controller_prediction
+         diagnostic_label    test       90      72  0.819444  0.784565                  diagnostic_label
+            thor_baseline    test       90      90  0.733333  0.716109                   thor_prediction
+   logistic_source_ranker    test       90      90  0.733333  0.716109 logistic_source_ranker_prediction regularized logistic regression, C=0.1
+oracle_source_upper_bound   train      150     150  0.840000  0.830938                 oracle_prediction      uses gold labels to choose source
+         diagnostic_label   train      150     126  0.841270  0.819799                  diagnostic_label
+            thor_baseline   train      150     150  0.820000  0.810857                   thor_prediction
+   logistic_source_ranker   train      150     150  0.820000  0.810857 logistic_source_ranker_prediction regularized logistic regression, C=0.1
+   current_final_selected   train      150     150  0.786667  0.774647               selected_prediction
+          direct_baseline   train      150     150  0.720000  0.702831                 direct_prediction
+    controller_prediction   train      150     150  0.720000  0.702831             controller_prediction
+
+logistic source counts
+logistic_source_ranker_source
+thor    240
+
+oracle source counts
+oracle_source
+direct    215
+thor       25

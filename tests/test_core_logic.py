@@ -34,6 +34,74 @@ class CoreLogicTests(unittest.TestCase):
         self.assertEqual(parsed["diagnostic_label"], "negative")
         self.assertEqual(parsed["confidence"], "high")
 
+    def test_parse_diagnostic_output_accepts_json_fields(self):
+        parsed = parse_diagnostic_output(
+            '{"error_type": "neutral_overinterpretation", '
+            '"corrected_label": "neutral", '
+            '"confidence": "medium"}'
+        )
+
+        self.assertEqual(parsed["error_type"], "neutral_overinterpretation")
+        self.assertEqual(parsed["diagnostic_label"], "neutral")
+        self.assertEqual(parsed["confidence"], "medium")
+
+    def test_parse_diagnostic_output_falls_back_to_polarity_text(self):
+        parsed = parse_diagnostic_output(
+            "error_type=reasoning_label_inconsistency\n"
+            "Sentiment polarity: Negative\n"
+            "confidence: high\n"
+        )
+
+        self.assertEqual(parsed["error_type"], "reasoning_label_inconsistency")
+        self.assertEqual(parsed["diagnostic_label"], "negative")
+        self.assertEqual(parsed["confidence"], "high")
+
+    def test_error_type_reflection_repairs_incomplete_diagnostic_label(self):
+        import os
+        from unittest.mock import patch
+
+        from src.reflection_pipeline import ErrorTypeReflectionPipeline
+
+        class FakeRunner:
+            def __init__(self):
+                self.calls = []
+                self.outputs = [
+                    "error_type=missed_implicit_negative",
+                    '{"error_type":"missed_implicit_negative","label":"negative","confidence":"high"}',
+                ]
+
+            def run(self, prompt, temperature, max_tokens):
+                self.calls.append(
+                    {
+                        "prompt": prompt,
+                        "temperature": temperature,
+                        "max_tokens": max_tokens,
+                    }
+                )
+                return self.outputs.pop(0)
+
+        pipeline = ErrorTypeReflectionPipeline()
+        fake_runner = FakeRunner()
+        pipeline.runner = fake_runner
+
+        with patch.dict(os.environ, {"ETC_DIAGNOSTIC_REPAIR_RETRIES": "1"}):
+            diagnosis = pipeline.diagnose(
+                sentence="15% gratuity automatically added to the bill.",
+                target="bill",
+                direct_label="negative",
+                aspect="general",
+                opinion="no sentiment evidence",
+                polarity_reasoning="neutral",
+                thor_label="neutral",
+            )
+
+        self.assertEqual(diagnosis["diagnostic_label"], "negative")
+        self.assertEqual(diagnosis["confidence"], "high")
+        self.assertEqual(len(fake_runner.calls), 2)
+        self.assertGreaterEqual(fake_runner.calls[0]["max_tokens"], 256)
+        self.assertGreaterEqual(fake_runner.calls[1]["max_tokens"], 256)
+        self.assertIn("[repair]", diagnosis["diagnostic_raw_output"])
+
     def test_controller_keeps_shared_direct_and_thor_label(self):
         label, decision = select_final_label(
             direct_label="positive",

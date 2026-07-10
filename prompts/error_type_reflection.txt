@@ -34,7 +34,5 @@ Rules:
 - If THOR reasoning implies one sentiment but THOR label says another, use reasoning_label_inconsistency.
 - If there is not enough evidence to override THOR, use insufficient_evidence.
 
-Output exactly these three lines:
-error_type=<allowed error type>
-label=<positive|negative|neutral>
-confidence=<low|medium|high>
+Output exactly one JSON object and no other text:
+{{"error_type":"<allowed error type>","label":"<positive|negative|neutral>","confidence":"<low|medium|high>"}}

@@ -1,0 +1,22 @@
+method,split,n_total,n_eval,accuracy,macro_f1,prediction_column,note
+direct_baseline,overall,240,240,0.7541666666666667,0.7417294431022237,direct_prediction,
+direct_baseline,train,150,150,0.72,0.7028306178149036,direct_prediction,
+direct_baseline,test,90,90,0.8111111111111111,0.8048858887817422,direct_prediction,
+thor_baseline,overall,240,240,0.7875,0.7754043879550592,thor_prediction,
+thor_baseline,train,150,150,0.82,0.8108565328077523,thor_prediction,
+thor_baseline,test,90,90,0.7333333333333333,0.7161092875378591,thor_prediction,
+diagnostic_label,overall,240,198,0.8333333333333334,0.8076035528837361,diagnostic_label,
+diagnostic_label,train,150,126,0.8412698412698413,0.8197991454392465,diagnostic_label,
+diagnostic_label,test,90,72,0.8194444444444444,0.7845648604269294,diagnostic_label,
+controller_prediction,overall,240,240,0.7541666666666667,0.7417294431022237,controller_prediction,
+controller_prediction,train,150,150,0.72,0.7028306178149036,controller_prediction,
+controller_prediction,test,90,90,0.8111111111111111,0.8048858887817422,controller_prediction,
+current_final_selected,overall,240,240,0.8,0.7916422865442474,selected_prediction,
+current_final_selected,train,150,150,0.7866666666666666,0.774647266313933,selected_prediction,
+current_final_selected,test,90,90,0.8222222222222222,0.8184611087836894,selected_prediction,
+oracle_source_upper_bound,overall,240,240,0.8583333333333333,0.8519302514193025,oracle_prediction,uses gold labels to choose source
+oracle_source_upper_bound,train,150,150,0.84,0.8309383668915253,oracle_prediction,uses gold labels to choose source
+oracle_source_upper_bound,test,90,90,0.8888888888888888,0.8859807264178848,oracle_prediction,uses gold labels to choose source
+logistic_source_ranker,overall,240,240,0.7875,0.7754043879550592,logistic_source_ranker_prediction,"regularized logistic regression, C=0.01"
+logistic_source_ranker,train,150,150,0.82,0.8108565328077523,logistic_source_ranker_prediction,"regularized logistic regression, C=0.01"
+logistic_source_ranker,test,90,90,0.7333333333333333,0.7161092875378591,logistic_source_ranker_prediction,"regularized logistic regression, C=0.01"

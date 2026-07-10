@@ -23,6 +23,7 @@ METRICS_PATH = result_path("etc_isa", "metrics.txt", "ETC_METRICS_PATH")
 DEBUG_N = parse_debug_n(default=20)
 RESUME = os.getenv("RESUME_ERROR_TYPE", "0") == "1"
 SAVE_EVERY = int(os.getenv("SAVE_EVERY", "10"))
+RERUN_INVALID_DIAGNOSTICS = os.getenv("RERUN_INVALID_DIAGNOSTICS", "0") == "1"
 TRIGGER_POLICY = os.getenv("ETC_TRIGGER_POLICY", "disagreement").strip().lower()
 FALLBACK_POLICY = os.getenv("ETC_FALLBACK_POLICY", "direct").strip().lower()
 TRUST_NO_ERROR_ON_DISAGREEMENT = os.getenv("ETC_TRUST_NO_ERROR_ON_DISAGREEMENT", "0") == "1"
@@ -144,6 +145,24 @@ def apply_no_diagnostic(row: pd.Series) -> dict:
     }
 
 
+def completed_error_type_mask(df: pd.DataFrame, rerun_invalid_diagnostics: bool = False) -> pd.Series:
+    completed_mask = df["controller_prediction"].isin(VALID_LABELS)
+    if not rerun_invalid_diagnostics:
+        return completed_mask
+
+    triggered = df["diagnostic_triggered"].fillna(False).astype(bool)
+    valid_diagnostic = df["diagnostic_label"].isin(VALID_LABELS)
+    return completed_mask & (~triggered | valid_diagnostic)
+
+
+def pending_error_type_indices(df: pd.DataFrame, rerun_invalid_diagnostics: bool = False) -> list:
+    completed_mask = completed_error_type_mask(
+        df,
+        rerun_invalid_diagnostics=rerun_invalid_diagnostics,
+    )
+    return df.index[~completed_mask].tolist()
+
+
 def save_outputs(df: pd.DataFrame):
     df.to_csv(OUTPUT_PATH, index=False)
     metrics = evaluate_predictions(df, gold_col="polarity", pred_col="controller_prediction")
@@ -180,7 +199,7 @@ def main():
         if col not in df.columns:
             df[col] = pd.NA
 
-    start_idx = 0
+    pending_indices = df.index.tolist()
     if RESUME and Path(OUTPUT_PATH).exists():
         prev_df = pd.read_csv(OUTPUT_PATH)
         if len(prev_df) == len(df):
@@ -188,15 +207,20 @@ def main():
                 if col in prev_df.columns:
                     df[col] = prev_df[col]
 
-            completed_mask = df["controller_prediction"].isin(VALID_LABELS)
-            start_idx = int(completed_mask.sum())
+            pending_indices = pending_error_type_indices(
+                df,
+                rerun_invalid_diagnostics=RERUN_INVALID_DIAGNOSTICS,
+            )
 
     pipeline = ErrorTypeReflectionPipeline()
 
-    for idx, row in tqdm(
-        df.iloc[start_idx:].iterrows(),
-        total=len(df) - start_idx,
-        desc="Running ETC-ISA controller",
+    for completed, (idx, row) in enumerate(
+        tqdm(
+            df.loc[pending_indices].iterrows(),
+            total=len(pending_indices),
+            desc="Running ETC-ISA controller",
+        ),
+        start=1,
     ):
         if should_trigger(row):
             diagnosis = pipeline.diagnose(
@@ -235,7 +259,6 @@ def main():
         for col, value in updates.items():
             df.at[idx, col] = value
 
-        completed = idx + 1
         if completed % SAVE_EVERY == 0:
             save_outputs(df)
 

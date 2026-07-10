@@ -71,16 +71,19 @@ Explanation: The phrase ""doesn't meet the bill"" directly indicates that the ac
 Explanation: The speaker expected a ""great meal"" but instead received ""marginally so-so food,"" which indicates that the quality of the food was disappointing and did not meet their expectations.","Sentiment polarity: Negative (Implicit cue: ""expecting a great meal, and all I got was marginally so-so food"")",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 808,33071731#1007204#6,15% gratuity automatically added to the bill.,bill,40,44,negative,restaurant,test,negative,negative,aspect: service charge,"Implicit opinion: no sentiment evidence
 
-Explanation: The sentence is a factual description of the restaurant's billing policy regarding the automatic addition of a gratuity. It contains no evaluative language or emotional expression that indicates a positive or negative opinion toward the service charge.",Sentiment polarity: Neutral,neutral,neutral,error_type=missed_implicit_negative,missed_implicit_negative,unknown,low,negative,fallback_use_direct,True
+Explanation: The sentence is a factual description of the restaurant's billing policy regarding the automatic addition of a gratuity. It contains no evaluative language or emotional expression that indicates a positive or negative opinion toward the service charge.",Sentiment polarity: Neutral,neutral,neutral,"{""error_type"": ""missed_implicit_negative"", ""label"": ""negative"", """,insufficient_evidence,unknown,low,negative,fallback_use_direct,True
 983,35391416#500259#5,Make more tables- perhaps a rooftop bar?,tables,10,16,negative,restaurant,test,neutral,neutral,aspect: location,"Implicit opinion: Negative
 
-Explanation: The suggestion to ""Make more tables"" implicitly criticizes the current setup for having an insufficient number of tables or seating capacity.","Sentiment polarity: Negative (Implicit cue: ""Make more"", which implies an insufficient number of tables)",negative,negative,error_type=aspect_opinion,insufficient_evidence,unknown,low,neutral,fallback_use_direct,True
+Explanation: The suggestion to ""Make more tables"" implicitly criticizes the current setup for having an insufficient number of tables or seating capacity.","Sentiment polarity: Negative (Implicit cue: ""Make more"", which implies an insufficient number of tables)",negative,negative,"{""error_type"": ""no_error"", ""label"": ""negative"",
+
+[repair]
+{""error_type"": ""no_error"", ""label"": ""negative"", ""confidence"": ""high""}",no_error,negative,high,neutral,fallback_use_direct,True
 1043,11651065#413029#1,"The comments about fried foods is correct (below) but the other dishes, including the lamb entree and many of the salads (avocado shrimp) were quite good.",fried foods,19,30,negative,restaurant,test,negative,negative,general,"Implicit opinion: Negative
 
 Explanation: The use of the contrastive conjunction ""but"" to transition from the comments about fried foods to stating that the other dishes were ""quite good"" implies that the fried foods were not good, suggesting a negative opinion.","Sentiment polarity: Negative (Implicit cue: the contrastive conjunction ""but"" transitioning to the other dishes being ""quite good"", implying the fried foods were not).",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 1054,33070305#1312437#5,"The room is a little plain, but it's difficult to make such a small place exciting and I would not suggest that as a reason not to go.",place,68,73,negative,restaurant,test,positive,positive,aspect: size,"Implicit opinion: Negative
 
-Explanation: The speaker views the small size of the place as a limitation or disadvantage, noting that it makes the room difficult to design or make exciting.","Sentiment polarity: Negative (Implicit cue: ""difficult to make such a small [place] exciting"")",negative,negative,error_type=no_error,no_error,unknown,low,positive,fallback_use_direct,True
+Explanation: The speaker views the small size of the place as a limitation or disadvantage, noting that it makes the room difficult to design or make exciting.","Sentiment polarity: Negative (Implicit cue: ""difficult to make such a small [place] exciting"")",negative,negative,"{""error_type"": ""no_error"", ""label"": ""negative"", ""confidence",insufficient_evidence,unknown,low,positive,fallback_use_direct,True
 1075,11350142#1253117#2,"Two complaints- their appetizer selection stinks, it would be nice to get some mozzarella sticks on the menu.",menu,104,108,negative,restaurant,test,negative,negative,aspect: appetizer selection,"Implicit opinion: negative
 
 Explanation: The speaker expresses a desire to have mozzarella sticks added to the menu (""it would be nice to get some... on the menu""), implying that the current menu is lacking or unsatisfactory in its options.","Sentiment polarity: Negative (Implicit cue: ""it would be nice to get some... on the menu"")",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
@@ -97,7 +100,7 @@ Explanation: The phrase ""in the process of learning about"" describes the speak
 164,124:1,I did add a SSD drive and memory,SSD drive,12,21,neutral,laptop,test,neutral,neutral,type,"Positive.
 
 Explanation: Adding an SSD drive is a common upgrade specifically chosen for its superior","Sentiment polarity: Positive
-Sentiment cue: superior",positive,positive,error_type=neutral_overinterpretation,neutral_overinterpretation,unknown,low,neutral,fallback_use_direct,True
+Sentiment cue: superior",positive,positive,"{""error_type"": ""neutral_overinterpretation"", ""label"": ""neutral"", ""confidence"":",insufficient_evidence,unknown,low,neutral,fallback_use_direct,True
 168,332:1,I Have been a Pc user for a very long time now but I will get used to this new OS.,OS,79,81,neutral,laptop,test,neutral,neutral,user experience,"Implicit opinion: Slightly negative.
 
 The phrase ""I will get used to this new OS"" implies that","Negative.
@@ -106,14 +109,18 @@ label=negative",no_error,negative,low,neutral,fallback_use_direct,True
 336,1075:1,(but Office can be purchased) IF I ever need a laptop again I am for sure purchasing another Toshiba!!,Office,5,11,neutral,laptop,test,neutral,neutral,purchasability,"Implicit opinion: neutral/mildly positive.
 
 Explanation: The phrase ""(but Office can be purchased)""","Sentiment polarity: Neutral/Mildly Positive (implicit)
-Sentiment cue: ""can be purchased""",positive,positive,"error_type=neutral_overinterpretation
-label=",neutral_overinterpretation,unknown,low,neutral,fallback_use_direct,True
+Sentiment cue: ""can be purchased""",positive,positive,"{""error_type"":""neutral_overinterpretation"",""label"":""neutral"",""confidence"":""high""}",neutral_overinterpretation,neutral,high,neutral,accept_neutral_overinterpretation,True
 337,689:1,I haven't tried the one with retina display... Maybe in the future.,retina display,29,43,neutral,laptop,test,neutral,neutral,general,"Implicit opinion: positive (curiosity/interest)
 
-Explanation: The phrase ""Maybe","Sentiment polarity: Positive (Implicit cue: ""Maybe"")",Positive,positive,error_type=neutral_,insufficient_evidence,unknown,low,neutral,fallback_use_direct,True
+Explanation: The phrase ""Maybe","Sentiment polarity: Positive (Implicit cue: ""Maybe"")",Positive,positive,"{""error_type"": ""no_error"", ""label"": ""positive"", ""confidence"": ""high
+
+[repair]
+```json
+{""error_type"": ""no_error"", ""label"": ""positive"", ""confidence"": ""high""}
+```",no_error,positive,high,neutral,fallback_use_direct,True
 447,523:1,This one still has the CD slot.,CD slot,23,30,neutral,laptop,test,positive,positive,presence,"No sentiment evidence.
 
-The phrase ""still has"" simply indicates that the CD slot is present despite",Sentiment polarity: Neutral,Neutral,neutral,error_type=missed_implicit_positive,missed_implicit_positive,unknown,low,positive,fallback_use_direct,True
+The phrase ""still has"" simply indicates that the CD slot is present despite",Sentiment polarity: Neutral,Neutral,neutral,"{""error_type"":""missed_implicit_positive"",""label"":""positive"",""confidence"":""high""}",missed_implicit_positive,positive,high,positive,accept_missed_implicit_positive,True
 533,891:1,"At home and the office it gets plugged into an external 24"" LCD screen, so built in screen size is not terribly important.","external 24"" LCD screen",47,70,neutral,laptop,test,neutral,neutral,screen size,"Implicit opinion: Positive.
 The external 24"" LCD screen is presented as a","Positive.
 Sentiment cue: The external screen makes the built-in screen size ""not terribly important,"" implying it provides a sufficient or preferred viewing experience.",Positive,positive,"error_type=no_error
@@ -122,14 +129,14 @@ label=positive",no_error,positive,low,neutral,fallback_use_direct,True
 Sentiment cue: surprised to learn that I needed to buy",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 555,1009:1,"I had to buy a wireless mouse to go with it, as I am old school and hate the pad, but knew that before I bought it, now it works great, need to get adjusted to the key board, as I am used to a bigger one and pounding.",key board,164,173,neutral,laptop,test,neutral,neutral,size,"Implicit opinion: Negative.
 Explanation: The speaker needs to ""get adjusted"" to the keyboard because they are ""used to a bigger one,"" implying the current keyboard's smaller size is a drawback requiring adaptation.","Negative.
-Sentiment cue: ""need to get adjusted to"" and ""used to a bigger one""",Negative,negative,error_type=no_error,no_error,unknown,low,neutral,fallback_use_direct,True
+Sentiment cue: ""need to get adjusted to"" and ""used to a bigger one""",Negative,negative,"{""error_type"":""no_error"",""label"":""negative"",""confidence"":""high""}",no_error,negative,high,neutral,fallback_use_direct,True
 557,404:1,"When considering a Mac, look at the total cost of ownership and not just the initial price tag.",price tag,85,94,neutral,laptop,test,neutral,neutral,initial,"Implicit opinion: Negative
 
 Explanation: The sentence advises against focusing solely on the initial price tag, implying that it is an insufficient and potentially misleading metric that does not reflect the true, long-term cost of owning a Mac.","Sentiment polarity: Negative (Implicit cue: ""not just"", advising against focusing solely on it)",negative,negative,"error_type=no_error
 label=negative",no_error,negative,low,neutral,fallback_use_direct,True
 598,547:16,i have dropped mine a couple times with only a slim plastic case covering it.,slim plastic case,47,64,neutral,laptop,test,neutral,neutral,aspect: protection,"Implicit opinion: Positive
 
-Explanation: The speaker implies that the phone survived being dropped multiple times with only a slim case on it, indicating that the case provided effective and successful protection despite its minimal design.",Sentiment polarity: Positive (Implicit cue: the implication that the phone survived multiple drops undamaged despite only having this minimal case on it).,positive,positive,error_type=no_error,no_error,unknown,low,neutral,fallback_use_direct,True
+Explanation: The speaker implies that the phone survived being dropped multiple times with only a slim case on it, indicating that the case provided effective and successful protection despite its minimal design.",Sentiment polarity: Positive (Implicit cue: the implication that the phone survived multiple drops undamaged despite only having this minimal case on it).,positive,positive,"{""error_type"": ""no_error"", ""label"": ""positive"", ""confidence"": ""high""}",no_error,positive,high,neutral,fallback_use_direct,True
 613,997:12,"I re-seated the ""WLAN"" card inside and re-installed the LAN device drivers.",LAN device drivers,56,74,neutral,laptop,test,neutral,neutral,aspect: installation,Implicit opinion: no sentiment evidence.,Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 617,884:1,I had to get Apple Customer Support to correct the problem.,Apple Customer Support,13,35,neutral,laptop,test,neutral,neutral,general,no sentiment evidence,Sentiment polarity: Neutral (factual statement with no sentiment cue).,neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 632,55:1,I know some people complained about HDMI issues but they released a firmware patch to address that issue.,firmware patch,68,82,neutral,laptop,test,positive,positive,availability,"Implicit opinion: Positive
@@ -146,27 +153,26 @@ Explanation: The sentiment towards the dessert pizza is negative because the cus
 Explanation: The sentence merely lists the scallops as one of the dishes ordered, providing a factual description of what was eaten without any qualitative modifiers or emotional cues to indicate a positive or negative opinion.","Sentiment polarity: Neutral (no sentiment cue, factual mention)",neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 318,32934709#796678#2,Be sure to accompany your food with one of their fresh juice concoctions.,food,26,30,neutral,restaurant,test,positive,positive,general,"Implicit opinion: no sentiment evidence
 
-Explanation: The sentence merely mentions ""food"" as the item to be accompanied by the juice, without providing any descriptive quality, evaluation, or sentiment directed toward the food itself.",Neutral (no sentiment cue),neutral,neutral,"error_type=no_error
-label=",no_error,unknown,low,positive,fallback_use_direct,True
+Explanation: The sentence merely mentions ""food"" as the item to be accompanied by the juice, without providing any descriptive quality, evaluation, or sentiment directed toward the food itself.",Neutral (no sentiment cue),neutral,neutral,"{""error_type"": ""missed_implicit_positive"", ""label"": ""positive"", """,insufficient_evidence,unknown,low,positive,fallback_use_direct,True
 424,11349922#547169#3,Half a chicken with a mountain of rice and beans for $6.25.,rice,34,38,neutral,restaurant,test,positive,positive,aspect: portion size,"Implicit opinion: Positive
 
 Explanation: The word ""mountain"" is used to describe the portion of rice, implying that the serving size is very generous and large, which represents a favorable and positive opinion regarding the portion size for the price.","Sentiment polarity: Positive (implicit cue: ""mountain"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 513,35177381#521555#1,"Our waitress had apparently never tried any of the food, and there was no one to recommend any wine.",food,51,55,neutral,restaurant,test,negative,negative,aspect: general,"Implicit opinion: no sentiment evidence
 
-Explanation: The sentence expresses frustration with the service and the waitress's lack of knowledge, but it does not provide any description or implicit opinion regarding the actual quality or taste of the food itself.",Sentiment polarity: Neutral (no sentiment cue/evidence),neutral,neutral,error_type=missed_implicit_negative,missed_implicit_negative,unknown,low,negative,fallback_use_direct,True
-559,32892130#435512#2,There's candlelight and music.,music,24,29,neutral,restaurant,test,positive,positive,general,Implicit opinion: no sentiment evidence,Sentiment polarity: neutral,neutral,neutral,"error_type=insufficient_evidence
-label",insufficient_evidence,unknown,low,positive,fallback_use_direct,True
+Explanation: The sentence expresses frustration with the service and the waitress's lack of knowledge, but it does not provide any description or implicit opinion regarding the actual quality or taste of the food itself.",Sentiment polarity: Neutral (no sentiment cue/evidence),neutral,neutral,"{""error_type"":""missed_implicit_negative"",""label"":""negative"",""confidence"":""high""}",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True
+559,32892130#435512#2,There's candlelight and music.,music,24,29,neutral,restaurant,test,positive,positive,general,Implicit opinion: no sentiment evidence,Sentiment polarity: neutral,neutral,neutral,"{""error_type"":""missed_implicit_positive"",""label"":""positive"",""confidence"":""high""}",missed_implicit_positive,positive,high,positive,accept_missed_implicit_positive,True
 692,33068909#1189415#2,"After waiting for almost an hour, the waiter brusquely told us he'd forgotten to give the kitchen our order.",kitchen,90,97,neutral,restaurant,test,neutral,neutral,aspect: general,"Implicit opinion: no sentiment evidence
 
 Explanation: The sentence expresses negative sentiment towards the waiter's service (forgetting the order and being brusque), but it does not provide any information or evaluation regarding the kitchen itself.",Neutral,neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 967,35720486#684689#1,"The closest that I got was the Cherry Marscapone, but they were out of it that day.",Cherry Marscapone,31,48,neutral,restaurant,test,positive,positive,availability,"Implicit opinion: Negative
 
-Explanation: The speaker expresses disappointment or frustration because the Cherry Mascarpone was unavailable (""out of it"") when they wanted to get it, indicating a negative experience regarding the product's availability.","Sentiment polarity: Negative (Implicit cue: ""were out of it that day"", indicating disappointment due to unavailability)",negative,negative,"error_type=no_error
-label=",no_error,unknown,low,positive,fallback_use_direct,True
+Explanation: The speaker expresses disappointment or frustration because the Cherry Mascarpone was unavailable (""out of it"") when they wanted to get it, indicating a negative experience regarding the product's availability.","Sentiment polarity: Negative (Implicit cue: ""were out of it that day"", indicating disappointment due to unavailability)",negative,negative,"{""error_type"": ""no_error"", ""label"": ""negative"", ""confidence
+
+[repair]
+{""error_type"": ""no_error"", ""label"": ""negative"", ""confidence"": ""high""}",no_error,negative,high,positive,fallback_use_direct,True
 1028,11359764#1373169#1,Who said go when the place is quiet during the day?,place,21,26,neutral,restaurant,test,neutral,neutral,noise level,"Implicit opinion: Negative
 
-Explanation: The rhetorical question ""Who said go..."" implies that the advice to visit the place when it is quiet was incorrect, suggesting the speaker found the place to be unexpectedly noisy or busy, resulting in a negative experience regarding the noise level.","Sentiment polarity: Negative (Implicit cue: ""Who said go..."", which rhetorically questions the advice and implies the place was not actually quiet as expected).",negative,negative,"error_type=no_error
-label=",no_error,unknown,low,neutral,fallback_use_direct,True
+Explanation: The rhetorical question ""Who said go..."" implies that the advice to visit the place when it is quiet was incorrect, suggesting the speaker found the place to be unexpectedly noisy or busy, resulting in a negative experience regarding the noise level.","Sentiment polarity: Negative (Implicit cue: ""Who said go..."", which rhetorically questions the advice and implies the place was not actually quiet as expected).",negative,negative,"{""error_type"":""no_error"",""label"":""negative"",""confidence"":""high""}",no_error,negative,high,neutral,fallback_use_direct,True
 1048,32897564#894393#1,The sauce is excellent (very fresh) with dabs of real mozzarella.,dabs of real mozzarella,41,64,neutral,restaurant,test,positive,positive,aspect: quality,"Implicit opinion: Positive
 
 Explanation: The descriptor ""real"" implies that the mozzarella is authentic and of high quality, which serves as a positive attribute contributing to the overall ""excellent"" rating of the sauce.","Sentiment polarity: Positive (implicit cue: ""real"", implying authentic/high quality)",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
@@ -213,7 +219,7 @@ label=negative",no_error,negative,low,positive,fallback_use_direct,True
 
 Explanation: The speaker describes Windows as ""second nature"" to them after years of use, which implies a strong sense of familiarity, comfort, and ease of use with the operating system.","**Sentiment polarity:** Positive (implicit cue: ""second nature"" to describe familiarity and ease of use)",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 568,805:1,I will upgrade the ram myself (because with this model you can you can do it) later on.,upgrade the ram,7,22,positive,laptop,test,positive,positive,upgradability,Reason:* The user positively views the ability to upgrade the RAM themselves as a beneficial feature,"Sentiment polarity: Positive (implicit cue: the justification ""(because with this model you can you can do it)"" frames the ability to self-upgrade as a beneficial and desirable feature).",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
-569,568:1,The price is 200 dollars down.,price,4,9,positive,laptop,test,positive,positive,aspect: down payment,Implicit opinion: no sentiment evidence.,Sentiment polarity: Neutral (no sentiment cue as the statement is a factual description).,neutral,neutral,error_type=missed_implicit_positive,missed_implicit_positive,unknown,low,positive,fallback_use_direct,True
+569,568:1,The price is 200 dollars down.,price,4,9,positive,laptop,test,positive,positive,aspect: down payment,Implicit opinion: no sentiment evidence.,Sentiment polarity: Neutral (no sentiment cue as the statement is a factual description).,neutral,neutral,"{""error_type"":""missed_implicit_positive"",""label"":""positive"",""confidence"":""high""}",missed_implicit_positive,positive,high,positive,accept_missed_implicit_positive,True
 589,881:4,"The speed, the simplicity, the design.. it is lightyears ahead of any PC I have ever owned.",speed,4,9,positive,laptop,test,positive,positive,general,"Implicit opinion: Positive
 
 Explanation: The author describes the speed, along with simplicity and design, as being ""lightyears ahead of any PC"" they have ever owned, which clearly indicates a highly favorable and positive evaluation of the computer's speed.","Sentiment polarity: Positive (implicit cue: ""lightyears ahead of any PC I have ever owned"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
@@ -221,7 +227,7 @@ Explanation: The author describes the speed, along with simplicity and design, a
 625,146:1,"I like iTunes, the apparent security, the Mini form factor, all the nice graphics stuff.",Mini form factor,42,58,positive,laptop,test,positive,positive,general,"Implicit opinion: positive
 
 Explanation: The writer introduces the list of features with the phrase ""I like,"" which directly applies to ""the Mini form factor,"" indicating a positive opinion and appreciation for its design size.","Sentiment polarity: Positive (implicit cue: ""I like"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
-164,35709337#1579632#6,"Anywhere else, the prices would be 3x as high!",prices,19,25,positive,restaurant,test,positive,positive,aspect: general,"Implicit opinion: Positive. 
+164,35709337#1579632#6,"Anywhere else, the prices would be 3x as high!",prices,19,25,positive,restaurant,test,positive,positive,aspect: general,"Implicit opinion: Positive.
 
 Explanation: The sentence implies that the prices at this location are much cheaper (only a third of what they would be elsewhere), indicating that the speaker finds the prices to be highly affordable and a great value.","Sentiment polarity: Positive (Implicit cue: ""Anywhere else, the prices would be 3x as high!"", implying that the current prices are cheap and a great value).",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 345,11565268#560107#1,"The service is always great, and the owner walks around to make sure you enjoy.",owner,37,42,positive,restaurant,test,positive,positive,aspect: hospitality,"Implicit opinion: Positive
@@ -238,7 +244,10 @@ Explanation: The sentence states that choosing the iced blended mocha will make 
 Explanation: The phrase ""handled with delicate care"" indicates that the preparation of the dishes is done with great attentiveness, precision, and high quality.","Sentiment polarity: Positive (implicit cue: ""handled with delicate care"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 689,35693216#1233439#1,"The happy hour is so cheap, but that does not reflect the service or the atmosphere.",service,58,65,positive,restaurant,test,negative,negative,general,"Implicit opinion: Positive
 
-Explanation: The phrase ""does not reflect"" indicates that the low price (""cheap"") of the happy hour does not translate to low-quality service. Instead, it implies that the service is of a much higher, better standard than the cheap price would suggest.","Sentiment polarity: Positive (Implicit cue: ""does not reflect"" [the cheap price])",positive,positive,error_type=aspect_opinion_m,insufficient_evidence,unknown,low,negative,fallback_use_direct,True
+Explanation: The phrase ""does not reflect"" indicates that the low price (""cheap"") of the happy hour does not translate to low-quality service. Instead, it implies that the service is of a much higher, better standard than the cheap price would suggest.","Sentiment polarity: Positive (Implicit cue: ""does not reflect"" [the cheap price])",positive,positive,"THOR's reasoning for a positive sentiment is sound. The phrase ""does not reflect"" in
+
+[repair]
+{""label"": ""positive"", ""confidence"": ""high""}",insufficient_evidence,positive,high,negative,fallback_use_direct,True
 701,11651065#413029#3,"but for the value, it was a great affordable spot to enjoy a fun night out with small group.",value,12,17,positive,restaurant,test,positive,positive,aspect: affordability,"Implicit opinion: Positive
 
 Explanation: The speaker describes the venue as a ""great affordable spot,"" which directly indicates that they found the pricing and value for money to be highly satisfactory.","Sentiment polarity: Positive (Implicit, cue: ""great affordable spot"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
@@ -250,7 +259,7 @@ Explanation: The speaker describes the venue as a ""great affordable spot,"" whi
 Explanation: The phrase ""keeps me coming back"" directly refers to the food, implying that it is delicious and of high quality since it serves as the main incentive for the customer's repeat visits.","Sentiment polarity: Positive (implicit cue: ""keeps me coming back"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 878,11313392#560011#1,Pizzas were excellent in addition to appetizers and main courses.,appetizers,37,47,positive,restaurant,test,positive,positive,general,"Implicit opinion: no sentiment evidence
 
-Explanation: While the pizzas are explicitly described as ""excellent,"" the appetizers are merely mentioned as part of the meal (""in addition to..."") without any descriptive words or clear context to indicate their quality.",Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,error_type=missed_,insufficient_evidence,unknown,low,positive,fallback_use_direct,True
+Explanation: While the pizzas are explicitly described as ""excellent,"" the appetizers are merely mentioned as part of the meal (""in addition to..."") without any descriptive words or clear context to indicate their quality.",Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,"{""error_type"": ""missed_implicit_positive"", ""label"": ""positive"",",insufficient_evidence,unknown,low,positive,fallback_use_direct,True
 901,11610050#517598#0,I HAVE NEVER HAD A BAD MEAL(OR BAD SERVICE )@ PIGALLE.,SERVICE,35,42,positive,restaurant,test,positive,positive,aspect: general,"Implicit opinion: Positive
 
 Explanation: The writer states they have ""never had"" bad service at the restaurant, which implies that the service they received has always been good or satisfactory.","Sentiment polarity: Positive (Implicit cue: ""never had [...] bad service"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
@@ -265,7 +274,7 @@ Explanation: The target-aspect is a description of the ""roti canai appetizer,""
 Explanation: The mention that the cocktail hour includes ""free appetizers"" with a ""nice non-sushi selection"" implies a positive evaluation of the cocktail hour value and offerings.","Sentiment polarity: Positive (implicit, cue: ""includes free appetizers (nice non-sushi selection)"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 1060,35170181#0#5,"The best dessert, a chocolate and peanut butter tart, isn't particularly Hawaiian, but it's a small world when it comes to sweets.",chocolate and peanut butter tart,20,52,positive,restaurant,test,positive,positive,origin,"Implicit opinion: no sentiment evidence
 
-Explanation: The author states as a fact that the tart is not of Hawaiian origin and dismisses the significance of this with the phrase ""it's a small world,"" indicating indifference rather than a positive or negative sentiment toward the origin itself.",Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,error_type=missed_implicit_positive,missed_implicit_positive,unknown,low,positive,fallback_use_direct,True
+Explanation: The author states as a fact that the tart is not of Hawaiian origin and dismisses the significance of this with the phrase ""it's a small world,"" indicating indifference rather than a positive or negative sentiment toward the origin itself.",Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,"{""error_type"":""aspect_opinion_mismatch"",""label"":""positive"",""confidence"":""high""}",aspect_opinion_mismatch,positive,high,positive,accept_aspect_opinion_mismatch,True
 55,661,There also seemed to be a problem with the hard disc as certain times windows loads but claims to not be able to find any drivers or files.,windows,70,77,negative,laptop,train,negative,negative,aspect: loading,"Implicit opinion: Negative
 
 Explanation: Although Windows successfully loads, the loading process is flawed and dysfunctional because it is immediately followed by the system's inability to find necessary drivers or files.","Sentiment polarity: Negative (implicit cue: ""loads but claims to not be able to find any drivers or files"")",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
@@ -295,7 +304,7 @@ Explanation: The need to ""really have to tap"" the pad to make it work implies 
 Explanation: The speaker expresses dissatisfaction and frustration because the service provider cannot guarantee that the issue will be resolved even if the item is sent for service, forcing the user to accept an uncertain outcome. This lack of assurance reflects a negative view of the service's reliability and guarantee.","Sentiment polarity: Negative (Implicit cue: ""CAN'T guarantee the problem will be solved"" and ""have to accept the outcome"")",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 606,842,"I'm still within the one year warranty but the repair ""depot""  has deemed that this time it was caused by physical abuse and is not  covered.",warranty,30,38,negative,laptop,train,negative,negative,warranty coverage,"Implicit opinion: Negative
 
-Explanation: The speaker expresses dissatisfaction and frustration with the warranty coverage because their claim was denied and deemed ""not covered"" due to alleged physical abuse, despite the product still being within the valid one-year warranty period.","**Sentiment polarity:** Negative 
+Explanation: The speaker expresses dissatisfaction and frustration with the warranty coverage because their claim was denied and deemed ""not covered"" due to alleged physical abuse, despite the product still being within the valid one-year warranty period.","**Sentiment polarity:** Negative
 
 **Implicit cue:** The contrast between being ""still within the one year warranty"" and the claim being ""not covered"" due to alleged physical abuse.",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 706,344,It has bein into the shop to get a new hardrive 2 times and to fix the touch control buttons on the keyboard!,touch control buttons,71,92,negative,laptop,train,negative,negative,aspect: functionality,"Implicit opinion: Negative
@@ -324,7 +333,7 @@ Explanation: The phrase ""I don't understand why only"" expresses disappointment
 Explanation: The writer states they ""will no longer buy"" a Windows-based machine, which indicates a decision to reject the product, implying a strong dissatisfaction or negative experience with Windows.","Sentiment polarity: Negative (Implicit cue: ""will no longer buy"")",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 1512,1322,"So what am I supposed to do?  The LG service center cannot provide me the ""service"" when it is called the ""service center"".",service center,107,121,negative,laptop,train,negative,negative,aspect: customer service,"Implicit opinion: Negative
 
-Explanation: The speaker expresses frustration and points out the irony that the LG service center is unable to provide actual service, implying that their customer service is ineffective and failing to fulfill its basic purpose.","Sentiment polarity: Negative 
+Explanation: The speaker expresses frustration and points out the irony that the LG service center is unable to provide actual service, implying that their customer service is ineffective and failing to fulfill its basic purpose.","Sentiment polarity: Negative
 
 Implicit cue: The irony that the ""service center"" cannot provide ""service"".",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 1865,830,There's literally no way to make it sing with Vista.,Vista,48,53,negative,laptop,train,negative,negative,aspect: compatibility,"Implicit opinion: Negative
@@ -344,8 +353,7 @@ Explanation: The use of the word ""only"" to describe ""1GB of RAM"" indicates t
 Explanation: The phrase ""played games with me for the warranty period"" implies that the company intentionally stalled and avoided resolving the customer's issue until the warranty expired. This reflects a negative experience regarding how the duration of the warranty was managed.","Negative (Implicit cue: ""played games with me"")",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 2318,3048,"I had the staff telling me older version did not make the fan noise cause it is a ""different"" computer.",staff,10,15,negative,laptop,train,neutral,neutral,aspect: knowledge,"Implicit opinion: Negative
 
-Explanation: The user's use of quotation marks around ""different""","Sentiment polarity: Negative (implicit cue: the sarcastic use of quotation marks around ""different"" to mock the staff's explanation)",negative,negative,"error_type=no_error
-label",no_error,unknown,low,neutral,fallback_use_direct,True
+Explanation: The user's use of quotation marks around ""different""","Sentiment polarity: Negative (implicit cue: the sarcastic use of quotation marks around ""different"" to mock the staff's explanation)",negative,negative,"{""error_type"":""no_error"",""label"":""negative"",""confidence"":""high""}",no_error,negative,high,neutral,fallback_use_direct,True
 439,38,"The man that was hosting promised to save a table for our party of 7, then sat a party of 2 at the very table he was saving (mean while there were boths open all around).",man,4,7,negative,restaurant,train,negative,negative,aspect: behavior,"Implicit opinion: Negative
 
 Explanation: The man (host) showed poor and unreliable behavior by breaking his promise to save a table for a large party of 7, instead giving it to a party of 2 despite other seating being available.",Sentiment polarity: Negative (Implicit cue: Breaking the promise to save the table for a larger party and giving it to a party of 2 instead).,negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
@@ -355,7 +363,10 @@ Explanation: The speaker expresses frustration and disapproval regarding the act
 741,2105,"A few tips: skip the turnip cake, roast pork buns and egg custards.",roast pork buns,34,49,negative,restaurant,train,negative,negative,general,"Implicit opinion: Negative. The author explicitly advises to ""skip"" the roast pork buns, which implies they are of poor quality or not worth ordering.","Sentiment polarity: Negative (implicit cue: ""skip"")",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 767,2932,"First, the waiter who served us neglected to fill us in on the specials, which I would have chosen had I known about them.",served,22,28,negative,restaurant,train,neutral,neutral,aspect: service,"Implicit opinion: Negative
 
-Explanation: The service (represented by the waiter who ""served"" them) is described negatively because the waiter neglected to inform the customers about the specials, which is a failure in standard service duties and negatively impacted the customer's dining experience","Sentiment polarity: Negative (Implicit cue: ""neglected to fill us in on the specials"")",negative,negative,error_type=neutral_overinterpretation,neutral_overinterpretation,unknown,low,neutral,fallback_use_direct,True
+Explanation: The service (represented by the waiter who ""served"" them) is described negatively because the waiter neglected to inform the customers about the specials, which is a failure in standard service duties and negatively impacted the customer's dining experience","Sentiment polarity: Negative (Implicit cue: ""neglected to fill us in on the specials"")",negative,negative,"{""error_type"": ""no_error"", ""label"": ""negative"", ""confidence"":
+
+[repair]
+{""error_type"": ""neutral_overinterpretation"", ""label"": ""neutral"", ""confidence"": ""high""}",neutral_overinterpretation,neutral,high,neutral,accept_neutral_overinterpretation,True
 866,3573,There are other people waiting!,waiting,23,30,negative,restaurant,train,negative,negative,general,"Implicit opinion: Negative
 
 Explanation: The exclamation indicates impatience, pressure, or frustration regarding a delay or queue, implying that the wait time or pace of service is unsatisfactory.","Negative (Implicit cue: the exclamation mark and the urgent tone of pointing out others waiting, which implies impatience and pressure).",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
@@ -370,8 +381,7 @@ Explanation: The speaker mentions going later at night specifically to avoid (""
 Explanation: Singapore Mai Fun is a dish traditionally defined by its distinct curry flavor. Stating that it had ""NO curry flavor whatsoever"" indicates a failure to meet the basic expectations of the dish, implying a negative opinion of its preparation and taste.","Sentiment polarity: Negative (Implicit cue: ""NO curry flavor whatsoever"")",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 1554,2646,"Only wine and beer are served, but the house varities are actually quite good.",served,23,29,negative,restaurant,train,neutral,neutral,aspect: drink selection,"Implicit opinion: negative
 
-Explanation: The use of the word ""only"" to describe the drink selection (""Only wine and beer are served"") implies that the variety is limited and restrictive, conveying a negative opinion about the limited options available.","Sentiment polarity: Negative (implicit cue: ""only"")",negative,negative,"error_type=no_error
-label=",no_error,unknown,low,neutral,fallback_use_direct,True
+Explanation: The use of the word ""only"" to describe the drink selection (""Only wine and beer are served"") implies that the variety is limited and restrictive, conveying a negative opinion about the limited options available.","Sentiment polarity: Negative (implicit cue: ""only"")",negative,negative,"{""error_type"": ""no_error"", ""label"": ""negative"", ""confidence"":",insufficient_evidence,unknown,low,neutral,fallback_use_direct,True
 1688,472,"After complaining about the chicken dish, the manager came over to tell us that, no one had ever complained before, and that we just didn't know what the dish was supposed to taste like.",manager,46,53,negative,restaurant,train,negative,negative,aspect: attitude,"Implicit opinion: Negative
 
 Explanation: The manager's response was dismissive and condescending, as they defended the dish by claiming no one else had complained and accusing the customers of not knowing what it should taste like, reflecting a poor and unhelpful attitude.",Sentiment polarity: Negative (Implicit cue: the manager's dismissive response claiming no one had ever complained and that the customers did not know what the dish was supposed to taste like),negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
@@ -429,7 +439,7 @@ Explanation: Spending two hours on the phone with technical support is an excess
 **Explanation:** The sentence is a factual description estimating the object's weight without any evaluative language or context to indicate whether ""seven pounds"" is viewed positively or negatively.",Sentiment polarity: Neutral,neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 426,1752,"however, I may have inadvertently thrown out one of the batteries with the shipping carton.",batteries,56,65,neutral,laptop,train,negative,negative,aspect: general,"Implicit opinion: no sentiment evidence.
 
-Explanation: The sentence describes an accidental event where the user",Neutral (no sentiment evidence),neutral,neutral,error_type=missed_implicit_,insufficient_evidence,unknown,low,negative,fallback_use_direct,True
+Explanation: The sentence describes an accidental event where the user",Neutral (no sentiment evidence),neutral,neutral,"{""error_type"": ""missed_implicit_negative"", ""label"": ""negative"", ""confidence"": ""high""}",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True
 472,720,"Upgrading from Windows 7 Starter, thru Windows 7 Home Premium, to Windows 7 Professional was a snap;",Windows 7 Home Premium,39,61,neutral,laptop,train,neutral,neutral,general,"Implicit opinion: no sentiment evidence.
 
 **Explanation:** The sentence mentions ""Windows 7 Home Premium"" merely as a transitional step in the upgrade process. While the upgrade process itself is described as easy (""was a snap""), there is no specific opinion or sentiment expressed regarding the quality, performance, or features of Windows 7 Home Premium itself.",Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
@@ -438,14 +448,14 @@ Explanation: The sentence describes an accidental event where the user",Neutral 
 Explanation: The sentence merely mentions ""tech support"" as part of a set of instructions or standard operating procedures (""Call tech support, standard email...""). There is no evaluative language or emotional tone to suggest a positive or negative opinion towards the tech support itself.",Sentiment polarity: Neutral (no sentiment cue due to lack of sentiment evidence),neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 559,1064,"For the Bluetooth to work properly, you must install the Launch Manager on the Drivers/Applications DVD, or it will not show after the reload.",Drivers/Applications DVD,79,103,neutral,laptop,train,positive,positive,aspect: content,"Implicit opinion: no sentiment evidence
 
-Explanation: The sentence provides factual instructions on how to make the",Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,error_type=missed_implicit_,insufficient_evidence,unknown,low,positive,fallback_use_direct,True
+Explanation: The sentence provides factual instructions on how to make the",Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,"{""error_type"":""missed_implicit_positive"",""label"":""positive"",""confidence"":""high""}",missed_implicit_positive,positive,high,positive,accept_missed_implicit_positive,True
 947,334,It's also very capable of doing moderate video editing (although you may need the performance boost of the larger MacBook Pros for heavy duty mobile video editing).,mobile video editing,142,162,neutral,laptop,train,negative,negative,aspect: general,"Implicit opinion: Mixed / Qualified Positive
 
 Explanation: The sentence expresses a mixed opinion regarding the device's capability for mobile video editing. While it is described positively as ""very capable"" for moderate video editing, the author notes a limitation for heavy-duty tasks, suggesting that a more powerful MacBook Pro would be needed for demanding mobile video editing.","**Sentiment polarity:** Mixed (Qualified Positive)
 
-**Implicit cue:** The contrast between being ""very capable"" for moderate tasks and the qualification of needing a ""performance boost"" for heavy-duty tasks.",positive,positive,error_type=aspect_opinion_m,insufficient_evidence,unknown,low,negative,fallback_use_direct,True
+**Implicit cue:** The contrast between being ""very capable"" for moderate tasks and the qualification of needing a ""performance boost"" for heavy-duty tasks.",positive,positive,"{""error_type"":""reasoning_label_inconsistency"",""label"":""negative"",""confidence"":""high",insufficient_evidence,unknown,low,negative,fallback_use_direct,True
 1095,2497,BUT there's this application called Boot Camp which allows you to add another OS X like Windows.,Windows,88,95,neutral,laptop,train,neutral,neutral,aspect: general,Implicit opinion: no sentiment evidence,Neutral (Sentiment cue: None / factual mention),neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
-1103,2100,"I run windows via bootcamp for the couple programs I do not want to buy a mac version of, like my cad programs.",bootcamp,18,26,neutral,laptop,train,positive,positive,general,Implicit opinion: no sentiment evidence,"Sentiment polarity: Neutral (no sentiment cue present, as it is a factual mention of using the software).",neutral,neutral,error_type=missed_implicit_positive,missed_implicit_positive,unknown,low,positive,fallback_use_direct,True
+1103,2100,"I run windows via bootcamp for the couple programs I do not want to buy a mac version of, like my cad programs.",bootcamp,18,26,neutral,laptop,train,positive,positive,general,Implicit opinion: no sentiment evidence,"Sentiment polarity: Neutral (no sentiment cue present, as it is a factual mention of using the software).",neutral,neutral,"{""error_type"": ""missed_implicit_positive"", ""label"": ""positive"", ""confidence"": ""high""}",missed_implicit_positive,positive,high,positive,accept_missed_implicit_positive,True
 1374,267,The machine has a bluray player the book has no mention of it or how to connect it to your HDTV.,bluray player,18,31,neutral,laptop,train,negative,negative,aspect: connectivity,"Implicit opinion: negative
 
 Explanation: The user expresses frustration that the manual provides no information on how to connect the Blu-ray player to an HDTV, indicating a negative experience regarding the device's connectivity setup.","Sentiment polarity: Negative (Implicit cue: ""the book has no mention of it or how to connect it to your HDTV"")",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
@@ -463,8 +473,12 @@ Explanation: The mention that the hard drive ""can be manually upgraded"" implie
 Explanation: The user loves the computer's size specifically because it is beneficial or suitable for playing games, implying a positive opinion regarding the computer's suitability for gaming.","Sentiment polarity: Positive (Implicit cue: ""love the size ... since i play games on it"", indicating the computer's size is beneficial/desirable for gaming)",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 1561,639,-I propose that I can just swap the hard drives.,hard drives,36,47,neutral,laptop,train,neutral,neutral,aspect: replaceability,"Implicit opinion: Positive
 
-Explanation: The speaker suggests they can ""just"" swap the hard drives, implying that the replaceability of the drives is a simple, convenient, and straightforward solution to a problem.","Sentiment polarity: Positive (Implicit cue: ""just"", implying the ease and convenience of swapping/replacing the drives)",positive,positive,"error_type=no_error
-label=",no_error,unknown,low,neutral,fallback_use_direct,True
+Explanation: The speaker suggests they can ""just"" swap the hard drives, implying that the replaceability of the drives is a simple, convenient, and straightforward solution to a problem.","Sentiment polarity: Positive (Implicit cue: ""just"", implying the ease and convenience of swapping/replacing the drives)",positive,positive,"{""error_type"": ""no_error"", ""label"": ""positive"", ""confidence"": ""
+
+[repair]
+```json
+{""error_type"": ""no_error"", ""label"": ""positive"", ""confidence"": ""high""}
+```",no_error,positive,high,neutral,fallback_use_direct,True
 1582,1226,I called their repair depot as was told they would send Me a new box to return the computer to the repair depot.,repair depot,99,111,neutral,laptop,train,neutral,neutral,aspect: customer service,"Implicit opinion: no sentiment evidence
 
 Explanation: The sentence merely describes a factual interaction with the customer service/repair depot regarding the process of returning a computer. It does not contain any evaluative language or emotional tone to indicate a positive or negative opinion.",Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
@@ -472,7 +486,7 @@ Explanation: The sentence merely describes a factual interaction with the custom
 
 **Explanation:** The sentence is a factual description stating that the iBook backup uses a firewire connection. It contains no evaluative language or subjective modifiers to indicate a positive or negative opinion about the connectivity aspect.",Sentiment polarity: Neutral (Sentiment cue: None / factual statement),neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 1765,2764,I took 3-4 years researching brands and prices of laptops.,prices,40,46,neutral,laptop,train,neutral,neutral,general,Implicit opinion: no sentiment evidence.,Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
-1862,1369,This is a review of windows vista system.,windows vista system,20,40,neutral,laptop,train,neutral,neutral,general,"Implicit opinion: no sentiment evidence. 
+1862,1369,This is a review of windows vista system.,windows vista system,20,40,neutral,laptop,train,neutral,neutral,general,"Implicit opinion: no sentiment evidence.
 
 Explanation: The sentence is a factual statement introducing the subject of the review and does not contain any evaluative language or emotional cues to indicate a positive or negative opinion about the Windows Vista system.",Sentiment polarity: Neutral (no sentiment cue),neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 1944,2173,"With all the programs that came with it, such as iLife and iWork, I was set from the very beginning.",iLife,49,54,neutral,laptop,train,positive,positive,aspect: general,"Implicit opinion: positive
@@ -500,13 +514,13 @@ Explanation: The recommendation to ""do yourself a favor"" by having dinner at t
 498,2222,Went there and had a combination of different seafood dishes and appetizers.,seafood dishes,46,60,neutral,restaurant,train,neutral,neutral,aspect: variety,no sentiment evidence,Sentiment polarity: Neutral (factual mention with no sentiment cues).,neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 769,451,"Also, top the meal with a delicious and perfect slice of tiramisu.",meal,14,18,neutral,restaurant,train,positive,positive,aspect: dessert,"Implicit opinion: no sentiment evidence
 
-Explanation: The sentence describes topping the meal with a ""delicious and perfect",Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,error_type=missed_implicit_positive,missed_implicit_positive,unknown,low,positive,fallback_use_direct,True
+Explanation: The sentence describes topping the meal with a ""delicious and perfect",Sentiment polarity: Neutral (no sentiment evidence),neutral,neutral,"{""error_type"": ""missed_implicit_positive"", ""label"": ""positive"", """,insufficient_evidence,unknown,low,positive,fallback_use_direct,True
 834,972,"Have always found that the waiters will go out of their way to be helpful, despite the fact they are often busy with lots of diners.",diners,125,131,neutral,restaurant,train,neutral,neutral,aspect: number,"Implicit opinion: no sentiment evidence
 
 Explanation: The mention of ""lots of diners"" is a factual description of the restaurant's high occupancy, used only as context to highlight the waiters' helpfulness despite being busy. There is no subjective opinion or sentiment expressed towards the number of diners itself.",Sentiment polarity: Neutral (no sentiment cue as there is no sentiment evidence),neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
-926,590,Nicky the Nose at the bar is a treat.,bar,22,25,neutral,restaurant,train,positive,positive,aspect: staff,"Implicit opinion: no sentiment evidence. 
+926,590,Nicky the Nose at the bar is a treat.,bar,22,25,neutral,restaurant,train,positive,positive,aspect: staff,"Implicit opinion: no sentiment evidence.
 
-Explanation: The phrase ""at the bar"" serves only as a spatial locator for the staff member (""Nicky the Nose""). While the staff member is described positively (""is a treat""), there is no evaluative sentiment expressed or implied about the bar itself.","Sentiment polarity: Neutral (no sentiment cue, as there is no sentiment evidence).",neutral,neutral,error_type=no_,insufficient_evidence,unknown,low,positive,fallback_use_direct,True
+Explanation: The phrase ""at the bar"" serves only as a spatial locator for the staff member (""Nicky the Nose""). While the staff member is described positively (""is a treat""), there is no evaluative sentiment expressed or implied about the bar itself.","Sentiment polarity: Neutral (no sentiment cue, as there is no sentiment evidence).",neutral,neutral,"{""error_type"": ""no_error"", ""label"": ""neutral"", ""confidence",insufficient_evidence,unknown,low,positive,fallback_use_direct,True
 1046,1159,"After dinner, take your date to the HUGE dance floor, probably one of the biggest you'll see in NY.",dinner,6,12,neutral,restaurant,train,neutral,neutral,general,"Implicit opinion: no sentiment evidence
 
 Explanation: The word ""dinner"" is only mentioned as a temporal reference (""After dinner"") to indicate when to go to the dance floor. There are no descriptive words or context clues to indicate whether the dinner itself was good or bad.",Neutral,neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
@@ -516,19 +530,19 @@ Explanation: The addition of a candle to the dessert by the waiter, proactively 
 1265,662,I always get the Shabu-Shabu dinner and the beef is always fresh.,Shabu-Shabu dinner,17,35,neutral,restaurant,train,positive,positive,aspect: beef quality,"Implicit opinion: Positive
 
 Explanation: The speaker describes the beef in the Shabu-Shabu dinner as ""always fresh,"" which is a highly desirable attribute for meat and directly indicates a positive opinion regarding its quality.","Sentiment polarity: Positive (implicit cue: ""beef is always fresh"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
-1336,3327,The food at this place is 'gourmet' Indian cuisine.,'gourmet' Indian cuisine,26,50,neutral,restaurant,train,positive,positive,aspect: general,"Implicit opinion: no sentiment evidence. 
+1336,3327,The food at this place is 'gourmet' Indian cuisine.,'gourmet' Indian cuisine,26,50,neutral,restaurant,train,positive,positive,aspect: general,"Implicit opinion: no sentiment evidence.
 
-**Explanation:** The sentence merely describes the category or style of the food served at the restaurant (""'gourmet' Indian cuisine"") without providing any explicit or implicit evaluation of its quality, taste, or the writer's actual experience. The use of quotation marks around ""gourmet"" also makes the stance ambiguous (potentially quoting a menu or expressing sarcasm), meaning no definitive sentiment can be inferred.",Sentiment polarity: Neutral,neutral,neutral,error_type=missed_implicit_,insufficient_evidence,unknown,low,positive,fallback_use_direct,True
+**Explanation:** The sentence merely describes the category or style of the food served at the restaurant (""'gourmet' Indian cuisine"") without providing any explicit or implicit evaluation of its quality, taste, or the writer's actual experience. The use of quotation marks around ""gourmet"" also makes the stance ambiguous (potentially quoting a menu or expressing sarcasm), meaning no definitive sentiment can be inferred.",Sentiment polarity: Neutral,neutral,neutral,"{""error_type"":""no_error"",""label"":""neutral"",""confidence"":""high""}",no_error,neutral,high,positive,fallback_use_direct,True
 1347,3157,Try the olive cream cheese or the lox spread on a whole wheat everything bagel.,bagel,73,78,neutral,restaurant,train,positive,positive,flavor,"Implicit opinion: Positive
 
 Explanation: The sentence is a recommendation (""Try..."") to pair specific spreads with the whole wheat everything bagel, which implicitly suggests that the flavor of this bagel combination is tasty and worth trying.","Sentiment polarity: Positive (implicit, cued by the recommendation ""Try the..."")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 2109,1667,I've read some of the previews reviews - people are either not New Yorkers or have more appreciation for ambience then food.,ambience,105,113,neutral,restaurant,train,negative,negative,aspect: general,"Implicit opinion: Positive
 
-Explanation: The sentence implies that the ambience is the appealing aspect of the restaurant that people appreciate, contrasting it with the food, which is implicitly criticized as disappointing.","Sentiment polarity: Positive (Implicit cue: ""appreciation for [ambience]"")",positive,positive,error_type=missed_implicit_negative,missed_implicit_negative,unknown,low,negative,fallback_use_direct,True
+Explanation: The sentence implies that the ambience is the appealing aspect of the restaurant that people appreciate, contrasting it with the food, which is implicitly criticized as disappointing.","Sentiment polarity: Positive (Implicit cue: ""appreciation for [ambience]"")",positive,positive,"{""error_type"":""missed_implicit_negative"",""label"":""negative"",""confidence"":""high",insufficient_evidence,unknown,low,negative,fallback_use_direct,True
 2114,1964,"$160 for 2 filets, 2 sides, an appetizer and drinks.",appetizer,31,40,neutral,restaurant,train,neutral,neutral,aspect: price,"Implicit opinion: no sentiment evidence
 
 Explanation: The word ""appetizer"" is merely mentioned as part of a list of items received for the total price of $160. There are no descriptive words or context clues to indicate whether the quality, taste, or portion of the appetizer was good or bad.","Sentiment polarity: Neutral (no sentiment cue, as there is no sentiment evidence)",neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
-2277,2718,"The first time I went, and was completely taken by the live jazz band and atmosphere, I ordered the Lobster Cobb Salad.",Lobster Cobb Salad,100,118,neutral,restaurant,train,neutral,neutral,aspect: -> i should output general (or aspect:,"Implicit opinion: no sentiment evidence. 
+2277,2718,"The first time I went, and was completely taken by the live jazz band and atmosphere, I ordered the Lobster Cobb Salad.",Lobster Cobb Salad,100,118,neutral,restaurant,train,neutral,neutral,aspect: -> i should output general (or aspect:,"Implicit opinion: no sentiment evidence.
 
 **Explanation:** The sentence only states that the speaker ordered the Lobster Cobb Salad, which is a factual description. While the speaker expresses positive sentiment toward the live jazz band and atmosphere, there is no evaluative language or opinion provided regarding the taste or quality of the salad itself.","Neutral (no sentiment cue, factual mention)",neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 2391,3139,"Where tanks in other Chinatown restaurants display a lurking myriad of sad-looking marine life in their murky waters, the tanks at Ping's are clear as glass with healthy-looking creatures who do not yet know that they will be part of some dim sum lover's brunch.",brunch,255,261,neutral,restaurant,train,positive,positive,aspect: dim sum,"Implicit opinion: Positive
@@ -537,11 +551,10 @@ Explanation: The brunch is implicitly viewed positively because the seafood inte
 Implicit cue: The brunch is associated with ""healthy-looking"" seafood kept in tanks that are ""clear as glass,"" implying fresh, high-quality ingredients.",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 2512,2016,We began with the cheese fondue (the artisanal blend) and added apples and kielbasa to dip.,kielbasa,75,83,neutral,restaurant,train,positive,positive,aspect: general,"Implicit opinion: no sentiment evidence
 
-Explanation: The sentence merely states that kielbasa was added to dip in the cheese fondue as a factual description of the meal. There are no descriptive modifiers or evaluative words to indicate whether the customer enjoyed it or not.","Sentiment polarity: Neutral (no sentiment cue, as it is a factual mention)",neutral,neutral,error_type=neutral_overinterpretation,neutral_overinterpretation,unknown,low,positive,fallback_use_direct,True
+Explanation: The sentence merely states that kielbasa was added to dip in the cheese fondue as a factual description of the meal. There are no descriptive modifiers or evaluative words to indicate whether the customer enjoyed it or not.","Sentiment polarity: Neutral (no sentiment cue, as it is a factual mention)",neutral,neutral,"{""error_type"":""missed_implicit_positive"",""label"":""positive"",""confidence"":""high""}",missed_implicit_positive,positive,high,positive,accept_missed_implicit_positive,True
 2516,3328,"Its not curry in a slurry crap, and regular run of the mill food.",curry,8,13,neutral,restaurant,train,positive,positive,aspect: consistency,"Implicit opinion: negative
 
-Explanation: The phrase ""curry in a slurry crap"" uses the pejorative term ""crap"" alongside ""slurry"" (which refers to a runny, watery mixture) to describe an unappealing, poor consistency of curry.","Sentiment polarity: Negative (Implicit cue: ""curry in a slurry crap"")",negative,negative,"error_type=no_error
-label=",no_error,unknown,low,positive,fallback_use_direct,True
+Explanation: The phrase ""curry in a slurry crap"" uses the pejorative term ""crap"" alongside ""slurry"" (which refers to a runny, watery mixture) to describe an unappealing, poor consistency of curry.","Sentiment polarity: Negative (Implicit cue: ""curry in a slurry crap"")",negative,negative,"{""error_type"": ""missed_implicit_positive"", ""label"": ""positive"", """,insufficient_evidence,unknown,low,positive,fallback_use_direct,True
 2721,3432,"Had 1 appetizer, 2 entrees and 2 cokes and the bill was ~$55.00, not including tip.",entrees,19,26,neutral,restaurant,train,neutral,neutral,general,"Implicit opinion: no sentiment evidence
 
 Explanation: The target aspect ""entrees"" is only mentioned as a factual list item of what was ordered to explain the total bill, with no evaluative language or implicit opinion expressed regarding its quality, taste, or value.",Sentiment polarity: neutral,neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
@@ -556,7 +569,12 @@ Explanation: The writer describes the bagels as ""a little overcooked,"" which d
 2937,3136,from an English speaking staff.,staff,25,30,neutral,restaurant,train,neutral,neutral,aspect: language skills,Implicit opinion: no sentiment evidence.,Neutral (no sentiment cue).,neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 3139,949,We were seated outside and the waiter spilled red wine and hot tea on myself and my date.,red wine,46,54,neutral,restaurant,train,negative,negative,aspect: general,"Implicit opinion: no sentiment evidence
 
-Explanation: The sentence describes an accident where the waiter spilled the red wine, but it does not express any opinion or evaluation regarding the quality, taste, or characteristics of the red wine itself.","Sentiment polarity: Neutral (no sentiment cue, as there is no sentiment evidence regarding the red wine itself).",neutral,neutral,error_type=missed_implicit_negative,missed_implicit_negative,unknown,low,negative,fallback_use_direct,True
+Explanation: The sentence describes an accident where the waiter spilled the red wine, but it does not express any opinion or evaluation regarding the quality, taste, or characteristics of the red wine itself.","Sentiment polarity: Neutral (no sentiment cue, as there is no sentiment evidence regarding the red wine itself).",neutral,neutral,"{""error_type"":""missed_implicit_negative"",""label"":""negative"",""confidence"":""high
+
+[repair]
+```json
+{""error_type"":""missed_implicit_negative"",""label"":""negative"",""confidence"":""high""}
+```",missed_implicit_negative,negative,high,negative,accept_missed_implicit_negative,True
 3252,2672,We left after one drink.,drink,18,23,neutral,restaurant,train,neutral,neutral,aspect: quantity,no sentiment evidence,"Sentiment polarity: Neutral (no sentiment cue, as the statement is factual).",neutral,neutral,,no_error,neutral,high,neutral,agreement_keep_shared_label,False
 3294,3672,The staff was too busy ordering sushi for dinner and then laying it out to eat on the bar to even bring me my check.,check,110,115,neutral,restaurant,train,negative,negative,aspect: receiving the check,Implicit opinion: Negative. The service of receiving the check was neglected and delayed because the staff prioritized their own dinner plans over attending to the customer.,"Sentiment polarity: Negative (Implicit cue: ""too busy... to even bring me"")",negative,negative,,no_error,negative,high,negative,agreement_keep_shared_label,False
 3654,1605,I've had pizza both times and the caprese salad appetizer.,caprese salad appetizer,34,57,neutral,restaurant,train,neutral,neutral,aspect: general,"Implicit opinion: no sentiment evidence
@@ -566,7 +584,10 @@ Explanation: The sentence merely states that the speaker ordered the caprese sal
 
 **Explanation:** The speaker expresses disbelief that others are complaining about the lack of cheese sticks. By dismissing these complaints as trivial or unwarranted, the speaker implies that the unavailability of the cheese sticks is a non-issue to them, indicating a neutral or indifferent attitude toward their availability.","**Sentiment polarity:** Neutral
 
-**Implicit cue:** The speaker's disbelief/dismissal of others' complaints about the lack of cheese sticks (""I can't believe people complain about...""), which implies they view the issue as trivial and unimportant.",neutral,neutral,error_type=missed_,insufficient_evidence,unknown,low,positive,fallback_use_direct,True
+**Implicit cue:** The speaker's disbelief/dismissal of others' complaints about the lack of cheese sticks (""I can't believe people complain about...""), which implies they view the issue as trivial and unimportant.",neutral,neutral,"{""error_type"": ""no_error"", ""label"": ""neutral"", ""confidence"":
+
+[repair]
+{""error_type"": ""no_error"", ""label"": ""neutral"", ""confidence"": ""high""}",no_error,neutral,high,positive,fallback_use_direct,True
 12,76,"I even got my teenage son one, because of the features that it offers, like, iChat, Photobooth, garage band and more!",iChat,77,82,positive,laptop,train,positive,positive,general,"Implicit opinion: Positive.
 
 The speaker lists iChat as one of the desirable ""features that it offers"" that led them to purchase the item for their teenage son, implying it is seen as","Sentiment polarity: Positive (Sentiment cue: ""desirable features"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
@@ -593,7 +614,7 @@ Sentiment cue: ""found some suggestions to fix it""",Positive,positive,,no_error
 616,2478,"All the things you can do with the trackpad make navigating around the computer and its programs so much simpler, quicker, and easier.",programs,88,96,positive,laptop,train,positive,positive,navigating around,"Implicit opinion: Negative.
 
 The sentence implies that navigating around programs, prior to using the trackpad,","Sentiment polarity: Negative.
-Sentiment cue: simpler, quicker, and easier (implies they were not simple",negative,negative,error_type=missed_implicit_positive,missed_implicit_positive,unknown,low,positive,fallback_use_direct,True
+Sentiment cue: simpler, quicker, and easier (implies they were not simple",negative,negative,"{""error_type"":""no_error"",""label"":""negative"",""confidence"":""high""}",no_error,negative,high,positive,fallback_use_direct,True
 642,2231,"you can find many laptops with the same performance and even better with lower price, but you cannot find the look, easy, applications, and the experience in mac.",applications,122,134,positive,laptop,train,positive,positive,exclusivity,"Implicit opinion: Positive.
 
 Explanation: The sentence implies that the unique quality, selection, or ecosystem","Sentiment polarity: Positive.
@@ -605,7 +626,7 @@ Sentiment cue: ""made me want a Mac""",positive,positive,,no_error,positive,high
 842,2080,"Even though it is running Snow Leopard, 2.4 GHz C2D is a bit of an antiquated CPU and thus the occasional spinning wheel would appear when running Office Mac applications such as Word or Excel.",Snow Leopard,26,38,positive,laptop,train,neutral,neutral,general,"Implicit opinion: Positive.
 
 The phrase ""Even though it is running Snow Leopard"" suggests that Snow Leopard","Sentiment polarity: Positive.
-Sentiment cue: ""Even though it is running Snow Leopard""",positive,positive,error_type=neutral_overinterpretation,neutral_overinterpretation,unknown,low,neutral,fallback_use_direct,True
+Sentiment cue: ""Even though it is running Snow Leopard""",positive,positive,"{""error_type"": ""neutral_overinterpretation"", ""label"": ""neutral"", """,insufficient_evidence,unknown,low,neutral,fallback_use_direct,True
 1028,2738,Comfterbale to use light easy to transport.,use,15,18,positive,laptop,train,positive,positive,comfortable,"Implicit opinion: Positive.
 Explanation: The phrase ""comfortable to use"" explicitly states a positive quality about the experience of using the item.",Sentiment polarity: Positive (comfortable),positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 1070,301,I have not had a problem with the applications quitting or freezing.,applications,34,46,positive,laptop,train,positive,positive,stability,Implicit opinion: Positive. The absence of applications quitting or freezing indicates good stability.,"Positive. Implicit cue: ""not had a problem with the applications quitting or freezing""",Positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
@@ -639,7 +660,7 @@ The sentence explicitly states that ""The Mac Snow Leopard O/S is extremely easy
 2022,2161,This is great if you have several lectures back to back and don't have a chance to charge during one of the lectures.,charge,83,89,positive,laptop,train,negative,negative,replenishing power,"Implicit opinion: Positive.
 
 Explanation: The sentence highlights a scenario where *not having a chance to charge* is a problem (""several lectures back to back""), and ""This is great"" refers to something that alleviates this problem. This implies that the ability to charge is desirable and beneficial.","Sentiment polarity: Positive.
-Sentiment cue: The phrase ""don't have a chance to charge"" implies that the *lack* of charging is a problem, making the ability to charge desirable and beneficial.",positive,positive,error_type=no_error,no_error,unknown,low,negative,fallback_use_direct,True
+Sentiment cue: The phrase ""don't have a chance to charge"" implies that the *lack* of charging is a problem, making the ability to charge desirable and beneficial.",positive,positive,"{""error_type"": ""no_error"", ""label"": ""positive"", ""confidence"": ""high",insufficient_evidence,unknown,low,negative,fallback_use_direct,True
 2147,1450,"The best thing to do is build your own computer, but if u can't company's like dell who allow you to choose the components are better and for the same price you can get a computer who compares to one of apple $2000 systems and if you google ""dell coupons"" you can find codes that take a signifant  amount off the price.",price,151,156,positive,laptop,train,positive,positive,price reduction,"Implicit opinion: Positive.
 
 Explanation: The sentence suggests that finding coupons to take a ""significant amount off the price"" is a beneficial action, implying that price reduction is a desirable outcome.","Sentiment polarity: Positive
@@ -648,12 +669,11 @@ Sentiment cue: significant amount off the price",positive,positive,,no_error,pos
 298,1907,The waitress suggested glasses of wine that went very well with the food.,waitress,4,12,positive,restaurant,train,positive,positive,recommendation skill,"Implicit opinion: Positive.
 The phrase ""went very well with the food"" explicitly states a positive outcome of her recommendation, indicating good recommendation skill.","Sentiment polarity: Positive.
 Sentiment cue: went very well with the food",Positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
-318,1494,"The takeout menu says to keep an eye out for an expanded menu offering more italian dishes, I can't wait!",takeout menu,4,16,positive,restaurant,train,positive,positive,upcoming menu expansion,no sentiment evidence,Sentiment polarity: neutral,neutral,neutral,error_type=aspect_opinion_mismatch,aspect_opinion_mismatch,unknown,low,positive,fallback_use_direct,True
+318,1494,"The takeout menu says to keep an eye out for an expanded menu offering more italian dishes, I can't wait!",takeout menu,4,16,positive,restaurant,train,positive,positive,upcoming menu expansion,no sentiment evidence,Sentiment polarity: neutral,neutral,neutral,"{""error_type"": ""no_error"", ""label"": ""neutral"", ""confidence"": ""high",insufficient_evidence,unknown,low,positive,fallback_use_direct,True
 322,2393,Regardless of whether there are two people or two hundred people ahead of you the hostess will take your name and tell you Five minutes.,hostess,82,89,positive,restaurant,train,neutral,neutral,wait time estimation,"Implicit opinion: Negative
 
 The hostess's wait time estimation is presented as consistently ""Five minutes","Sentiment polarity: Negative
-Sentiment cue: ""Five minutes"" (implying a consistently underestimated or false wait time)",negative,negative,"error_type=neutral_overinterpretation
-label=",neutral_overinterpretation,unknown,low,neutral,fallback_use_direct,True
+Sentiment cue: ""Five minutes"" (implying a consistently underestimated or false wait time)",negative,negative,"{""error_type"": ""no_error"", ""label"": ""negative"", ""confidence"": """,insufficient_evidence,unknown,low,neutral,fallback_use_direct,True
 809,2421,"For all of you new to Indian food, try the Paneer Roll, it is a piece of heaven.",Indian food,22,33,positive,restaurant,train,positive,positive,taste,"Implicit opinion: Positive.
 
 Explanation: The phrase ""it is a piece of heaven"" directly praises the taste of the Paneer Roll, which is an Indian food item, thereby conveying a very positive implicit opinion about its taste.","Positive.
@@ -663,8 +683,7 @@ Sentiment cue: ""it is a piece of heaven"" (referring to an Indian food item).",
 1187,1211,"While they keep the capex to a minimum, they do put some cash into the bagels, because they among the best in the city.",capex,20,25,positive,restaurant,train,neutral,neutral,minimum level,"Positive.
 
 **Explanation:** The sentence implies that keeping capex to a minimum","Sentiment polarity: Positive
-Sentiment cue: The positive sentiment is implicitly derived from the given opinion that ""keeping",positive,positive,"error_type=neutral_overinterpretation
-label",neutral_overinterpretation,unknown,low,neutral,fallback_use_direct,True
+Sentiment cue: The positive sentiment is implicitly derived from the given opinion that ""keeping",positive,positive,"{""error_type"": ""no_error"", ""label"": ""positive"", ""confidence",insufficient_evidence,unknown,low,neutral,fallback_use_direct,True
 1340,359,"However, looking at the table next to ours, we both sort of wished we had ordered pizza, which looked PERRRRRRRRRFECT.",pizza,82,87,positive,restaurant,train,positive,positive,visual appearance,"Implicit opinion: Highly positive.
 
 Explanation: The word ""PERRRRRRRRRRFECT""","Positive.
@@ -690,7 +709,7 @@ Explanation: The wintermelon's role in ""covering"" is","Positive. Sentiment cue
 1898,842,"Service was decent, but not as smooth as I would expect from a place with these prices and reputation.",reputation,91,101,positive,restaurant,train,negative,negative,high standards,"Implicit opinion: Positive.
 
 Explanation: The speaker uses ""reputation"" as a benchmark for *high expectations* regarding service quality, indicating that the reputation itself is understood to be positive or high-standing. The disappointment is that the service did not meet these high expectations, which are attributed to the establishment's good reputation.","Sentiment polarity: Positive
-Sentiment cue: ""high expectations"" (associated with ""reputation"")",positive,positive,error_type=reasoning_label_inconsistency,reasoning_label_inconsistency,unknown,low,negative,fallback_use_direct,True
+Sentiment cue: ""high expectations"" (associated with ""reputation"")",positive,positive,"{""error_type"":""no_error"",""label"":""positive"",""confidence"":""high""}",no_error,positive,high,negative,fallback_use_direct,True
 2179,2676,Cornelia Street looks like a Broadway set for West Side Story and the inside of Po is so cool quaint you really can't top the setting for a romantic dinner in NYC.,setting,126,133,positive,restaurant,train,positive,positive,ambiance and style,"Implicit opinion: Positive
 Reason: The descriptions ""looks like a Broadway set for West Side Story"" and ""so cool quaint"" are highly favorable, and the statement ""you really can't top the setting for a romantic dinner in NYC"" explicitly praises its exceptional quality.","Sentiment polarity: Positive
 Sentiment cue: you really can't top the setting for a romantic dinner in NYC, so cool quaint",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
@@ -707,7 +726,10 @@ Sentiment cue: ""first thing on my mind"" (implies eagerness and high anticipati
 The phrase ""stick with the chicken, beef,","Sentiment polarity: Positive. Sentiment cue: ""stick with"".",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 3172,3365,The jukebox plays everything from Italian Opera to The Strokes.,jukebox,4,11,positive,restaurant,train,neutral,neutral,musical repertoire,"Implicit opinion: Positive.
 
-The phrase ""everything from Italian Opera to The Strokes"" emphasizes the extreme breadth and diversity of the musical repertoire, which is generally considered a highly desirable quality for a jukebox.","Positive. Sentiment cue: ""everything from Italian Opera to The Strokes""",Positive,positive,error_type=no_error,no_error,unknown,low,neutral,fallback_use_direct,True
+The phrase ""everything from Italian Opera to The Strokes"" emphasizes the extreme breadth and diversity of the musical repertoire, which is generally considered a highly desirable quality for a jukebox.","Positive. Sentiment cue: ""everything from Italian Opera to The Strokes""",Positive,positive,"{""error_type"": ""no_error"", ""label"": ""positive"", ""confidence"": ""
+
+[repair]
+{""error_type"": ""missed_implicit_positive"", ""label"": ""positive"", ""confidence"": ""high""}",missed_implicit_positive,positive,high,positive,accept_missed_implicit_positive,True
 3380,559,We had a 3 hour brunch- they definitely do not rush you- and they kept the unlimited mimosas flowing the whole time.,brunch,16,22,positive,restaurant,train,positive,positive,unlimited mimosas,"Implicit opinion: Positive.
 
 Explanation: The phrase ""kept the unlimited mimosas flowing the whole time"" implies a generous and continuous supply, which is generally considered a desirable and positive aspect of an ""unlimited mimosas"" offering at brunch.","Sentiment polarity: Positive.
@@ -715,7 +737,7 @@ Sentiment cue: kept the unlimited mimosas flowing the whole time.",positive,posi
 3549,784,"If you are in a big group, this place is perfect because it recomends sharing - they have lazy susans on most tables - even families can feel comfortable here.",lazy susans,90,101,positive,restaurant,train,positive,positive,facilitates sharing,"Implicit opinion: Positive.
 Explanation: Lazy susans are mentioned as a feature that facilitates sharing, which is explicitly presented as a positive attribute making the place ""perfect"" for big groups.","Sentiment polarity: Positive
 Sentiment cue: ""perfect"", ""recomends sharing""",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
-3561,705,"Just because it's cheap does NOT mean the portions are small or the food is nasty, IT IS GREAT!",portions,42,50,positive,restaurant,train,positive,positive,aspect: portion size,"Implicit opinion: Positive. 
+3561,705,"Just because it's cheap does NOT mean the portions are small or the food is nasty, IT IS GREAT!",portions,42,50,positive,restaurant,train,positive,positive,aspect: portion size,"Implicit opinion: Positive.
 
 **Explanation:** The author refutes the assumption that cheap prices equate","Sentiment polarity: Positive (Implicit, cue: ""does NOT mean the portions are small"")",positive,positive,,no_error,positive,high,positive,agreement_keep_shared_label,False
 3572,3362,Kenny the owner is always there and he treats my family like we are part of his family.,owner,10,15,positive,restaurant,train,positive,positive,aspect: friendliness,"Implicit opinion: Positive

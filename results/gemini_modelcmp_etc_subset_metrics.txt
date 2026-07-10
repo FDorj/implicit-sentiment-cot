@@ -10,15 +10,15 @@ accepted_error_types: aspect_opinion_mismatch,missed_implicit_negative,missed_im
 n_total: 240
 n_eval: 240
 n_diagnostic_triggered: 47
-accuracy: 0.754167
-macro_f1: 0.741729
+accuracy: 0.758333
+macro_f1: 0.745482
 
               precision    recall  f1-score   support
 
-    positive     0.7030    0.8875    0.7845        80
+    positive     0.7059    0.9000    0.7912        80
     negative     0.8068    0.8875    0.8452        80
-     neutral     0.7647    0.4875    0.5954        80
+     neutral     0.7800    0.4875    0.6000        80
 
-    accuracy                         0.7542       240
-   macro avg     0.7582    0.7542    0.7417       240
-weighted avg     0.7582    0.7542    0.7417       240
+    accuracy                         0.7583       240
+   macro avg     0.7642    0.7583    0.7455       240
+weighted avg     0.7642    0.7583    0.7455       240
