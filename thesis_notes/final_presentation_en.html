@@ -827,7 +827,7 @@
       <div class="grid-2">
         <div class="reason"><strong>Why not fine-tune Qwen3 8B here</strong><p>Ollama is inference-oriented. Fine-tuning Qwen3 8B would require a separate LoRA/QLoRA setup, suitable GPU resources, careful validation, and more training data than the 1,746 ISA train examples provide.</p></div>
         <div class="reason"><strong>Flan-T5 not evaluated</strong><p>A HuggingFace runner scaffold exists, but Flan-T5 results are not part of the validated experiments.</p></div>
-        <div class="reason"><strong>No API model comparison</strong><p>OpenAI API or other external API models were not included in current result files.</p></div>
+        <div class="reason"><strong>API comparison was secondary</strong><p>Gemini 2.5 Flash was evaluated only on a balanced 240-example subset; the main full-test result remains Qwen/Ollama.</p></div>
         <div class="reason"><strong>THOR-style implementation</strong><p>The project uses a compatible THOR-style pipeline, not an exact reproduction of the official codebase.</p></div>
       </div>
       <div class="panel" style="margin-top: 16px;">

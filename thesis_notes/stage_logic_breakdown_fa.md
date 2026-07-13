@@ -634,6 +634,18 @@ controller یک لایه تصمیم‌گیری rule-based است.
 - `diagnostic_confidence`
 - `domain`
 
+در نسخه‌های بعدی، key غنی‌تر و guard محافظه‌کارانه هم اضافه شد:
+
+```text
+direct_prediction
+thor_prediction
+error_type
+diagnostic_confidence
+domain
+```
+
+و برای جلوگیری از profileهای ناپایدار، guardهایی مثل `min_support`، margin نسبت به default، margin نسبت به source دوم، و relative gain بررسی شدند. در نسخه validation-tuned، انتخاب policy فقط با validation روی train انجام می‌شود و test برای انتخاب policy استفاده نمی‌شود.
+
 ### لاجیک
 
 1. فقط ردیف‌های train جدا می‌شوند.
@@ -679,3 +691,20 @@ controller یک لایه تصمیم‌گیری rule-based است.
 5. بعد reflection ساختاریافته + controller ساخته شد.
 6. بعد policyهای controller با ablation مقایسه شدند.
 7. در آخر به‌جای policy ثابت، selected train-calibrated policy ساخته شد تا انتخاب بین direct و thor و diagnostic داده‌محور شود.
+
+## پیوست: منطق آزمایش Gemini subset
+
+برای Gemini، به‌جای اجرای کل test رسمی با THOR self-consistency، یک subset متوازن ساخته شد چون اجرای Gemini THOR بسیار زمان‌بر و پرهزینه بود. subset شامل 240 نمونه است:
+
+- train: 150 نمونه
+- test: 90 نمونه
+- seed: `20260709`
+
+انتخاب نمونه‌ها stratified بود:
+
+- train: برای هر ترکیب `split=train`, `domain`, `polarity` تعداد 25 نمونه
+- test: برای هر ترکیب `split=test`, `domain`, `polarity` تعداد 15 نمونه
+
+پس train/test عوض نشده‌اند؛ فقط از هر split رسمی یک بخش کوچک‌تر و متوازن‌تر برداشته شده است. این طراحی باعث می‌شود مقایسه Gemini و Qwen منصفانه‌تر باشد، چون هر دو روی دقیقاً همان 240 نمونه ارزیابی شده‌اند.
+
+تغییر نسبت train/test می‌تواند روی عدد نهایی اثر بگذارد، اما انتخاب نسبت بعد از دیدن نتیجه test قابل دفاع نیست. اگر بخواهیم علمی‌تر بررسی کنیم، بهتر است چند subset با seedهای از پیش تعریف‌شده بسازیم یا budget را برای اجرای full test فراهم کنیم.

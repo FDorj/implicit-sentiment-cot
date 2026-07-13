@@ -4,6 +4,8 @@
 گروه `gain_vs_direct` یعنی پیش‌بینی Direct نادرست بوده و سیستم نهایی درست پاسخ داده است.
 گروه `loss_vs_direct` یعنی پیش‌بینی Direct درست بوده و سیستم نهایی نادرست پاسخ داده است.
 
+نکته: این فایل مربوط به سیستم نهایی full-test با Qwen است. آزمایش‌های Gemini روی subset متوازن 240تایی جداگانه گزارش شده‌اند و جایگزین این تحلیل کیفی full-test نیستند.
+
 # Final Pipeline Qualitative Examples
 
 ## Test Split Comparison Counts

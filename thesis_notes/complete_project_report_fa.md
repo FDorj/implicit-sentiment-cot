@@ -6,7 +6,35 @@
 
 اگر بخواهم کل مسیر کار را از ابتدا و با جزئیات توضیح بدهم، من این پروژه را با هدف پیاده‌سازی و ارزیابی یک سیستم تحلیل احساس ضمنی روی داده‌های SemEval 2014 شروع کردم. مسیرم از یک baseline خیلی ساده شروع شد، بعد به سمت یک pipeline چندمرحله‌ای شبیه THOR رفت، بعد reflection ساده را امتحان کردم، بعد reflection آگاه از نوع خطا و controller را اضافه کردم، و در نهایت به سمت policy selection و نسخه‌های original-ish و self-consistency حرکت کردم. در طول این مسیر سعی کردم هر مرحله هم از نظر مهندسی کد منظم باشد و هم از نظر تجربی با فایل نتیجه و متریک قابل ارجاع باشد.
 
-این سند هم روایت پژوهشی کار را پوشش می‌دهد، هم تاریخچه توسعه کد را، هم فایل‌هایی را که در هر مرحله تغییر کرده‌اند، و هم وضعیت نهایی پروژه را تا تاریخ `2026-06-25`.
+این سند هم روایت پژوهشی کار را پوشش می‌دهد، هم تاریخچه توسعه کد را، هم فایل‌هایی را که در هر مرحله تغییر کرده‌اند. بخش‌های تاریخی قدیمی‌تر عمداً حفظ شده‌اند؛ برای نتیجه نهایی full-test و مقایسه‌های جدیدتر، فایل `thesis_notes/final_project_report_fa.md` مرجع اصلی است.
+
+## به‌روزرسانی 2026-07-13
+
+بعد از نسخه اولیه گزارش، چند کار تکمیلی انجام شد:
+
+- guard و validation-tuned profile selection اضافه شد.
+- oracle upper bound و offline meta-selector بررسی شد.
+- یک meta-selector مبتنی بر Regularized Logistic Regression آزمایش شد، اما از profile selection بهتر نشد.
+- backend سازگار با OpenAI-compatible API برای اجرای Gemini 2.5 Flash استفاده شد.
+- برای Gemini یک subset متوازن 240تایی ساخته شد: `150` train و `90` test.
+- diagnostic prompt/parser برای Gemini اصلاح شد تا خروجی JSON و repair برای خروجی ناقص پشتیبانی شود.
+
+نتیجه اصلی full-test پروژه همچنان Qwen final selected pipeline است:
+
+| روش | test accuracy | test macro-F1 |
+| --- | ---: | ---: |
+| Direct Qwen3 8B | 0.678733 | 0.674075 |
+| Final selected pipeline | 0.723982 | 0.719204 |
+
+نتیجه تکمیلی Gemini روی subset متوازن:
+
+| روش | test accuracy | test macro-F1 |
+| --- | ---: | ---: |
+| Gemini direct | 0.811111 | 0.804886 |
+| Gemini THOR original-ish SC3 | 0.733333 | 0.716109 |
+| Gemini validation-tuned selected profile | 0.811111 | 0.808340 |
+
+برداشت فعلی این است که Gemini direct روی subset قوی‌تر از Qwen direct است، اما THOR با Gemini روی test همان subset بهتر از direct نشد. profile validation-tuned کمی از Gemini direct بهتر شد، ولی diagnostic به‌عنوان source نهایی انتخاب نشد. بنابراین Gemini برای مقایسه مدل بزرگ‌تر مفید است، اما ادعای اصلی پروژه باید همچنان بر پایه full-test Qwen گزارش شود.
 
 ## 1. هدف پروژه و سوالی که دنبال کردم
 
@@ -797,7 +825,7 @@ self-consistency نسخه original-ish نسبت به THOR simplified بهتر ش
 - `results/etc_thor_originalish_sc3_selected_isa_metrics.txt`
 - `results/etc_thor_originalish_sc3_selected_isa_predictions.csv`
 
-### بهترین نتیجه فعلی کل پروژه
+### بهترین نتیجه در آن مقطع تاریخی پروژه
 
 | روش | accuracy | macro-F1 |
 | --- | ---: | ---: |
@@ -842,7 +870,7 @@ self-consistency نسخه original-ish نسبت به THOR simplified بهتر ش
 - ruleهای ثابت روی همه profileها خوب عمل نمی‌کنند.
 - train-calibrated selection از همه policyهای ثابت بهتر شده است.
 
-## 4.6. وضعیت فایل‌های تغییرکرده در working tree فعلی
+## 4.6. وضعیت فایل‌های تغییرکرده در working tree در آن مقطع
 
 ### فایل‌های modified
 
@@ -974,13 +1002,13 @@ pipeline چندمرحله‌ای THOR را اجرا می‌کند:
 | THOR original-ish deterministic | commit‌شده | 20 | 0.750000 | 0.650794 | فقط pilot |
 | THOR original-ish SC3 | commit‌شده | 2188 | 0.612431 | 0.615445 | self-consistency full-run |
 
-## 6.2. نتایج local فعلی
+## 6.2. نتایج local در آن مقطع تاریخی
 
 | روش | وضعیت | n | accuracy | macro-F1 | توضیح |
 | --- | --- | ---: | ---: | ---: | --- |
 | Selected train-calibrated روی ETC استاندارد | local | 2188 | 0.665905 | 0.669348 | انتخاب source بر اساس train |
 | ETC روی THOR original-ish SC3 | local | 2188 | 0.643510 | 0.645832 | controller روی THOR original-ish |
-| Selected train-calibrated روی ETC حاصل از THOR original-ish SC3 | local | 2188 | 0.680987 | 0.683829 | بهترین نتیجه فعلی کل پروژه |
+| Selected train-calibrated روی ETC حاصل از THOR original-ish SC3 | local | 2188 | 0.680987 | 0.683829 | بهترین نتیجه در آن مقطع تاریخی |
 
 ## 7. برداشت علمی من از کل مسیر
 
@@ -1002,7 +1030,7 @@ pipeline چندمرحله‌ای THOR را اجرا می‌کند:
 
 اگر استاد از من بخواهد contribution اصلی را خیلی خلاصه بگویم، می‌توانم این‌طور بگویم:
 
-من پروژه را از یک baseline مستقیم شروع کردم، بعد یک pipeline reasoning چندمرحله‌ای شبیه THOR ساختم و عملکرد آن را در setting پروژه ارزیابی کردم. بعد با تحلیل خطا به این نتیجه رسیدم که باید reflection را ساختاریافته کنم. برای همین Error-Type Aware Reflection و controller را طراحی کردم. بعد روی policyهای controller ablation انجام دادم و در نهایت selected controller یادگرفته‌شده از train را ساختم که در بهترین نسخه فعلی، macro-F1 را به `0.683829` رسانده است و از direct baseline بهتر عمل می‌کند.
+من پروژه را از یک baseline مستقیم شروع کردم، بعد یک pipeline reasoning چندمرحله‌ای شبیه THOR ساختم و عملکرد آن را در setting پروژه ارزیابی کردم. بعد با تحلیل خطا به این نتیجه رسیدم که باید reflection را ساختاریافته کنم. برای همین Error-Type Aware Reflection و controller را طراحی کردم. بعد روی policyهای controller ablation انجام دادم و در نهایت selected controller یادگرفته‌شده از train را ساختم که در آن مقطع تاریخی، macro-F1 را به `0.683829` رسانده بود و از direct baseline بهتر عمل می‌کرد. برای عدد نهایی فعلی باید به بخش به‌روزرسانی ابتدای همین فایل و گزارش نهایی مراجعه شود.
 
 ## 9. پرسش‌های احتمالی برای ارائه
 

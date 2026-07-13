@@ -8,7 +8,7 @@ Implementation for the undergraduate thesis:
 
 This project studies implicit sentiment analysis (ISA) on the SCAPT-labeled SemEval 2014 Laptop and Restaurant datasets. It starts from a direct zero-shot prompting baseline, implements THOR-style multi-step reasoning, and extends it with reflective error diagnosis, controller logic, self-consistency, and train-calibrated source selection.
 
-The validated experiments in this repository use Qwen3 8B through Ollama. The code contains a HuggingFace seq2seq runner scaffold, but Flan-T5 has not been tested or evaluated in the current results.
+The primary full-test experiments in this repository use Qwen3 8B through Ollama. A secondary, cost-limited Gemini 2.5 Flash comparison is also included on a balanced 240-example subset through an OpenAI-compatible gateway. The code contains a HuggingFace seq2seq runner scaffold, but Flan-T5 has not been tested or evaluated in the current results.
 
 ## Final Pipeline
 
@@ -40,7 +40,7 @@ results/etc_thor_originalish_sc3_selected_isa_predictions.csv
 
 ## Final Results
 
-Main test-only results:
+Main Qwen full-test results:
 
 | Method | Test Accuracy | Test Macro-F1 |
 | --- | ---: | ---: |
@@ -51,6 +51,33 @@ Main test-only results:
 | THOR original-ish SC3 | 0.590498 | 0.600690 |
 | ETC over original-ish SC3 | 0.660633 | 0.662108 |
 | Final selected pipeline | 0.723982 | 0.719204 |
+
+Secondary Gemini/Qwen model-comparison subset:
+
+- subset file: `data/processed/gemini_model_comparison_subset_train150_test90.csv`
+- total: 240 examples
+- train: 150 examples
+- test: 90 examples
+- seed: `20260709`
+- sampling: stratified by original `split`, `domain`, and `polarity`
+
+Subset construction:
+
+| Original split | Laptop negative | Laptop neutral | Laptop positive | Restaurant negative | Restaurant neutral | Restaurant positive | Total |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| train | 25 | 25 | 25 | 25 | 25 | 25 | 150 |
+| test | 15 | 15 | 15 | 15 | 15 | 15 | 90 |
+
+Gemini 2.5 Flash subset results:
+
+| Method | Overall Macro-F1 | Test Macro-F1 |
+| --- | ---: | ---: |
+| Gemini direct | 0.741729 | 0.804886 |
+| Gemini THOR original-ish SC3 | 0.775404 | 0.716109 |
+| Gemini ETC controller | 0.745482 | 0.804886 |
+| Gemini validation-tuned selected profile | 0.818858 | 0.808340 |
+
+On this subset, the validation-tuned Gemini profile selected `direct` for 211 examples and `thor` for 29 examples; it did not select `diagnostic` as a final source. Diagnostic parsing was repaired and became more usable structurally, but its final labels were still not reliable enough for the selected policy to trust them directly.
 
 Generated summary files:
 
@@ -149,9 +176,12 @@ python -B experiments/extract_qualitative_examples.py
 - Rule-based controller
 - ETC-ISA pipeline
 - Policy ablation
+- Guarded and validation-tuned source-selection policies
 - THOR original-ish prompting
 - THOR self-consistency
 - Train-calibrated source selection
+- Oracle upper-bound and offline meta-selector analysis
+- OpenAI-compatible gateway backend for Gemini-style API experiments
 - Final pipeline validation and result summarization
 - Qualitative example extraction for report/defense analysis
 - Lightweight unit tests for core logic
@@ -160,7 +190,7 @@ python -B experiments/extract_qualitative_examples.py
 
 - No language model fine-tuning has been performed.
 - Flan-T5/HuggingFace has not been tested or evaluated.
-- Gemini/OpenAI-compatible gateway results are not part of the current validated result files.
+- Gemini/OpenAI-compatible gateway results are included only as a secondary balanced-subset comparison, not as the main full-test result.
 - `run_final_pipeline.py` summarizes saved outputs; it does not rerun Qwen/Ollama inference.
 
 ## Notes

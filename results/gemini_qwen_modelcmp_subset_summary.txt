@@ -1,30 +1,54 @@
 Model comparison subset summary
 Subset: data/processed/gemini_model_comparison_subset_train150_test90.csv
+Seed: 20260709
+
+Subset construction
+train: 150 = 25 examples for each domain/polarity combination
+test: 90 = 15 examples for each domain/polarity combination
+domains: laptop, restaurant
+polarities: positive, negative, neutral
 
 overall
-               method   split   n  accuracy  macro_f1
-      gemini_thor_sc3 overall 240  0.787500  0.775404
-        gemini_direct overall 240  0.754167  0.741729
-qwen_profile_selected overall 240  0.716667  0.714844
-          qwen_direct overall 240  0.704167  0.703440
-      qwen_controller overall 240  0.700000  0.695241
-        qwen_thor_sc3 overall 240  0.654167  0.644301
+                         method   split   n  accuracy  macro_f1
+gemini_validation_tuned_profile overall 240  0.825000  0.818858
+       gemini_pre_repair_profile overall 240  0.800000  0.791642
+                gemini_thor_sc3 overall 240  0.787500  0.775404
+                  gemini_direct overall 240  0.754167  0.741729
+              gemini_controller overall 240  0.758333  0.745482
+  logistic_source_ranker_gemini overall 240  0.787500  0.775404
+ qwen_validation_tuned_profile overall 240  0.704167  0.703440
+                    qwen_direct overall 240  0.704167  0.703440
+                qwen_controller overall 240  0.700000  0.695241
+                  qwen_thor_sc3 overall 240  0.654167  0.644301
 
 train
-               method split   n  accuracy  macro_f1
-      gemini_thor_sc3 train 150  0.820000  0.810857
-qwen_profile_selected train 150  0.713333  0.710702
-        gemini_direct train 150  0.720000  0.702831
-      qwen_controller train 150  0.700000  0.693890
-          qwen_direct train 150  0.693333  0.692725
-        qwen_thor_sc3 train 150  0.673333  0.666052
+                         method split   n  accuracy  macro_f1
+gemini_validation_tuned_profile train 150  0.833333  0.824878
+       gemini_pre_repair_profile train 150  0.786667  0.774647
+                gemini_thor_sc3 train 150  0.820000  0.810857
+                  gemini_direct train 150  0.720000  0.702831
+              gemini_controller train 150  0.720000  0.702831
+  logistic_source_ranker_gemini train 150  0.820000  0.810857
+ qwen_validation_tuned_profile train 150  0.693333  0.692725
+                    qwen_direct train 150  0.693333  0.692725
+                qwen_controller train 150  0.700000  0.693890
+                  qwen_thor_sc3 train 150  0.673333  0.666052
 
 test
-               method split  n  accuracy  macro_f1
-        gemini_direct  test 90  0.811111  0.804886
-          qwen_direct  test 90  0.722222  0.721903
-qwen_profile_selected  test 90  0.722222  0.721903
-      gemini_thor_sc3  test 90  0.733333  0.716109
-      qwen_controller  test 90  0.700000  0.698256
-        qwen_thor_sc3  test 90  0.622222  0.606450
+                         method split  n  accuracy  macro_f1
+gemini_validation_tuned_profile  test 90  0.811111  0.808340
+       gemini_pre_repair_profile  test 90  0.822222  0.818461
+                  gemini_direct  test 90  0.811111  0.804886
+              gemini_controller  test 90  0.811111  0.804886
+                gemini_thor_sc3  test 90  0.733333  0.716109
+  logistic_source_ranker_gemini test 90  0.733333  0.716109
+ qwen_validation_tuned_profile  test 90  0.722222  0.721903
+                    qwen_direct  test 90  0.722222  0.721903
+                qwen_controller  test 90  0.700000  0.698256
+                  qwen_thor_sc3  test 90  0.622222  0.606450
+
+Notes
+- gemini_validation_tuned_profile is the post-diagnostic-repair validation-selected policy.
+- gemini_pre_repair_profile is the earlier selected profile before diagnostic repair; it is useful for historical comparison but should not be mixed with the repaired ETC run.
+- logistic_source_ranker_gemini selected THOR for all rows, so it matched Gemini THOR SC3.
 

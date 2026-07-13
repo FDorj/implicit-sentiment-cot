@@ -143,11 +143,39 @@ domain
 results/final_pipeline_validation.txt
 ```
 
+## به‌روزرسانی مدل Gemini روی subset متوازن
+
+بعد از نتیجه اصلی Qwen، یک مقایسه محدود با `Gemini 2.5 Flash` هم انجام شد. این مقایسه روی کل test رسمی اجرا نشده، چون اجرای THOR self-consistency با Gemini زمان و هزینه زیادی داشت. برای همین یک subset متوازن ساخته شد:
+
+```text
+data/processed/gemini_model_comparison_subset_train150_test90.csv
+```
+
+ساختار subset:
+
+| بخش | laptop negative | laptop neutral | laptop positive | restaurant negative | restaurant neutral | restaurant positive | کل |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| train | 25 | 25 | 25 | 25 | 25 | 25 | 150 |
+| test | 15 | 15 | 15 | 15 | 15 | 15 | 90 |
+
+یعنی split رسمی train/test جابه‌جا نشده است؛ فقط از هر ترکیب `split/domain/polarity` تعداد ثابتی نمونه با seed ثابت `20260709` انتخاب شده است. بنابراین نمونه‌های test در ساخت profile دیده نشده‌اند.
+
+نتایج مهم Gemini روی این subset:
+
+| روش | overall macro-F1 | test macro-F1 |
+| --- | ---: | ---: |
+| Gemini direct | 0.741729 | 0.804886 |
+| Gemini THOR original-ish SC3 | 0.775404 | 0.716109 |
+| Gemini ETC controller | 0.745482 | 0.804886 |
+| Gemini validation-tuned selected profile | 0.818858 | 0.808340 |
+
+در نسخه validation-tuned، policy نهایی `rich_unguarded` انتخاب شد و از 240 نمونه، `211` بار direct و `29` بار THOR را انتخاب کرد. `diagnostic` به‌عنوان source نهایی انتخاب نشد. علت این است که اصلاح parser و prompt باعث شد خروجی diagnostic ساختاریافته‌تر شود، اما کیفیت labelهای diagnostic هنوز برای اعتماد مستقیم کافی نبود.
+
 ## چیزهایی که نباید ادعا شوند
 
 - fine-tuning انجام نشده است.
 - Flan-T5/HuggingFace تست و ارزیابی نشده است.
-- OpenAI API یا مدل API در نتایج فعلی استفاده نشده است.
+- نتیجه اصلی full-test پروژه با Qwen/Ollama است. Gemini فقط به‌عنوان مقایسه subset متوازن گزارش می‌شود.
 - `run_final_pipeline.py` مدل را دوباره اجرا نمی‌کند؛ فقط خروجی‌های موجود را validate و summarize می‌کند.
 
 ## جمله پیشنهادی برای گزارش یا ارائه
