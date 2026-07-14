@@ -8,7 +8,7 @@ Implementation for the undergraduate thesis:
 
 This project studies implicit sentiment analysis (ISA) on the SCAPT-labeled SemEval 2014 Laptop and Restaurant datasets. It starts from a direct zero-shot prompting baseline, implements THOR-style multi-step reasoning, and extends it with reflective error diagnosis, controller logic, self-consistency, and train-calibrated source selection.
 
-The primary full-test experiments in this repository use Qwen3 8B through Ollama. A secondary, cost-limited Gemini 2.5 Flash comparison is also included on a balanced 240-example subset through an OpenAI-compatible gateway. The code contains a HuggingFace seq2seq runner scaffold, but Flan-T5 has not been tested or evaluated in the current results.
+The primary full-test experiments in this repository use Qwen3 8B through Ollama. A secondary, cost-limited Gemini 2.5 Flash comparison is also included on a balanced 240-example subset through an OpenAI-compatible gateway.
 
 ## Final Pipeline
 
@@ -124,6 +124,77 @@ The ISA-only clean dataset has 2188 examples:
 - `tests/`: lightweight unit tests for core controller and pipeline logic
 - `thesis_notes/`: Persian notes and defense-oriented explanations
 
+## Fresh Windows Setup
+
+### Prerequisites
+
+Install these system tools before cloning the repository:
+
+- Git
+- Python 3.10 or newer
+- Ollama for the primary Qwen3 8B experiments
+- MiKTeX with XeLaTeX and BibTeX for the thesis PDF
+
+In **MiKTeX Console > Settings > General**, set **Install missing packages on-the-fly** to **Always**. This lets MiKTeX install the LaTeX packages used by the university template on the first build. The required Persian and Latin font files are already committed under the thesis template's `Fonts/` directory and do not need to be installed globally.
+
+Clone and prepare the Python environment from PowerShell. The `scripts/setup_windows.ps1` entry point performs the repository-local setup:
+
+```powershell
+git clone https://github.com/FDorj/implicit-sentiment-cot.git
+cd implicit-sentiment-cot
+powershell -ExecutionPolicy Bypass -File .\scripts\setup_windows.ps1 -PullModel
+```
+
+The setup script creates `.venv`, installs `requirements.txt` with that environment's Python, checks Ollama, and optionally downloads `qwen3:8b`. If Ollama is installed but its service is not running, start the Ollama application or run `ollama serve` in another terminal. The equivalent manual model command is:
+
+```powershell
+ollama pull qwen3:8b
+```
+
+Run a one-prompt model smoke test:
+
+```powershell
+.\.venv\Scripts\python.exe -B test_runner.py
+```
+
+### Validate the Saved Results
+
+The prediction CSV files needed for the reported results are committed. The following command validates their alignment and regenerates the final summary tables without calling Ollama or another language model:
+
+```powershell
+.\.venv\Scripts\python.exe -B experiments\run_final_pipeline.py
+```
+
+Run all Python tests, validate the saved final pipeline, and compile the thesis in one command:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\verify_project.ps1
+```
+
+### Build the Thesis PDF
+
+Compile the official LaTeX template with the `scripts/build_thesis.ps1` entry point, which runs the required XeLaTeX/BibTeX/XeLaTeX/XeLaTeX sequence:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\build_thesis.ps1
+```
+
+The final file is written to:
+
+```text
+قالب__تمپلیت__پایان_نامه_امیرکبیر_thesis_template_of_Amirkabir/AUTthesis.pdf
+```
+
+Temporary LaTeX files are ignored by Git; the final `AUTthesis.pdf`, thesis sources, fonts, and figures are versioned. Rebuilding the thesis does not rerun any language-model experiment.
+
+### Optional: Regenerate Chapter 5 Figures
+
+The finished PDF and PNG figure assets are already committed. Regenerating them additionally requires `pdftocairo` from Poppler and the MiKTeX `standalone`, `pgfplots`, and TikZ packages:
+
+```powershell
+.\.venv\Scripts\python.exe -B experiments\generate_thesis_result_figures.py
+```
+
 ## Useful Commands
 
 Run the lightweight tests:
@@ -189,7 +260,6 @@ python -B experiments/extract_qualitative_examples.py
 ## Not Implemented In Current Results
 
 - No language model fine-tuning has been performed.
-- Flan-T5/HuggingFace has not been tested or evaluated.
 - Gemini/OpenAI-compatible gateway results are included only as a secondary balanced-subset comparison, not as the main full-test result.
 - `run_final_pipeline.py` summarizes saved outputs; it does not rerun Qwen/Ollama inference.
 
