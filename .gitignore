@@ -11,6 +11,21 @@ data/raw/
 logs/
 .test_tmp/
 proposal_related_papers/
+
+# LaTeX build artifacts (keep source files, figures, and final PDFs)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.lof
+*.log
+*.lot
+*.out
+*.synctex*
+*.toc
+
 results/*
 !results/.gitkeep
 !results/*_metrics.txt
