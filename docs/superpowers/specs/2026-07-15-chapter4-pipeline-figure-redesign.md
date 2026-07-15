@@ -10,6 +10,10 @@ Replace the plain box diagram in Chapter 4 with a formal, publication-quality ve
 - Preserve legibility when printed in grayscale through contrast, labels, border weight, and line style rather than color alone.
 - Use consistent rounded rectangles, compact Persian labels, aligned spacing, and directional arrows.
 - Keep the figure within a portrait thesis page at normal reading size.
+- Keep Persian sentences free of inline Latin identifiers. The literal name `THOR` may appear only as a standalone heading on its own line.
+- Replace implementation identifiers such as `no_error` with clear Persian conceptual labels inside the figure.
+- Use heavier flow lines and substantially larger arrowheads so direction remains visible after the figure is scaled in the thesis.
+- Place the agreement and disagreement labels beside their branches in separate badges rather than over the arrow paths.
 
 ## Information Architecture
 
