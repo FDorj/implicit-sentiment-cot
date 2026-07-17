@@ -192,6 +192,19 @@ class ThesisFinalizationTests(unittest.TestCase):
             with self.subTest(footnote=footnote):
                 self.assertIsNone(re.search(r"[\u0600-\u06ff]", footnote))
 
+    def test_latin_terms_do_not_fall_back_to_the_persian_font(self):
+        chapter2 = read_thesis_file("chapter2.tex")
+        chapter4 = read_thesis_file("chapter4.tex")
+        prose = chapter2 + chapter4
+
+        self.assertNotIn("parser", prose)
+        self.assertNotIn("خروجی CSV", prose)
+        self.assertIn(r"خروجی \lr{CSV}", chapter4)
+        self.assertNotIn("نمونه--منبع", prose)
+        for label in ["positive", "negative", "neutral"]:
+            self.assertNotIn(rf"\text{{{label}}}", chapter4)
+            self.assertIn(rf"\text{{\lr{{{label}}}}}", chapter4)
+
     def test_pdf_links_and_metadata(self):
         commands = read_thesis_file("commands.tex")
 
