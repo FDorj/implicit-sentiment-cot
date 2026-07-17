@@ -16,6 +16,34 @@ def read_thesis_file(name: str) -> str:
 
 
 class ThesisFinalizationTests(unittest.TestCase):
+    def test_pipeline_figure_uses_clear_approved_copy(self):
+        figure = read_thesis_file("Images/Chapter4/ch4_proposed_pipeline.tex")
+
+        for expected in [
+            "جمله و هدفی که باید احساس نسبت به آن تعیین شود",
+            "پیش‌بینی مستقیم",
+            "مسیر استدلالی \\lr{THOR}",
+            "تعیین برچسب با رأی اکثریت",
+            "تحلیل اختلاف",
+            "نوع خطا، برچسب پیشنهادی و سطح اطمینان تعیین می‌شود",
+            "ساخت پروفایل انتخاب",
+            "دو برچسب، نوع خطا، اطمینان و دامنه",
+            "تنظیم با دادۀ آموزش",
+            "انتخاب منبع نهایی",
+            "در غیر این صورت، پاسخ مستقیم حفظ می‌شود",
+            "فقط یک تصمیم میانی برای مقایسه می‌سازد",
+            "پیش‌بینی نهایی",
+        ]:
+            self.assertIn(expected, figure)
+
+        for unclear in [
+            "عبارتی که احساس نسبت به آن سنجیده می‌شود",
+            "برچسب‌های تولیدشده و نتیجۀ بررسی اختلاف",
+            "پروفایل عملکردی پنج‌جزئی و شروط محافظ",
+            "تولید تصمیم کمکی برای تحلیل",
+        ]:
+            self.assertNotIn(unclear, figure)
+
     def test_defense_approval_source_is_unchanged(self):
         content = (THESIS_DIR / "taid.tex").read_text(encoding="utf-8")
         normalized = content.replace("\r\n", "\n").encode("utf-8")

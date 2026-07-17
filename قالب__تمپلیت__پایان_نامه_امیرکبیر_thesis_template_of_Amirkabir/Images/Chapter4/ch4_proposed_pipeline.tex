@@ -71,30 +71,32 @@
   signals/.style={
     box,
     fill=AcademicWhite,
-    text width=8.0cm,
-    minimum height=1.15cm
+    text width=8.4cm,
+    minimum height=1.25cm
   },
   controller/.style={
     box,
     fill=AcademicGray,
     draw=AcademicGrayDark,
     dashed,
-    text width=4.0cm,
-    minimum height=1.55cm
+    text width=4.4cm,
+    minimum height=1.8cm,
+    font=\footnotesize
   },
   selector/.style={
     box,
     fill=AcademicBlueStrong,
     line width=1.15pt,
-    text width=5.2cm,
-    minimum height=1.75cm
+    text width=5.5cm,
+    minimum height=1.9cm,
+    font=\footnotesize
   },
   training/.style={
     box,
     fill=AcademicGray,
     draw=AcademicGrayDark,
-    text width=2.7cm,
-    minimum height=1.4cm,
+    text width=3.0cm,
+    minimum height=1.5cm,
     font=\footnotesize
   },
   final/.style={
@@ -102,9 +104,9 @@
     fill=AcademicNavy,
     text=AcademicWhite,
     line width=1.05pt,
-    text width=4.7cm,
-    minimum height=0.9cm,
-    font=\small\bfseries
+    text width=5.0cm,
+    minimum height=1.05cm,
+    font=\small
   },
   flow/.style={
     -{Stealth[length=3.4mm,width=2.5mm]},
@@ -135,15 +137,14 @@
 \begin{tikzpicture}
   \node[input] (input) at (0,0)
     {\textbf{ورودی سامانه}\\[-1pt]
-     جملۀ ورودی و عبارتی که احساس نسبت به آن سنجیده می‌شود};
+     جمله و هدفی که باید احساس نسبت به آن تعیین شود};
 
   \node[source] (thor) at (-3.35,-2.05)
-    {\textbf{\lr{THOR}}\\[-1pt]
-     سه اجرای مستقل مسیر استدلالی\\[-1pt]
-     رأی‌گیری میان سه برچسب};
+    {\textbf{مسیر استدلالی \lr{THOR}}\\[-1pt]
+     سه اجرای مستقل؛ تعیین برچسب با رأی اکثریت};
   \node[source] (direct) at (3.35,-2.05)
-    {\textbf{مسیر مستقیم}\\[-1pt]
-     مدل فقط برچسب احساس را تولید می‌کند};
+    {\textbf{پیش‌بینی مستقیم}\\[-1pt]
+     مدل بدون تولید استدلال، یک برچسب احساس می‌دهد};
 
   \coordinate (inputSplit) at (0,-1.0);
   \draw[flow] (input.south) -- (inputSplit);
@@ -151,17 +152,16 @@
   \draw[flow] (inputSplit) -| (direct.north);
 
   \node[compare] (compare) at (0,-4.05)
-    {آیا دو برچسب\\یکسان‌اند؟};
+    {مقایسۀ دو مسیر\\آیا برچسب‌ها یکسان‌اند؟};
   \draw[flow] (thor.south) |- (compare.west);
   \draw[flow] (direct.south) |- (compare.east);
 
   \node[diagnostic] (diagnostic) at (-3.35,-6.05)
-    {\textbf{بررسی اختلاف}\\[-1pt]
-     تشخیص نوع خطا\\[-1pt]
-     پیشنهاد برچسب و تعیین میزان اطمینان};
+    {\textbf{تحلیل اختلاف}\\[-1pt]
+     نوع خطا، برچسب پیشنهادی و سطح اطمینان تعیین می‌شود};
   \node[agreement] (agreement) at (3.35,-6.05)
     {\textbf{توافق دو مسیر}\\[-1pt]
-     حفظ همان برچسب};
+     برچسب مشترک بدون تغییر حفظ می‌شود};
 
   \draw[flow] (compare.west) -| (diagnostic.north);
   \draw[flow] (compare.east) -| (agreement.north);
@@ -169,29 +169,30 @@
   \node[edgeLabel] at (2.35,-4.72) {بله};
 
   \node[signals] (signals) at (0,-8.15)
-    {\textbf{اطلاعات لازم برای انتخاب نهایی}\\[-1pt]
-     برچسب‌های تولیدشده و نتیجۀ بررسی اختلاف};
+    {\textbf{ساخت پروفایل انتخاب}\\[-1pt]
+     دو برچسب، نوع خطا، اطمینان و دامنه کنار هم قرار می‌گیرند};
   \draw[flow] (diagnostic.south) |- ($(signals.north)+(-2.1,0)$);
   \draw[flow] (agreement.south) |- ($(signals.north)+(2.1,0)$);
 
   \node[training] (training) at (-6.2,-10.35)
-    {\textbf{بخش آموزش}\\[-1pt]
-     اعتبارسنجی داخلی و تنظیم آستانه‌های محافظ};
+    {\textbf{تنظیم با دادۀ آموزش}\\[-1pt]
+     تعیین آستانه‌های محافظ با اعتبارسنجی داخلی};
   \node[selector] (selector) at (-1.45,-10.35)
-    {\textbf{انتخاب‌گر نهایی}\\[-1pt]
-     پروفایل عملکردی پنج‌جزئی و شروط محافظ\\[-1pt]
-     انتخاب منبع یا بازگشت به مسیر مستقیم};
+    {\textbf{انتخاب منبع نهایی}\\[-1pt]
+     اگر شواهد کافی باشد، بهترین منبع انتخاب می‌شود؛\\[-1pt]
+     در غیر این صورت، پاسخ مستقیم حفظ می‌شود};
   \node[controller] (controller) at (4.25,-10.35)
     {\textbf{کنترل‌گر قاعده‌محور}\\[-1pt]
-     تولید تصمیم کمکی برای تحلیل\\[-1pt]
-     \textbf{در انتخاب نهایی دخالت ندارد}};
+     فقط یک تصمیم میانی برای مقایسه می‌سازد\\[-1pt]
+     و در پاسخ نهایی دخالت ندارد};
 
   \draw[flow] (signals.south) -- ++(0,-0.55) -| (selector.north);
   \draw[auxiliary] (signals.south) -- ++(0,-0.55) -| (controller.north);
   \draw[auxiliary] (training.east) -- (selector.west);
 
   \node[final] (final) at (-1.45,-12.4)
-    {برچسب نهایی احساس};
+    {\textbf{پیش‌بینی نهایی}\\[-1pt]
+     برچسب منبع منتخب، خروجی سامانه است};
   \draw[flow] (selector.south) -- (final.north);
 
   \node[
