@@ -6,7 +6,7 @@
 
 **Architecture:** A single experiment module owns dataset validation, text construction, sparse feature/model construction, train-only cross-validation, final evaluation, and artifact serialization. Small pure functions make selection and formatting independently testable; the command-line entry point wires them together and evaluates the test split once.
 
-**Tech Stack:** Python 3, pandas, scikit-learn (`FeatureUnion`, `TfidfVectorizer`, `LogisticRegression`, `StratifiedKFold`), pytest/unittest-compatible tests.
+**Tech Stack:** Python 3, pandas, scikit-learn (`FeatureUnion`, `TfidfVectorizer`, `LogisticRegression`, `StratifiedKFold`), standard-library `unittest`.
 
 ## Global Constraints
 
@@ -46,8 +46,9 @@
 - [ ] **Step 1: Write failing tests for validation, text construction, and tie-breaking**
 
 ```python
+import unittest
+
 import pandas as pd
-import pytest
 
 from experiments.run_tfidf_logreg_baseline import (
     build_model_text,
@@ -67,39 +68,37 @@ def sample_frame() -> pd.DataFrame:
     )
 
 
-def test_build_model_text_normalizes_target_and_sentence():
-    df = sample_frame()
-    assert build_model_text(df).iloc[0] == "staff [SEP] Service was slow."
+class TfidfLogregBaselineTests(unittest.TestCase):
+    def test_build_model_text_normalizes_target_and_sentence(self):
+        df = sample_frame()
+        self.assertEqual(build_model_text(df).iloc[0], "staff [SEP] Service was slow.")
 
+    def test_validate_dataset_rejects_missing_required_values(self):
+        df = sample_frame()
+        df.loc[0, "sentence"] = None
+        with self.assertRaisesRegex(ValueError, "Missing values"):
+            validate_dataset(df)
 
-def test_validate_dataset_rejects_missing_required_values():
-    df = sample_frame()
-    df.loc[0, "sentence"] = None
-    with pytest.raises(ValueError, match="Missing values"):
-        validate_dataset(df)
+    def test_validate_dataset_rejects_unknown_labels(self):
+        df = sample_frame()
+        df.loc[0, "polarity"] = "mixed"
+        with self.assertRaisesRegex(ValueError, "Unsupported labels"):
+            validate_dataset(df)
 
-
-def test_validate_dataset_rejects_unknown_labels():
-    df = sample_frame()
-    df.loc[0, "polarity"] = "mixed"
-    with pytest.raises(ValueError, match="Unsupported labels"):
-        validate_dataset(df)
-
-
-def test_select_best_candidate_uses_smaller_c_after_metric_tie():
-    results = pd.DataFrame(
-        [
-            {"c": 1.0, "mean_macro_f1": 0.5, "mean_accuracy": 0.6},
-            {"c": 0.1, "mean_macro_f1": 0.5, "mean_accuracy": 0.6},
-            {"c": 10.0, "mean_macro_f1": 0.4, "mean_accuracy": 0.9},
-        ]
-    )
-    assert select_best_candidate(results) == 0.1
+    def test_select_best_candidate_uses_smaller_c_after_metric_tie(self):
+        results = pd.DataFrame(
+            [
+                {"c": 1.0, "mean_macro_f1": 0.5, "mean_accuracy": 0.6},
+                {"c": 0.1, "mean_macro_f1": 0.5, "mean_accuracy": 0.6},
+                {"c": 10.0, "mean_macro_f1": 0.4, "mean_accuracy": 0.9},
+            ]
+        )
+        self.assertEqual(select_best_candidate(results), 0.1)
 ```
 
 - [ ] **Step 2: Run tests to verify missing-module failure**
 
-Run: `python -m pytest tests/test_tfidf_logreg_baseline.py -v`
+Run: `.venv\Scripts\python.exe -m unittest tests.test_tfidf_logreg_baseline -v`
 
 Expected: collection fails with `ModuleNotFoundError: No module named 'experiments.run_tfidf_logreg_baseline'`.
 
@@ -186,7 +185,7 @@ def select_best_candidate(results: pd.DataFrame) -> float:
 
 - [ ] **Step 4: Run targeted tests**
 
-Run: `python -m pytest tests/test_tfidf_logreg_baseline.py -v`
+Run: `.venv\Scripts\python.exe -m unittest tests.test_tfidf_logreg_baseline -v`
 
 Expected: four tests pass.
 
@@ -235,39 +234,41 @@ def balanced_training_data(repeats: int = 5) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def test_cross_validate_candidates_returns_one_deterministic_row_per_c():
+def test_cross_validate_candidates_returns_one_deterministic_row_per_c(self):
     df = balanced_training_data()
     train = df[df["split"] == "train"]
     results = cross_validate_candidates(build_model_text(train), train["polarity"], c_values=(0.1, 1.0))
-    assert results["c"].tolist() == [0.1, 1.0]
-    assert results["fold_count"].tolist() == [5, 5]
-    assert results["mean_macro_f1"].between(0.0, 1.0).all()
-    assert results["mean_accuracy"].between(0.0, 1.0).all()
+    self.assertEqual(results["c"].tolist(), [0.1, 1.0])
+    self.assertEqual(results["fold_count"].tolist(), [5, 5])
+    self.assertTrue(results["mean_macro_f1"].between(0.0, 1.0).all())
+    self.assertTrue(results["mean_accuracy"].between(0.0, 1.0).all())
 
 
-def test_run_experiment_writes_predictions_cv_and_reproducible_metrics(tmp_path: Path):
-    data_path = tmp_path / "data.csv"
-    predictions_path = tmp_path / "predictions.csv"
-    cv_path = tmp_path / "cv.csv"
-    metrics_path = tmp_path / "metrics.txt"
-    balanced_training_data().to_csv(data_path, index=False)
+def test_run_experiment_writes_predictions_cv_and_reproducible_metrics(self):
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        data_path = root / "data.csv"
+        predictions_path = root / "predictions.csv"
+        cv_path = root / "cv.csv"
+        metrics_path = root / "metrics.txt"
+        balanced_training_data().to_csv(data_path, index=False)
 
-    summary = run_experiment(data_path, predictions_path, cv_path, metrics_path)
-    predictions = pd.read_csv(predictions_path)
-    cv_results = pd.read_csv(cv_path)
+        summary = run_experiment(data_path, predictions_path, cv_path, metrics_path)
+        predictions = pd.read_csv(predictions_path)
+        cv_results = pd.read_csv(cv_path)
 
-    assert len(predictions) == 3
-    assert len(cv_results) == 3
-    assert summary["test_accuracy"] == pytest.approx(accuracy_score(predictions["polarity"], predictions["prediction"]))
-    assert summary["test_macro_f1"] == pytest.approx(f1_score(predictions["polarity"], predictions["prediction"], labels=VALID_LABELS, average="macro", zero_division=0))
-    text = metrics_path.read_text(encoding="utf-8")
-    assert f"selected_c: {summary['selected_c']}" in text
-    assert "test_rows: 3" in text
+        self.assertEqual(len(predictions), 3)
+        self.assertEqual(len(cv_results), 3)
+        self.assertAlmostEqual(summary["test_accuracy"], accuracy_score(predictions["polarity"], predictions["prediction"]))
+        self.assertAlmostEqual(summary["test_macro_f1"], f1_score(predictions["polarity"], predictions["prediction"], labels=VALID_LABELS, average="macro", zero_division=0))
+        text = metrics_path.read_text(encoding="utf-8")
+        self.assertIn(f"selected_c: {summary['selected_c']}", text)
+        self.assertIn("test_rows: 3", text)
 ```
 
 - [ ] **Step 2: Run the new tests and verify attribute/function failures**
 
-Run: `python -m pytest tests/test_tfidf_logreg_baseline.py -v`
+Run: `.venv\Scripts\python.exe -m unittest tests.test_tfidf_logreg_baseline -v`
 
 Expected: new tests fail because `cross_validate_candidates` and `run_experiment` do not exist.
 
@@ -314,7 +315,7 @@ Implement flags:
 
 - [ ] **Step 5: Run targeted tests**
 
-Run: `python -m pytest tests/test_tfidf_logreg_baseline.py -v`
+Run: `.venv\Scripts\python.exe -m unittest tests.test_tfidf_logreg_baseline -v`
 
 Expected: all baseline tests pass.
 
@@ -334,7 +335,7 @@ Expected: all baseline tests pass.
 
 - [ ] **Step 1: Run the complete existing test suite before the experiment**
 
-Run: `python -m pytest -q`
+Run: `.venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py" -v`
 
 Expected: all tests pass; any unrelated pre-existing failure is investigated and separated from baseline changes.
 
@@ -358,9 +359,9 @@ Compare the post-run thesis-directory status with the snapshot from Step 2. Expe
 
 - [ ] **Step 5: Run targeted and complete tests once more**
 
-Run: `python -m pytest tests/test_tfidf_logreg_baseline.py -v`
+Run: `.venv\Scripts\python.exe -m unittest tests.test_tfidf_logreg_baseline -v`
 
-Run: `python -m pytest -q`
+Run: `.venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py" -v`
 
 Expected: both commands pass.
 

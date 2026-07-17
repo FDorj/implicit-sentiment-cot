@@ -1,0 +1,31 @@
+data_path: data\processed\semeval14_scapt_isa_only_clean.csv
+predictions_path: results\tfidf_logreg_predictions.csv
+cv_results_path: results\tfidf_logreg_cv_results.csv
+train_rows: 1746
+test_rows: 442
+seed: 42
+candidate_c_values: [0.1, 1.0, 10.0]
+selected_c: 1.0
+selection_metric: mean validation Macro-F1; tie-break validation Accuracy then smaller C
+cv: StratifiedKFold(n_splits=5, shuffle=True, random_state=42), train only
+model_text: normalized target + ' [SEP] ' + sentence
+word_tfidf: ngram_range=(1, 2), sublinear_tf=True
+char_tfidf: analyzer=char_wb, ngram_range=(3, 5), sublinear_tf=True, min_df=2
+logistic_regression: class_weight=balanced, max_iter=2000, random_state=42
+test_accuracy: 0.547511312217
+test_macro_f1: 0.514082021498
+label_order: ['positive', 'negative', 'neutral']
+confusion_matrix:
+[[ 71  19  22]
+ [ 17  35  30]
+ [ 61  51 136]]
+classification_report:
+              precision    recall  f1-score   support
+
+    positive   0.476510  0.633929  0.544061       112
+    negative   0.333333  0.426829  0.374332        82
+     neutral   0.723404  0.548387  0.623853       248
+
+    accuracy                       0.547511       442
+   macro avg   0.511083  0.536382  0.514082       442
+weighted avg   0.588477  0.547511  0.557343       442

@@ -16,13 +16,16 @@ from src.final_results import (  # noqa: E402
 
 RESULTS_DIR = Path("results")
 
+TFIDF_LOGREG_PATH = RESULTS_DIR / "tfidf_logreg_predictions.csv"
 DIRECT_PATH = RESULTS_DIR / "direct_isa_predictions.csv"
 THOR_SIMPLIFIED_PATH = RESULTS_DIR / "thor_isa_predictions.csv"
 SIMPLE_REFLECTION_PATH = RESULTS_DIR / "simple_reflection_isa_predictions.csv"
 ETC_STANDARD_PATH = RESULTS_DIR / "etc_isa_predictions.csv"
 THOR_ORIGINALISH_SC3_PATH = RESULTS_DIR / "thor_originalish_sc3_isa_predictions.csv"
 ETC_ORIGINALISH_SC3_PATH = RESULTS_DIR / "etc_thor_originalish_sc3_isa_predictions.csv"
-FINAL_SELECTED_PATH = RESULTS_DIR / "etc_thor_originalish_sc3_selected_isa_predictions.csv"
+FINAL_SELECTED_PATH = (
+    RESULTS_DIR / "etc_thor_originalish_sc3_guarded_tuned_selected_isa_predictions.csv"
+)
 
 FINAL_RESULTS_CSV = RESULTS_DIR / "final_results_table.csv"
 FINAL_RESULTS_MD = RESULTS_DIR / "final_results_table.md"
@@ -30,6 +33,12 @@ FINAL_VALIDATION_TXT = RESULTS_DIR / "final_pipeline_validation.txt"
 
 
 METHODS = [
+    MethodSpec(
+        name="TF-IDF + Logistic Regression",
+        path=TFIDF_LOGREG_PATH,
+        pred_col="prediction",
+        note="Classical word/character TF-IDF baseline tuned on train only.",
+    ),
     MethodSpec(
         name="Direct Qwen3 8B",
         path=DIRECT_PATH,
@@ -70,7 +79,10 @@ METHODS = [
         name="Final selected pipeline",
         path=FINAL_SELECTED_PATH,
         pred_col="selected_prediction",
-        note="Train-calibrated source selection over direct, THOR original-ish SC3, and diagnostic signals.",
+        note=(
+            "Validation-tuned guarded source selection over direct, THOR original-ish SC3, "
+            "and diagnostic signals."
+        ),
     ),
 ]
 
