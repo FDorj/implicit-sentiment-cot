@@ -53,7 +53,7 @@
     align=center,
     inner sep=2.5pt,
     text width=2.5cm,
-    font=\small\bfseries
+    font=\small
   },
   agreement/.style={
     box,
@@ -152,7 +152,7 @@
   \draw[flow] (inputSplit) -| (direct.north);
 
   \node[compare] (compare) at (0,-4.05)
-    {مقایسۀ دو مسیر\\آیا برچسب‌ها یکسان‌اند؟};
+    {\textbf{مقایسۀ دو مسیر}\\آیا برچسب‌ها یکسان‌اند؟};
   \draw[flow] (thor.south) |- (compare.west);
   \draw[flow] (direct.south) |- (compare.east);
 

@@ -16,6 +16,18 @@ def read_thesis_file(name: str) -> str:
 
 
 class ThesisFinalizationTests(unittest.TestCase):
+    def test_pipeline_compare_description_uses_normal_weight(self):
+        figure = read_thesis_file("Images/Chapter4/ch4_proposed_pipeline.tex")
+        compare_style = re.search(
+            r"compare/\.style=\{(.*?)\n  \},",
+            figure,
+            flags=re.DOTALL,
+        )
+
+        self.assertIsNotNone(compare_style)
+        self.assertNotIn(r"\bfseries", compare_style.group(1))
+        self.assertIn(r"\textbf{مقایسۀ دو مسیر}", figure)
+
     def test_pipeline_input_description_uses_normal_weight(self):
         figure = read_thesis_file("Images/Chapter4/ch4_proposed_pipeline.tex")
         input_style = re.search(
