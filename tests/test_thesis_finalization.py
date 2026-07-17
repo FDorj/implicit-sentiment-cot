@@ -1,4 +1,5 @@
 import hashlib
+import re
 import unittest
 from pathlib import Path
 
@@ -156,6 +157,40 @@ class ThesisFinalizationTests(unittest.TestCase):
         self.assertIn("Supervised Contrastive Pre-Training", prose)
         self.assertIn("Sentiment Analysis of Thinking", prose)
         self.assertIn(r"\ref{tab:ch5-class-f1}", prose)
+
+    def test_persian_prose_avoids_unsupported_combining_hamza(self):
+        prose = "\n".join(
+            read_thesis_file(name)
+            for name in [
+                "chapter1.tex",
+                "chapter2.tex",
+                "chapter3.tex",
+                "chapter4.tex",
+                "chapter5.tex",
+                "chapter6.tex",
+            ]
+        )
+
+        self.assertNotIn("ٔ", prose)
+
+    def test_ltr_footnotes_contain_only_latin_text(self):
+        prose = "\n".join(
+            read_thesis_file(name)
+            for name in [
+                "chapter1.tex",
+                "chapter2.tex",
+                "chapter3.tex",
+                "chapter4.tex",
+                "chapter5.tex",
+                "chapter6.tex",
+            ]
+        )
+        ltr_footnotes = re.findall(r"\\LTRfootnote\{([^}]*)\}", prose)
+
+        self.assertGreater(len(ltr_footnotes), 0)
+        for footnote in ltr_footnotes:
+            with self.subTest(footnote=footnote):
+                self.assertIsNone(re.search(r"[\u0600-\u06ff]", footnote))
 
     def test_pdf_links_and_metadata(self):
         commands = read_thesis_file("commands.tex")
