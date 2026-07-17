@@ -1,4 +1,8 @@
+import re
 from pathlib import Path
+
+
+VALID_OUTPUT_LABELS = ("positive", "negative", "neutral")
 
 
 def load_prompt(path: str) -> str:
@@ -9,20 +13,10 @@ def normalize_label(text: str) -> str:
     if not text:
         return "unknown"
 
-    t = text.strip().lower()
-
-    if t == "positive" or t.startswith("positive"):
-        return "positive"
-    if t == "negative" or t.startswith("negative"):
-        return "negative"
-    if t == "neutral" or t.startswith("neutral"):
-        return "neutral"
-
-    if "positive" in t:
-        return "positive"
-    if "negative" in t:
-        return "negative"
-    if "neutral" in t:
-        return "neutral"
-
-    return "unknown"
+    normalized = " ".join(str(text).strip().lower().split())
+    matches = {
+        label
+        for label in VALID_OUTPUT_LABELS
+        if re.search(rf"\b{re.escape(label)}\b", normalized)
+    }
+    return next(iter(matches)) if len(matches) == 1 else "unknown"

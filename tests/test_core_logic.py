@@ -22,6 +22,9 @@ class CoreLogicTests(unittest.TestCase):
         self.assertEqual(normalize_label("negative sentiment"), "negative")
         self.assertEqual(normalize_label("The answer is neutral."), "neutral")
         self.assertEqual(normalize_label("unclear"), "unknown")
+        self.assertEqual(normalize_label("positive or negative"), "unknown")
+        self.assertEqual(normalize_label("negative, then neutral"), "unknown")
+        self.assertEqual(normalize_label("nonpositive"), "unknown")
 
     def test_parse_diagnostic_output_normalizes_fields(self):
         parsed = parse_diagnostic_output(

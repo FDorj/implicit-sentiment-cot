@@ -7,6 +7,49 @@ RAW_DIR = Path("data/raw/scapt_split")
 PROCESSED_DIR = Path("data/processed")
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
+REQUIRED_SAMPLE_COLUMNS = (
+    "id",
+    "source_sentence_id",
+    "domain",
+    "split",
+    "sentence",
+    "target",
+    "from",
+    "to",
+    "polarity",
+    "is_implicit",
+)
+
+
+def validate_required_fields(
+    df: pd.DataFrame,
+    required_columns: tuple[str, ...] = REQUIRED_SAMPLE_COLUMNS,
+) -> None:
+    missing_columns = [column for column in required_columns if column not in df.columns]
+    if missing_columns:
+        raise ValueError(f"Missing required data columns: {missing_columns}")
+
+    null_counts = df.loc[:, required_columns].isna().sum()
+    invalid_counts = {
+        column: int(count)
+        for column, count in null_counts.items()
+        if int(count) > 0
+    }
+    if invalid_counts:
+        details = ", ".join(
+            f"{column}={count}" for column, count in invalid_counts.items()
+        )
+        raise ValueError(f"Missing values in required data fields: {details}")
+
+
+def clean_scapt_rows(df: pd.DataFrame) -> pd.DataFrame:
+    valid_polarities = {"positive", "negative", "neutral"}
+    cleaned = df[df["polarity"].isin(valid_polarities)].copy()
+    cleaned = cleaned[cleaned["is_implicit"].isin([0, 1])].copy()
+    cleaned["is_implicit"] = cleaned["is_implicit"].astype(int)
+    validate_required_fields(cleaned)
+    return cleaned
+
 
 def str_to_bool(x):
     if x is None:
@@ -91,10 +134,7 @@ def main():
     df_isa = df_all[df_all["is_implicit"] == 1].copy()
     save_df(df_isa, PROCESSED_DIR / "semeval14_scapt_isa_only.csv")
 
-    valid_polarities = {"positive", "negative", "neutral"}
-    df_clean = df_all[df_all["polarity"].isin(valid_polarities)].copy()
-    df_clean = df_clean[df_clean["is_implicit"].isin([0, 1])].copy()
-    df_clean["is_implicit"] = df_clean["is_implicit"].astype(int)
+    df_clean = clean_scapt_rows(df_all)
 
     save_df(df_clean, PROCESSED_DIR / "semeval14_scapt_all_clean.csv")
     save_df(df_clean[df_clean["is_implicit"] == 1].copy(), PROCESSED_DIR / "semeval14_scapt_isa_only_clean.csv")
