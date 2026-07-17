@@ -16,7 +16,9 @@ def read_thesis_file(name: str) -> str:
 
 class ThesisFinalizationTests(unittest.TestCase):
     def test_defense_approval_source_is_unchanged(self):
-        digest = hashlib.sha256((THESIS_DIR / "taid.tex").read_bytes()).hexdigest()
+        content = (THESIS_DIR / "taid.tex").read_text(encoding="utf-8")
+        normalized = content.replace("\r\n", "\n").encode("utf-8")
+        digest = hashlib.sha256(normalized).hexdigest()
         self.assertEqual(
             digest,
             "8212555f994bea6aae5976199921b1cc55c925063440dd862e5cc3d4ac9adab8",
