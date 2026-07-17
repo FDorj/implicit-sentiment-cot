@@ -4,9 +4,11 @@
 
 Integrate the completed TF-IDF plus logistic-regression experiment into the thesis as a reproducible classical baseline, while preserving the Amirkabir template and keeping the baseline separate from the proposed LLM system.
 
+The thesis narrative presents this comparator as the first experimental step: the study first establishes a low-cost classical reference point, then evaluates direct LLM prediction, and only afterward develops the reasoning, review, controller, and source-selection variants. The prose describes this research order naturally without claiming that the classical baseline is a component of the final architecture.
+
 ## Chapter 4 placement and content
 
-Add a subsection titled «خط پایه کلاسیک مبتنی بر TF-IDF و رگرسیون لجستیک» after data preparation and before the LLM prediction-source sections. The subsection states that this model is an independent comparator rather than a component of the proposed pipeline.
+Add a subsection titled «خط پایه کلاسیک مبتنی بر TF-IDF و رگرسیون لجستیک» after data preparation and before the LLM prediction-source sections. The subsection begins by explaining that the first experimental step was to establish a classical reference point before using language models. It states that this model is an independent comparator rather than a component of the proposed pipeline.
 
 It documents the exact evidence-backed configuration:
 
@@ -23,7 +25,7 @@ The implementation-module table gains the baseline script and its responsibility
 
 ## Chapter 5 placement and content
 
-The compared-method count changes from seven to eight. The classical baseline becomes the first item, explicitly labeled as non-LLM. The Qwen direct predictor remains the first LLM method.
+The compared-method count changes from seven to eight. The classical baseline becomes the first item, explicitly labeled as non-LLM. The Qwen direct predictor remains the first LLM method. The method list and analysis follow the same chronological research narrative: classical baseline, direct LLM prediction, reasoning variants, review/controller variants, and final source selection.
 
 The main full-test table becomes a comparison of all principal methods rather than only Qwen-based methods. It gains the row:
 
