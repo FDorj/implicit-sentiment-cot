@@ -18,7 +18,7 @@
 - فصل چهارم باید `TF-IDF + Logistic Regression` و تمام لایه‌های اصلی کد را توضیح دهد، بدون درج فهرست خط‌به‌خط توابع یا قطعه‌کد خام.
 - پیوست در فهرست مطالب حفظ و با عنوان «پیوست: راهنمای بازتولید آزمایش‌ها» تمیز و فشرده می‌شود.
 - هیچ اجرای جدید مدل زبانی و هیچ تغییر در نتایج آزمایش‌ها انجام نمی‌شود.
-- PDF نهایی باید ۶۰ تا ۶۵ صفحه بماند.
+- PDF نهایی باید ۶۵ تا ۷۵ صفحه بماند.
 
 ---
 
@@ -90,7 +90,7 @@ self.assertIn("point meta=explicit symbolic", comparison)
 self.assertIn("[۰٫۷۲۲]", comparison)
 self.assertIn("yticklabels={۰,۰٫۱,۰٫۲,۰٫۳,۰٫۴,۰٫۵,۰٫۶,۰٫۷,۰٫۸,۰٫۹}", comparison)
 self.assertNotIn(r"\pgfmathprintnumber", comparison)
-self.assertIn("۶۶\\۸۰٫۵\\%", confusion)
+self.assertIn(r"۶۶\\۸۰٫۵\%", confusion)
 self.assertIn("تعداد نمونه‌ها: ۹۰", gemini_confusion)
 ```
 
