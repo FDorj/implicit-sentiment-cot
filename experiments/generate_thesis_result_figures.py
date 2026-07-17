@@ -8,7 +8,15 @@ import pandas as pd
 from sklearn.metrics import confusion_matrix, f1_score
 
 
+THESIS_FONT_DIR = (
+    Path(__file__).resolve().parents[1]
+    / "قالب__تمپلیت__پایان_نامه_امیرکبیر_thesis_template_of_Amirkabir"
+    / "Fonts"
+)
+
+
 MAIN_METHOD_ORDER = [
+    "TF-IDF + Logistic Regression",
     "Direct Qwen3 8B",
     "THOR simplified",
     "THOR original-ish SC3",
@@ -100,7 +108,7 @@ def load_main_test_results(repo_root: Path) -> list[dict]:
 def _load_aligned_direct_final(repo_root: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     direct_path = _results_path(repo_root, "direct_isa_predictions.csv")
     final_path = _results_path(
-        repo_root, "etc_thor_originalish_sc3_selected_isa_predictions.csv"
+        repo_root, "etc_thor_originalish_sc3_guarded_tuned_selected_isa_predictions.csv"
     )
     direct = _with_stable_index(_test_rows(direct_path), direct_path)
     final = _with_stable_index(_test_rows(final_path), final_path)
@@ -233,6 +241,7 @@ def load_shared_subset_comparison(repo_root: Path) -> dict:
 
 
 def _preamble(figure_id: str) -> str:
+    font_path = THESIS_FONT_DIR.as_posix() + "/"
     return rf"""\documentclass[tikz,border=4pt]{{standalone}}
 \usepackage{{pgfplots}}
 \usetikzlibrary{{positioning,calc}}
@@ -242,6 +251,9 @@ def _preamble(figure_id: str) -> str:
 \definecolor{{PlotGreen}}{{HTML}}{{009E73}}
 \definecolor{{PlotRed}}{{HTML}}{{D55E00}}
 \definecolor{{PlotGray}}{{HTML}}{{7A7A7A}}
+\usepackage{{xepersian}}
+\settextfont[Path={{{font_path}}},BoldFont={{B Nazanin Bold.TTF}}]{{B Nazanin.TTF}}
+\setlatintextfont[Path={{{font_path}}},BoldFont={{timesbd.ttf}}]{{times.ttf}}
 \begin{{document}}
 % figure-id: {figure_id}
 """
@@ -254,21 +266,23 @@ def _document(body: str, figure_id: str) -> str:
 def _format_coordinates(rows: list[dict], field: str, *, omit_final: bool) -> str:
     chosen = rows[:-1] if omit_final else rows[-1:]
     labels = {
-        "Direct Qwen3 8B": "Direct Qwen3 8B",
-        "THOR simplified": "THOR simplified",
-        "Simple reflection": "Simple reflection",
-        "ETC standard": "ETC standard",
-        "THOR original-ish SC3": "THOR original-ish SC3",
-        "ETC over original-ish SC3": "ETC over THOR SC3",
-        "Final selected pipeline": "Final selected pipeline",
+        "TF-IDF + Logistic Regression": r"\lr{TF-IDF + Logistic Regression}",
+        "Direct Qwen3 8B": r"پیش‌بینی مستقیم \lr{Qwen3 8B}",
+        "THOR simplified": r"\lr{THOR} ساده‌شده",
+        "Simple reflection": "بازبینی ساده",
+        "ETC standard": r"کنترل‌گر \lr{ETC}",
+        "THOR original-ish SC3": r"\lr{THOR SC3} سه‌اجرایی",
+        "ETC over original-ish SC3": r"کنترل‌گر \lr{ETC} روی \lr{THOR SC3}",
+        "Final selected pipeline": "سامانۀ نهایی",
     }
     return " ".join(f"({row[field]:.6f},{{{labels[row['method']]}}})" for row in chosen)
 
 
 def _render_main_results(rows: list[dict]) -> str:
     y_labels = (
-        "Direct Qwen3 8B,THOR simplified,THOR original-ish SC3,Simple reflection,"
-        "ETC standard,ETC over THOR SC3,Final selected pipeline"
+        r"\lr{TF-IDF + Logistic Regression},پیش‌بینی مستقیم \lr{Qwen3 8B},"
+        r"\lr{THOR} ساده‌شده,\lr{THOR SC3} سه‌اجرایی,بازبینی ساده,"
+        r"کنترل‌گر \lr{ETC},کنترل‌گر \lr{ETC} روی \lr{THOR SC3},سامانۀ نهایی"
     )
     accuracy = _format_coordinates(rows, "accuracy", omit_final=True)
     macro_f1 = _format_coordinates(rows, "macro_f1", omit_final=True)
@@ -277,12 +291,12 @@ def _render_main_results(rows: list[dict]) -> str:
     body = rf"""\begin{{tikzpicture}}
 \begin{{axis}}[
   width=11.4cm,
-  height=8.4cm,
+  height=9.2cm,
   xbar,
   xmin=0.00,
   xmax=0.80,
   xtick={{0.00,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80}},
-  xlabel={{Score}},
+  xlabel={{امتیاز}},
   symbolic y coords={{{y_labels}}},
   ytick={{{y_labels}}},
   y dir=reverse,
@@ -299,9 +313,9 @@ def _render_main_results(rows: list[dict]) -> str:
   every node near coord/.append style={{font=\scriptsize,anchor=west,xshift=1pt}},
 ]
 \addplot[draw=PlotBlue,fill=PlotBlue!45,bar shift=-3pt] coordinates {{{accuracy}}};
-\addlegendentry{{Accuracy}}
+\addlegendentry{{دقت}}
 \addplot[draw=PlotOrange,fill=PlotOrange!55,bar shift=3pt] coordinates {{{macro_f1}}};
-\addlegendentry{{Macro-F1}}
+\addlegendentry{{اف‌یک ماکرو}}
 \addplot[draw=PlotBlue!80!black,fill=PlotBlue,bar shift=-3pt,forget plot] coordinates {{{final_accuracy}}};
 \addplot[draw=PlotOrange!80!black,fill=PlotOrange,bar shift=3pt,forget plot] coordinates {{{final_macro_f1}}};
 \end{{axis}}
@@ -310,7 +324,7 @@ def _render_main_results(rows: list[dict]) -> str:
 
 
 def _matrix_panel(counts: list[list[int]], x_offset: float, title: str) -> str:
-    display_labels = ["Negative", "Neutral", "Positive"]
+    display_labels = ["منفی", "خنثی", "مثبت"]
     lines = [rf"\node[font=\bfseries] at ({x_offset + 2.1:.2f},4.35) {{{title}}};"]
     for column, label in enumerate(display_labels):
         lines.append(
@@ -334,8 +348,8 @@ def _matrix_panel(counts: list[list[int]], x_offset: float, title: str) -> str:
                 rf"({x + 0.7:.2f},{y + 0.525:.3f}) "
                 rf"{{\shortstack{{{count}\\{percentage * 100:.1f}\%}}}};"
             )
-    lines.append(rf"\node[font=\small] at ({x_offset + 2.1:.2f},-0.95) {{Predicted label}};")
-    lines.append(rf"\node[font=\small,rotate=90] at ({x_offset - 2.05:.2f},1.35) {{Gold label}};")
+    lines.append(rf"\node[font=\small] at ({x_offset + 2.1:.2f},-0.95) {{برچسب پیش‌بینی‌شده}};")
+    lines.append(rf"\node[font=\small,rotate=90] at ({x_offset - 2.05:.2f},1.35) {{برچسب واقعی}};")
     return "\n".join(lines)
 
 
@@ -343,9 +357,9 @@ def _render_confusion_matrices(
     data: dict,
     *,
     figure_id: str = "direct-vs-final-confusion",
-    left_title: str = "Direct Qwen3 8B",
-    right_title: str = "Final selected pipeline",
-    footer: str = "Row-normalized: each cell shows count and row percentage",
+    left_title: str = r"پیش‌بینی مستقیم \lr{Qwen3 8B}",
+    right_title: str = "سامانۀ نهایی",
+    footer: str = "نرمال‌سازی سطری: هر خانه شمار و درصد سطر را نشان می‌دهد",
 ) -> str:
     left = _matrix_panel(data["direct_counts"], 0.0, left_title)
     right = _matrix_panel(data["final_counts"], 6.6, right_title)
@@ -366,13 +380,13 @@ def _render_selector_behavior(data: dict) -> str:
   width=6.8cm,
   height=5.6cm,
   xmin=0,
-  xmax=330,
-  xtick={{0,50,100,150,200,250,300}},
-  symbolic y coords={{Direct,THOR,Diagnostic}},
+  xmax=450,
+  xtick={{0,50,100,150,200,250,300,350,400,450}},
+  symbolic y coords={{مستقیم,\lr{{THOR}},تشخیصی}},
   ytick=data,
   y dir=reverse,
-  xlabel={{Selected examples}},
-  title={{Selected source on test ($n={data['n']}$)}},
+  xlabel={{تعداد نمونه‌های منتخب}},
+  title={{منبع منتخب در آزمون \lr{{$n={data['n']}$}}}},
   title style={{font=\small\bfseries}},
   tick label style={{font=\small}},
   label style={{font=\small}},
@@ -383,28 +397,28 @@ def _render_selector_behavior(data: dict) -> str:
   nodes near coords,
   every node near coord/.append style={{font=\small,anchor=west,xshift=2pt}},
 ]
-\addplot[draw=PlotBlue,fill=PlotBlue!70] coordinates {{({sources['direct']},Direct) ({sources['thor']},THOR) ({sources['diagnostic']},Diagnostic)}};
+\addplot[draw=PlotBlue,fill=PlotBlue!70] coordinates {{({sources['direct']},مستقیم) ({sources['thor']},\lr{{THOR}}) ({sources['diagnostic']},تشخیصی)}};
 \end{{axis}}
 
 \begin{{scope}}[xshift=9.0cm,yshift=0.25cm]
-\node[font=\small\bfseries] at (2.2,4.75) {{Correctness transition ($n={data['n']}$)}};
-\node[font=\small] at (1.1,4.08) {{Final wrong}};
-\node[font=\small] at (3.3,4.08) {{Final correct}};
-\node[font=\small,anchor=east] at (-0.15,3.05) {{Direct wrong}};
-\node[font=\small,anchor=east] at (-0.15,1.35) {{Direct correct}};
+\node[font=\small\bfseries] at (2.2,4.75) {{گذار وضعیت صحت \lr{{$n={data['n']}$}}}};
+\node[font=\small] at (1.1,4.08) {{نهایی نادرست}};
+\node[font=\small] at (3.3,4.08) {{نهایی درست}};
+\node[font=\small,anchor=east] at (-0.15,3.05) {{مستقیم نادرست}};
+\node[font=\small,anchor=east] at (-0.15,1.35) {{مستقیم درست}};
 
-% Both wrong
+% هر دو نادرست
 \filldraw[fill=PlotGray!22,draw=white,line width=1pt] (0,2.2) rectangle (2.2,3.9);
-\node[font=\small,align=center] at (1.1,3.05) {{\shortstack{{Both wrong\\\textbf{{{transitions['both_wrong']}}}}}}};
-% Direct wrong / Final correct = gain
+\node[font=\small,align=center] at (1.1,3.05) {{\shortstack{{هر دو نادرست\\\textbf{{{transitions['both_wrong']}}}}}}};
+% مستقیم نادرست / نهایی درست = بهبود
 \filldraw[fill=PlotGreen!45,draw=white,line width=1pt] (2.2,2.2) rectangle (4.4,3.9);
-\node[font=\small,align=center] at (3.3,3.05) {{\shortstack{{Gain\\\textbf{{{transitions['gain']}}}}}}};
-% Direct correct / Final wrong = loss
+\node[font=\small,align=center] at (3.3,3.05) {{\shortstack{{بهبود\\\textbf{{{transitions['gain']}}}}}}};
+% مستقیم درست / نهایی نادرست = تضعیف
 \filldraw[fill=PlotRed!38,draw=white,line width=1pt] (0,0.5) rectangle (2.2,2.2);
-\node[font=\small,align=center] at (1.1,1.35) {{\shortstack{{Loss\\\textbf{{{transitions['loss']}}}}}}};
-% Both correct
+\node[font=\small,align=center] at (1.1,1.35) {{\shortstack{{تضعیف\\\textbf{{{transitions['loss']}}}}}}};
+% هر دو درست
 \filldraw[fill=PlotBlue!38,draw=white,line width=1pt] (2.2,0.5) rectangle (4.4,2.2);
-\node[font=\small,align=center] at (3.3,1.35) {{\shortstack{{Both correct\\\textbf{{{transitions['both_correct']}}}}}}};
+\node[font=\small,align=center] at (3.3,1.35) {{\shortstack{{هر دو درست\\\textbf{{{transitions['both_correct']}}}}}}};
 \end{{scope}}
 \end{{tikzpicture}}"""
     return _document(body, "selector-behavior")
@@ -414,16 +428,16 @@ def _render_shared_subset(data: dict) -> str:
     values = data["macro_f1"]
     qwen = " ".join(
         [
-            f"(Direct,{values['Direct']['Qwen3 8B']:.6f})",
-            f"({{THOR SC3}},{values['THOR SC3']['Qwen3 8B']:.6f})",
-            f"({{Selected profile}},{values['Validation-tuned selected']['Qwen3 8B']:.6f})",
+            f"(مستقیم,{values['Direct']['Qwen3 8B']:.6f})",
+            f"({{\\lr{{THOR SC3}}}},{values['THOR SC3']['Qwen3 8B']:.6f})",
+            f"({{سیاست منتخب}},{values['Validation-tuned selected']['Qwen3 8B']:.6f})",
         ]
     )
     gemini = " ".join(
         [
-            f"(Direct,{values['Direct']['Gemini 2.5 Flash']:.6f})",
-            f"({{THOR SC3}},{values['THOR SC3']['Gemini 2.5 Flash']:.6f})",
-            f"({{Selected profile}},{values['Validation-tuned selected']['Gemini 2.5 Flash']:.6f})",
+            f"(مستقیم,{values['Direct']['Gemini 2.5 Flash']:.6f})",
+            f"({{\\lr{{THOR SC3}}}},{values['THOR SC3']['Gemini 2.5 Flash']:.6f})",
+            f"({{سیاست منتخب}},{values['Validation-tuned selected']['Gemini 2.5 Flash']:.6f})",
         ]
     )
     body = rf"""\begin{{tikzpicture}}
@@ -434,12 +448,12 @@ def _render_shared_subset(data: dict) -> str:
   ymin=0.00,
   ymax=0.90,
   ytick={{0.00,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90}},
-  ylabel={{Test Macro-F1}},
-  symbolic x coords={{Direct,THOR SC3,Selected profile}},
+  ylabel={{اف‌یک ماکروی آزمون}},
+  symbolic x coords={{مستقیم,\lr{{THOR SC3}},سیاست منتخب}},
   xtick=data,
   bar width=15pt,
   enlarge x limits=0.24,
-  title={{Shared balanced test subset ($n={data['n']}$)}},
+  title={{زیرمجموعۀ متوازن مشترک آزمون \lr{{$n={data['n']}$}}}},
   title style={{at={{(axis description cs:0.5,1.16)}},anchor=south,font=\small\bfseries}},
   tick label style={{font=\small}},
   label style={{font=\small}},
@@ -451,9 +465,9 @@ def _render_shared_subset(data: dict) -> str:
   every node near coord/.append style={{font=\scriptsize,anchor=south,yshift=1pt}},
 ]
 \addplot[draw=PlotBlue!80!black,fill=PlotBlue!75] coordinates {{{qwen}}};
-\addlegendentry{{Qwen3 8B}}
+\addlegendentry{{\lr{{Qwen3 8B}}}}
 \addplot[draw=PlotOrange!80!black,fill=PlotOrange!80] coordinates {{{gemini}}};
-\addlegendentry{{Gemini 2.5 Flash}}
+\addlegendentry{{\lr{{Gemini 2.5 Flash}}}}
 \end{{axis}}
 \end{{tikzpicture}}"""
     return _document(body, "qwen-gemini-shared-subset")
@@ -472,9 +486,9 @@ def render_figure_tex(repo_root: Path, output_dir: Path) -> list[Path]:
         FIGURE_STEMS[4]: _render_confusion_matrices(
             load_gemini_confusion_data(repo_root),
             figure_id="gemini-direct-vs-selected-confusion",
-            left_title="Gemini 2.5 Flash Direct",
-            right_title="Gemini selected profile",
-            footer="Shared balanced test subset ($n=90$); row-normalized counts and percentages",
+            left_title=r"پیش‌بینی مستقیم \lr{Gemini 2.5 Flash}",
+            right_title=r"سیاست منتخب \lr{Gemini}",
+            footer=r"زیرمجموعۀ متوازن مشترک آزمون \lr{$n=90$}؛ شمار و درصدهای نرمال‌شدۀ سطری",
         ),
     }
     paths = []

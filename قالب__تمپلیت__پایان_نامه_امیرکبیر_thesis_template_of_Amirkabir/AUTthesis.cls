@@ -156,9 +156,9 @@
 \newcommand{\exam}[2]{\makebox[12cm]
 {\makebox[2cm][c]{\hfill}\makebox[4cm][r]{#1} \ \  \makebox[6cm][r]{#2}}\newline}
 % دستوری برای تعریف واژه‌نامه انگلیسی به فارسی
-\newcommand{\englishTOfarsi}[2]{\par\bigskip\rl{#2}\dotfill\lr{#1}\par} 
+\newcommand{\englishTOfarsi}[2]{\par\bigskip\rl{#2}\dotfill\lr{\resetlatinfont #1}\par}
 % دستوری برای تعریف واژه‌نامه فارسی به انگلیسی 
-\newcommand{\farsiTOenglish}[2]{\par\bigskip#1\dotfill\lr{#2}\par}
+\newcommand{\farsiTOenglish}[2]{\par\bigskip#1\dotfill\lr{\resetlatinfont #2}\par}
 %-----------------------------------------------
 \def\frame{\newpage
 \thispagestyle{empty}

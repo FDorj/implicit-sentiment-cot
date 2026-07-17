@@ -16,8 +16,14 @@
 \usepackage{enumitem}
 \usepackage{multirow,adjustbox}
 %\usepackage{titlesec}
-% بسته‌ و دستوراتی برای ایجاد لینک‌های رنگی با امکان جهش
-\usepackage[pagebackref=false,colorlinks,linkcolor=blue,citecolor=red]{hyperref}
+% لینک‌های داخلی برای ناوبری حفظ می‌شوند، اما در نسخۀ نهایی رنگ و کادر ندارند.
+\usepackage[pagebackref=false,hidelinks,unicode=true]{hyperref}
+\hypersetup{
+    pdftitle={توسعۀ سامانه‌ای برای تحلیل احساسات ضمنی با استفاده از زنجیرۀ تفکر چندمرحله‌ای},
+    pdfauthor={فاطمه درج},
+    pdfsubject={پایان‌نامۀ کارشناسی مهندسی کامپیوتر، تحلیل احساسات ضمنی},
+    pdfkeywords={تحلیل احساسات ضمنی، مدل‌های زبانی بزرگ، زنجیرۀ تفکر، استدلال چندمرحله‌ای، انتخاب منبع}
+}
 \usepackage[nameinlink]{cleveref}%capitalize,,noabbrev
  \AtBeginDocument{%
     \crefname{equation}{برابری}{equations}%

@@ -27,15 +27,16 @@ def clean_test_output_dir(name: str) -> Path:
 
 
 class ThesisResultFigureDataTests(unittest.TestCase):
-    def test_main_results_are_test_only_and_include_seven_methods(self):
+    def test_main_results_are_test_only_and_include_eight_methods(self):
         rows = load_main_test_results(REPO_ROOT)
 
-        self.assertEqual(len(rows), 7)
+        self.assertEqual(len(rows), 8)
         self.assertEqual({row["n_eval"] for row in rows}, {442})
-        self.assertEqual(rows[0]["method"], "Direct Qwen3 8B")
+        self.assertEqual(rows[0]["method"], "TF-IDF + Logistic Regression")
         self.assertEqual(rows[-1]["method"], "Final selected pipeline")
-        self.assertAlmostEqual(rows[0]["accuracy"], 0.6787330316742082)
-        self.assertAlmostEqual(rows[-1]["macro_f1"], 0.7192041747124914)
+        self.assertAlmostEqual(rows[0]["accuracy"], 0.5475113122171946)
+        self.assertAlmostEqual(rows[0]["macro_f1"], 0.5140820214979989)
+        self.assertAlmostEqual(rows[-1]["macro_f1"], 0.7191194191688132)
 
     def test_main_result_order_places_originalish_thor_after_simplified_thor(self):
         rows = load_main_test_results(REPO_ROOT)
@@ -43,6 +44,7 @@ class ThesisResultFigureDataTests(unittest.TestCase):
         self.assertEqual(
             [row["method"] for row in rows],
             [
+                "TF-IDF + Logistic Regression",
                 "Direct Qwen3 8B",
                 "THOR simplified",
                 "THOR original-ish SC3",
@@ -64,7 +66,7 @@ class ThesisResultFigureDataTests(unittest.TestCase):
         )
         self.assertEqual(
             result["final_counts"],
-            [[70, 9, 3], [50, 160, 38], [3, 19, 90]],
+            [[70, 9, 3], [51, 160, 37], [3, 19, 90]],
         )
 
     def test_gemini_confusion_data_aligns_shared_test_rows(self):
@@ -87,7 +89,7 @@ class ThesisResultFigureDataTests(unittest.TestCase):
         self.assertEqual(result["n"], 442)
         self.assertEqual(
             result["source_counts"],
-            {"direct": 300, "thor": 142, "diagnostic": 0},
+            {"direct": 409, "thor": 33, "diagnostic": 0},
         )
         self.assertEqual(
             result["transitions"],
@@ -134,6 +136,7 @@ class ThesisResultFigureRenderingTests(unittest.TestCase):
             content = path.read_text(encoding="utf-8")
             self.assertIn(r"\documentclass[tikz,border=4pt]{standalone}", content)
             self.assertIn(r"\usepackage{pgfplots}", content)
+            self.assertIn(r"\usepackage{xepersian}", content)
             self.assertIn(r"\pgfplotsset{compat=1.18}", content)
             self.assertIn("figure-id:", content)
             self.assertNotIn("nan", content.lower())
@@ -151,40 +154,57 @@ class ThesisResultFigureRenderingTests(unittest.TestCase):
         self.assertNotIn("xmin=0.55", main)
         self.assertIn("zerofill", main)
         self.assertGreaterEqual(main.count("forget plot"), 2)
-        self.assertIn("Final selected pipeline", main)
+        self.assertIn("سامانۀ نهایی", main)
+        self.assertIn("TF-IDF + Logistic Regression", main)
         self.assertIn(
-            "ytick={Direct Qwen3 8B,THOR simplified,THOR original-ish SC3,"
-            "Simple reflection,ETC standard,ETC over THOR SC3,Final selected pipeline}",
+            r"ytick={\lr{TF-IDF + Logistic Regression},پیش‌بینی مستقیم \lr{Qwen3 8B},"
+            r"\lr{THOR} ساده‌شده,\lr{THOR SC3} سه‌اجرایی,"
+            r"بازبینی ساده,کنترل‌گر \lr{ETC},کنترل‌گر \lr{ETC} روی \lr{THOR SC3},سامانۀ نهایی}",
             main,
         )
+        self.assertIn("xlabel={امتیاز}", main)
+        self.assertIn(r"\addlegendentry{دقت}", main)
+        self.assertIn(r"\addlegendentry{اف‌یک ماکرو}", main)
+        self.assertNotIn("original-ish", main)
+        self.assertIn(r"\lr{TF-IDF + Logistic Regression}", main)
+        self.assertIn(r"\lr{Qwen3 8B}", main)
         self.assertNotIn("ytick=data", main)
 
         confusion = paths["ch5_direct_vs_final_confusion"].read_text(encoding="utf-8")
         self.assertIn("66", confusion)
         self.assertIn("160", confusion)
-        self.assertIn("Row-normalized", confusion)
+        self.assertIn("نرمال‌سازی سطری", confusion)
+        self.assertIn("برچسب واقعی", confusion)
+        self.assertIn("برچسب پیش‌بینی‌شده", confusion)
+        self.assertIn(r"\lr{Qwen3 8B}", confusion)
         self.assertIn("at (-2.05,1.35)", confusion)
         self.assertIn("at (4.55,1.35)", confusion)
 
         selector = paths["ch5_selector_behavior"].read_text(encoding="utf-8")
-        self.assertIn("300", selector)
-        self.assertIn("142", selector)
-        self.assertIn("Direct wrong / Final correct", selector)
+        self.assertIn("409", selector)
+        self.assertIn("33", selector)
+        self.assertIn("مستقیم نادرست / نهایی درست", selector)
+        self.assertIn("منبع منتخب در آزمون", selector)
+        self.assertIn(r"\lr{$n=442$}", selector)
 
         comparison = paths["ch5_qwen_gemini_shared_subset"].read_text(encoding="utf-8")
         self.assertIn("ymin=0.00", comparison)
         self.assertIn("ymax=0.90", comparison)
         self.assertNotIn("ymin=0.55", comparison)
-        self.assertIn("Shared balanced test subset", comparison)
+        self.assertIn("زیرمجموعۀ متوازن مشترک آزمون", comparison)
+        self.assertIn("اف‌یک ماکروی آزمون", comparison)
+        self.assertIn(r"\lr{Qwen3 8B}", comparison)
+        self.assertIn(r"\lr{Gemini 2.5 Flash}", comparison)
+        self.assertIn(r"\lr{$n=90$}", comparison)
         self.assertIn("axis description cs:0.5,1.16", comparison)
         self.assertNotIn("rel axis cs:0.015,0.985", comparison)
 
         gemini_confusion = paths["ch5_gemini_direct_vs_selected_confusion"].read_text(
             encoding="utf-8"
         )
-        self.assertIn("Gemini 2.5 Flash Direct", gemini_confusion)
-        self.assertIn("Gemini selected profile", gemini_confusion)
-        self.assertIn("Shared balanced test subset", gemini_confusion)
+        self.assertIn(r"پیش‌بینی مستقیم \lr{Gemini 2.5 Flash}", gemini_confusion)
+        self.assertIn(r"سیاست منتخب \lr{Gemini}", gemini_confusion)
+        self.assertIn("زیرمجموعۀ متوازن مشترک آزمون", gemini_confusion)
         self.assertIn("27", gemini_confusion)
         self.assertIn("20", gemini_confusion)
 
@@ -195,9 +215,10 @@ class ThesisResultFigureRenderingTests(unittest.TestCase):
         }
         comparison = paths["ch5_qwen_gemini_shared_subset"].read_text(encoding="utf-8")
 
-        self.assertIn("(Direct,0.721903)", comparison)
-        self.assertIn("({THOR SC3},0.606450)", comparison)
-        self.assertNotIn("(0.721903,Direct)", comparison)
+        self.assertIn("(مستقیم,0.721903)", comparison)
+        self.assertIn(r"({\lr{THOR SC3}},0.606450)", comparison)
+        self.assertIn("({سیاست منتخب},0.721903)", comparison)
+        self.assertNotIn("(0.721903,مستقیم)", comparison)
 
 
 class ThesisResultFigureBuildTests(unittest.TestCase):
