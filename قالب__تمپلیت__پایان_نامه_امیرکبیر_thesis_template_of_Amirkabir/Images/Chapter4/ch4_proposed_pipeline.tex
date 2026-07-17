@@ -36,7 +36,7 @@
     text=AcademicWhite,
     text width=7.4cm,
     minimum height=1.05cm,
-    font=\small\bfseries
+    font=\small
   },
   source/.style={
     box,
@@ -174,7 +174,7 @@
   \draw[flow] (diagnostic.south) |- ($(signals.north)+(-2.1,0)$);
   \draw[flow] (agreement.south) |- ($(signals.north)+(2.1,0)$);
 
-  \node[training] (training) at (-6.2,-10.35)
+  \node[training] (training) at (-7.1,-10.35)
     {\textbf{تنظیم با دادۀ آموزش}\\[-1pt]
      تعیین آستانه‌های محافظ با اعتبارسنجی داخلی};
   \node[selector] (selector) at (-1.45,-10.35)

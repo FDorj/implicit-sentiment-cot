@@ -16,6 +16,61 @@ def read_thesis_file(name: str) -> str:
 
 
 class ThesisFinalizationTests(unittest.TestCase):
+    def test_pipeline_input_description_uses_normal_weight(self):
+        figure = read_thesis_file("Images/Chapter4/ch4_proposed_pipeline.tex")
+        input_style = re.search(
+            r"input/\.style=\{(.*?)\n  \},",
+            figure,
+            flags=re.DOTALL,
+        )
+
+        self.assertIsNotNone(input_style)
+        self.assertNotIn(r"\bfseries", input_style.group(1))
+        self.assertIn(r"\textbf{ورودی سامانه}", figure)
+
+    def test_pipeline_training_connector_has_visible_clearance(self):
+        figure = read_thesis_file("Images/Chapter4/ch4_proposed_pipeline.tex")
+
+        def style_text_width(style_name):
+            style = re.search(
+                rf"{style_name}/\.style=\{{(.*?)\n  \}},",
+                figure,
+                flags=re.DOTALL,
+            )
+            self.assertIsNotNone(style)
+            width = re.search(r"text width=([0-9.]+)cm", style.group(1))
+            self.assertIsNotNone(width)
+            return float(width.group(1))
+
+        def node_x(node_name):
+            node = re.search(
+                rf"\\node\[{node_name}\] \({node_name}\) at \(([-0-9.]+),",
+                figure,
+            )
+            self.assertIsNotNone(node)
+            return float(node.group(1))
+
+        inner_xsep = re.search(r"inner xsep=([0-9.]+)pt", figure)
+        self.assertIsNotNone(inner_xsep)
+        inner_xsep_cm = float(inner_xsep.group(1)) * 2.54 / 72.27
+
+        training_right = (
+            node_x("training")
+            + style_text_width("training") / 2
+            + inner_xsep_cm
+        )
+        selector_left = (
+            node_x("selector")
+            - style_text_width("selector") / 2
+            - inner_xsep_cm
+        )
+
+        self.assertGreaterEqual(selector_left - training_right, 0.9)
+        self.assertIn(
+            r"\draw[auxiliary] (training.east) -- (selector.west);",
+            figure,
+        )
+
     def test_pipeline_figure_uses_clear_approved_copy(self):
         figure = read_thesis_file("Images/Chapter4/ch4_proposed_pipeline.tex")
 
