@@ -2,6 +2,7 @@ import unittest
 from pathlib import Path
 
 from experiments.generate_thesis_result_figures import (
+    _format_persian_number,
     build_figures,
     load_confusion_data,
     load_gemini_confusion_data,
@@ -119,6 +120,12 @@ class ThesisResultFigureDataTests(unittest.TestCase):
 
 
 class ThesisResultFigureRenderingTests(unittest.TestCase):
+    def test_persian_number_formatter_uses_persian_digits_and_decimal_separator(self):
+        self.assertEqual(_format_persian_number(0.7, 1), "۰٫۷")
+        self.assertEqual(_format_persian_number(90), "۹۰")
+        self.assertEqual(_format_persian_number(80.5, 1), "۸۰٫۵")
+        self.assertNotIn("/", _format_persian_number(0.7, 1))
+
     def test_rendering_writes_five_complete_standalone_documents(self):
         paths = render_figure_tex(REPO_ROOT, clean_test_output_dir("render-docs-a"))
 
@@ -137,6 +144,7 @@ class ThesisResultFigureRenderingTests(unittest.TestCase):
             self.assertIn(r"\documentclass[tikz,border=4pt]{standalone}", content)
             self.assertIn(r"\usepackage{pgfplots}", content)
             self.assertIn(r"\usepackage{xepersian}", content)
+            self.assertIn(r"\setdigitfont", content)
             self.assertIn(r"\pgfplotsset{compat=1.18}", content)
             self.assertIn("figure-id:", content)
             self.assertNotIn("nan", content.lower())
@@ -152,7 +160,8 @@ class ThesisResultFigureRenderingTests(unittest.TestCase):
         self.assertIn("xmin=0.00", main)
         self.assertIn("xmax=0.80", main)
         self.assertNotIn("xmin=0.55", main)
-        self.assertIn("zerofill", main)
+        self.assertIn("point meta=explicit symbolic", main)
+        self.assertNotIn(r"\pgfmathprintnumber", main)
         self.assertGreaterEqual(main.count("forget plot"), 2)
         self.assertIn("سامانۀ نهایی", main)
         self.assertIn("TF-IDF + Logistic Regression", main)
@@ -171,8 +180,9 @@ class ThesisResultFigureRenderingTests(unittest.TestCase):
         self.assertNotIn("ytick=data", main)
 
         confusion = paths["ch5_direct_vs_final_confusion"].read_text(encoding="utf-8")
-        self.assertIn("66", confusion)
-        self.assertIn("160", confusion)
+        self.assertIn(r"۶۶\\۸۰٫۵\%", confusion)
+        self.assertIn("۶۶", confusion)
+        self.assertIn("۱۶۰", confusion)
         self.assertIn("نرمال‌سازی سطری", confusion)
         self.assertIn("برچسب واقعی", confusion)
         self.assertIn("برچسب پیش‌بینی‌شده", confusion)
@@ -181,13 +191,20 @@ class ThesisResultFigureRenderingTests(unittest.TestCase):
         self.assertIn("at (4.55,1.35)", confusion)
 
         selector = paths["ch5_selector_behavior"].read_text(encoding="utf-8")
-        self.assertIn("409", selector)
-        self.assertIn("33", selector)
+        self.assertIn("۴۰۹", selector)
+        self.assertIn("۳۳", selector)
         self.assertIn("مستقیم نادرست / نهایی درست", selector)
         self.assertIn("منبع منتخب در آزمون", selector)
-        self.assertIn(r"\lr{$n=442$}", selector)
+        self.assertIn("تعداد نمونه‌ها: ۴۴۲", selector)
 
         comparison = paths["ch5_qwen_gemini_shared_subset"].read_text(encoding="utf-8")
+        self.assertIn("point meta=explicit symbolic", comparison)
+        self.assertIn("[۰٫۷۲۲]", comparison)
+        self.assertIn(
+            "yticklabels={۰,۰٫۱,۰٫۲,۰٫۳,۰٫۴,۰٫۵,۰٫۶,۰٫۷,۰٫۸,۰٫۹}",
+            comparison,
+        )
+        self.assertNotIn(r"\pgfmathprintnumber", comparison)
         self.assertIn("ymin=0.00", comparison)
         self.assertIn("ymax=0.90", comparison)
         self.assertNotIn("ymin=0.55", comparison)
@@ -195,18 +212,19 @@ class ThesisResultFigureRenderingTests(unittest.TestCase):
         self.assertIn("اف‌یک ماکروی آزمون", comparison)
         self.assertIn(r"\lr{Qwen3 8B}", comparison)
         self.assertIn(r"\lr{Gemini 2.5 Flash}", comparison)
-        self.assertIn(r"\lr{$n=90$}", comparison)
+        self.assertIn("تعداد نمونه‌ها: ۹۰", comparison)
         self.assertIn("axis description cs:0.5,1.16", comparison)
         self.assertNotIn("rel axis cs:0.015,0.985", comparison)
 
         gemini_confusion = paths["ch5_gemini_direct_vs_selected_confusion"].read_text(
             encoding="utf-8"
         )
+        self.assertIn("تعداد نمونه‌ها: ۹۰", gemini_confusion)
         self.assertIn(r"پیش‌بینی مستقیم \lr{Gemini 2.5 Flash}", gemini_confusion)
         self.assertIn(r"سیاست منتخب \lr{Gemini}", gemini_confusion)
         self.assertIn("زیرمجموعۀ متوازن مشترک آزمون", gemini_confusion)
-        self.assertIn("27", gemini_confusion)
-        self.assertIn("20", gemini_confusion)
+        self.assertIn("۲۷", gemini_confusion)
+        self.assertIn("۲۰", gemini_confusion)
 
     def test_shared_subset_ybar_coordinates_put_symbolic_x_first(self):
         paths = {

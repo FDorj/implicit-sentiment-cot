@@ -8,6 +8,17 @@ import pandas as pd
 from sklearn.metrics import confusion_matrix, f1_score
 
 
+PERSIAN_DIGIT_TRANSLATION = str.maketrans("0123456789.-", "۰۱۲۳۴۵۶۷۸۹٫−")
+
+
+def _format_persian_number(value: int | float, precision: int | None = None) -> str:
+    if precision is None:
+        rendered = str(int(value)) if isinstance(value, int) or float(value).is_integer() else str(value)
+    else:
+        rendered = f"{float(value):.{precision}f}"
+    return rendered.translate(PERSIAN_DIGIT_TRANSLATION)
+
+
 THESIS_FONT_DIR = (
     Path(__file__).resolve().parents[1]
     / "قالب__تمپلیت__پایان_نامه_امیرکبیر_thesis_template_of_Amirkabir"
@@ -254,6 +265,8 @@ def _preamble(figure_id: str) -> str:
 \usepackage{{xepersian}}
 \settextfont[Path={{{font_path}}},BoldFont={{B Nazanin Bold.TTF}}]{{B Nazanin.TTF}}
 \setlatintextfont[Path={{{font_path}}},BoldFont={{timesbd.ttf}}]{{times.ttf}}
+\setdigitfont[Path={{{font_path}}},BoldFont={{Yas Bd.ttf}}]{{Yas.ttf}}
+\newfontfamily\persiannumeralfont[Path={{{font_path}}},BoldFont={{Yas Bd.ttf}}]{{Yas.ttf}}
 \begin{{document}}
 % figure-id: {figure_id}
 """
@@ -275,7 +288,11 @@ def _format_coordinates(rows: list[dict], field: str, *, omit_final: bool) -> st
         "ETC over original-ish SC3": r"کنترل‌گر \lr{ETC} روی \lr{THOR SC3}",
         "Final selected pipeline": "سامانۀ نهایی",
     }
-    return " ".join(f"({row[field]:.6f},{{{labels[row['method']]}}})" for row in chosen)
+    coordinates = []
+    for row in chosen:
+        label = _format_persian_number(row[field], 3)
+        coordinates.append(f"({row[field]:.6f},{{{labels[row['method']]}}}) [{label}]")
+    return " ".join(coordinates)
 
 
 def _render_main_results(rows: list[dict]) -> str:
@@ -296,6 +313,7 @@ def _render_main_results(rows: list[dict]) -> str:
   xmin=0.00,
   xmax=0.80,
   xtick={{0.00,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80}},
+  xticklabels={{۰,۰٫۱,۰٫۲,۰٫۳,۰٫۴,۰٫۵,۰٫۶,۰٫۷,۰٫۸}},
   xlabel={{امتیاز}},
   symbolic y coords={{{y_labels}}},
   ytick={{{y_labels}}},
@@ -303,14 +321,18 @@ def _render_main_results(rows: list[dict]) -> str:
   bar width=5pt,
   enlarge y limits=0.10,
   yticklabel style={{font=\small,align=right}},
+  xticklabel style={{font=\persiannumeralfont\small}},
   tick label style={{font=\small}},
   label style={{font=\small}},
   grid=major,
   grid style={{draw=black!12}},
   axis line style={{draw=black!55}},
   legend style={{at={{(0.5,1.02)}},anchor=south,legend columns=2,draw=none,font=\small}},
-  nodes near coords={{\pgfmathprintnumber[fixed,precision=3,zerofill]{{\pgfplotspointmeta}}}},
-  every node near coord/.append style={{font=\scriptsize,anchor=west,xshift=1pt}},
+  point meta=explicit symbolic,
+  scatter/@pre marker code/.code={{}},
+  scatter/@post marker code/.code={{}},
+  nodes near coords*={{\pgfplotspointmeta}},
+  every node near coord/.append style={{font=\persiannumeralfont\scriptsize,anchor=west,xshift=1pt}},
 ]
 \addplot[draw=PlotBlue,fill=PlotBlue!45,bar shift=-3pt] coordinates {{{accuracy}}};
 \addlegendentry{{دقت}}
@@ -336,6 +358,8 @@ def _matrix_panel(counts: list[list[int]], x_offset: float, title: str) -> str:
         row_total = sum(counts[row])
         for column, count in enumerate(counts[row]):
             percentage = count / row_total
+            count_label = _format_persian_number(count)
+            percentage_label = _format_persian_number(percentage * 100, 1)
             shade = max(5, round(percentage * 100))
             text_color = "white" if percentage >= 0.56 else "black"
             x = x_offset + column * 1.4
@@ -344,9 +368,9 @@ def _matrix_panel(counts: list[list[int]], x_offset: float, title: str) -> str:
                 rf"({x:.2f},{y:.2f}) rectangle ++(1.4,1.05);"
             )
             lines.append(
-                rf"\node[text={text_color},font=\small,align=center] at "
+                rf"\node[text={text_color},font=\persiannumeralfont\small,align=center] at "
                 rf"({x + 0.7:.2f},{y + 0.525:.3f}) "
-                rf"{{\shortstack{{{count}\\{percentage * 100:.1f}\%}}}};"
+                rf"{{\shortstack{{{count_label}\\{percentage_label}\%}}}};"
             )
     lines.append(rf"\node[font=\small] at ({x_offset + 2.1:.2f},-0.95) {{برچسب پیش‌بینی‌شده}};")
     lines.append(rf"\node[font=\small,rotate=90] at ({x_offset - 2.05:.2f},1.35) {{برچسب واقعی}};")
@@ -374,6 +398,10 @@ def _render_confusion_matrices(
 def _render_selector_behavior(data: dict) -> str:
     sources = data["source_counts"]
     transitions = data["transitions"]
+    sample_count = _format_persian_number(data["n"])
+    direct_count = _format_persian_number(sources["direct"])
+    thor_count = _format_persian_number(sources["thor"])
+    diagnostic_count = _format_persian_number(sources["diagnostic"])
     body = rf"""\begin{{tikzpicture}}
 \begin{{axis}}[
   xbar,
@@ -382,26 +410,31 @@ def _render_selector_behavior(data: dict) -> str:
   xmin=0,
   xmax=450,
   xtick={{0,50,100,150,200,250,300,350,400,450}},
+  xticklabels={{۰,۵۰,۱۰۰,۱۵۰,۲۰۰,۲۵۰,۳۰۰,۳۵۰,۴۰۰,۴۵۰}},
   symbolic y coords={{مستقیم,\lr{{THOR}},تشخیصی}},
   ytick=data,
   y dir=reverse,
   xlabel={{تعداد نمونه‌های منتخب}},
-  title={{منبع منتخب در آزمون \lr{{$n={data['n']}$}}}},
+  title={{منبع منتخب در آزمون؛ تعداد نمونه‌ها: {sample_count}}},
   title style={{font=\small\bfseries}},
   tick label style={{font=\small}},
+  xticklabel style={{font=\persiannumeralfont\small}},
   label style={{font=\small}},
   bar width=11pt,
   grid=major,
   grid style={{draw=black!12}},
   axis line style={{draw=black!55}},
-  nodes near coords,
-  every node near coord/.append style={{font=\small,anchor=west,xshift=2pt}},
+  point meta=explicit symbolic,
+  scatter/@pre marker code/.code={{}},
+  scatter/@post marker code/.code={{}},
+  nodes near coords*={{\pgfplotspointmeta}},
+  every node near coord/.append style={{font=\persiannumeralfont\small,anchor=west,xshift=2pt}},
 ]
-\addplot[draw=PlotBlue,fill=PlotBlue!70] coordinates {{({sources['direct']},مستقیم) ({sources['thor']},\lr{{THOR}}) ({sources['diagnostic']},تشخیصی)}};
+\addplot[draw=PlotBlue,fill=PlotBlue!70] coordinates {{({sources['direct']},مستقیم) [{direct_count}] ({sources['thor']},\lr{{THOR}}) [{thor_count}] ({sources['diagnostic']},تشخیصی) [{diagnostic_count}]}};
 \end{{axis}}
 
 \begin{{scope}}[xshift=9.0cm,yshift=0.25cm]
-\node[font=\small\bfseries] at (2.2,4.75) {{گذار وضعیت صحت \lr{{$n={data['n']}$}}}};
+\node[font=\small\bfseries] at (2.2,4.75) {{گذار وضعیت صحت؛ تعداد نمونه‌ها: {sample_count}}};
 \node[font=\small] at (1.1,4.08) {{نهایی نادرست}};
 \node[font=\small] at (3.3,4.08) {{نهایی درست}};
 \node[font=\small,anchor=east] at (-0.15,3.05) {{مستقیم نادرست}};
@@ -409,16 +442,16 @@ def _render_selector_behavior(data: dict) -> str:
 
 % هر دو نادرست
 \filldraw[fill=PlotGray!22,draw=white,line width=1pt] (0,2.2) rectangle (2.2,3.9);
-\node[font=\small,align=center] at (1.1,3.05) {{\shortstack{{هر دو نادرست\\\textbf{{{transitions['both_wrong']}}}}}}};
+\node[font=\small,align=center] at (1.1,3.05) {{\shortstack{{هر دو نادرست\\\textbf{{{_format_persian_number(transitions['both_wrong'])}}}}}}};
 % مستقیم نادرست / نهایی درست = بهبود
 \filldraw[fill=PlotGreen!45,draw=white,line width=1pt] (2.2,2.2) rectangle (4.4,3.9);
-\node[font=\small,align=center] at (3.3,3.05) {{\shortstack{{بهبود\\\textbf{{{transitions['gain']}}}}}}};
+\node[font=\small,align=center] at (3.3,3.05) {{\shortstack{{بهبود\\\textbf{{{_format_persian_number(transitions['gain'])}}}}}}};
 % مستقیم درست / نهایی نادرست = تضعیف
 \filldraw[fill=PlotRed!38,draw=white,line width=1pt] (0,0.5) rectangle (2.2,2.2);
-\node[font=\small,align=center] at (1.1,1.35) {{\shortstack{{تضعیف\\\textbf{{{transitions['loss']}}}}}}};
+\node[font=\small,align=center] at (1.1,1.35) {{\shortstack{{تضعیف\\\textbf{{{_format_persian_number(transitions['loss'])}}}}}}};
 % هر دو درست
 \filldraw[fill=PlotBlue!38,draw=white,line width=1pt] (2.2,0.5) rectangle (4.4,2.2);
-\node[font=\small,align=center] at (3.3,1.35) {{\shortstack{{هر دو درست\\\textbf{{{transitions['both_correct']}}}}}}};
+\node[font=\small,align=center] at (3.3,1.35) {{\shortstack{{هر دو درست\\\textbf{{{_format_persian_number(transitions['both_correct'])}}}}}}};
 \end{{scope}}
 \end{{tikzpicture}}"""
     return _document(body, "selector-behavior")
@@ -428,16 +461,16 @@ def _render_shared_subset(data: dict) -> str:
     values = data["macro_f1"]
     qwen = " ".join(
         [
-            f"(مستقیم,{values['Direct']['Qwen3 8B']:.6f})",
-            f"({{\\lr{{THOR SC3}}}},{values['THOR SC3']['Qwen3 8B']:.6f})",
-            f"({{سیاست منتخب}},{values['Validation-tuned selected']['Qwen3 8B']:.6f})",
+            f"(مستقیم,{values['Direct']['Qwen3 8B']:.6f}) [{_format_persian_number(values['Direct']['Qwen3 8B'], 3)}]",
+            f"({{\\lr{{THOR SC3}}}},{values['THOR SC3']['Qwen3 8B']:.6f}) [{_format_persian_number(values['THOR SC3']['Qwen3 8B'], 3)}]",
+            f"({{سیاست منتخب}},{values['Validation-tuned selected']['Qwen3 8B']:.6f}) [{_format_persian_number(values['Validation-tuned selected']['Qwen3 8B'], 3)}]",
         ]
     )
     gemini = " ".join(
         [
-            f"(مستقیم,{values['Direct']['Gemini 2.5 Flash']:.6f})",
-            f"({{\\lr{{THOR SC3}}}},{values['THOR SC3']['Gemini 2.5 Flash']:.6f})",
-            f"({{سیاست منتخب}},{values['Validation-tuned selected']['Gemini 2.5 Flash']:.6f})",
+            f"(مستقیم,{values['Direct']['Gemini 2.5 Flash']:.6f}) [{_format_persian_number(values['Direct']['Gemini 2.5 Flash'], 3)}]",
+            f"({{\\lr{{THOR SC3}}}},{values['THOR SC3']['Gemini 2.5 Flash']:.6f}) [{_format_persian_number(values['THOR SC3']['Gemini 2.5 Flash'], 3)}]",
+            f"({{سیاست منتخب}},{values['Validation-tuned selected']['Gemini 2.5 Flash']:.6f}) [{_format_persian_number(values['Validation-tuned selected']['Gemini 2.5 Flash'], 3)}]",
         ]
     )
     body = rf"""\begin{{tikzpicture}}
@@ -448,21 +481,26 @@ def _render_shared_subset(data: dict) -> str:
   ymin=0.00,
   ymax=0.90,
   ytick={{0.00,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90}},
+  yticklabels={{۰,۰٫۱,۰٫۲,۰٫۳,۰٫۴,۰٫۵,۰٫۶,۰٫۷,۰٫۸,۰٫۹}},
   ylabel={{اف‌یک ماکروی آزمون}},
   symbolic x coords={{مستقیم,\lr{{THOR SC3}},سیاست منتخب}},
   xtick=data,
   bar width=15pt,
   enlarge x limits=0.24,
-  title={{زیرمجموعۀ متوازن مشترک آزمون \lr{{$n={data['n']}$}}}},
+  title={{زیرمجموعۀ متوازن مشترک آزمون؛ تعداد نمونه‌ها: {_format_persian_number(data['n'])}}},
   title style={{at={{(axis description cs:0.5,1.16)}},anchor=south,font=\small\bfseries}},
   tick label style={{font=\small}},
+  yticklabel style={{font=\persiannumeralfont\small}},
   label style={{font=\small}},
   grid=major,
   grid style={{draw=black!12}},
   axis line style={{draw=black!55}},
   legend style={{at={{(0.5,1.02)}},anchor=south,legend columns=2,draw=none,font=\small}},
-  nodes near coords={{\pgfmathprintnumber[fixed,precision=3,zerofill]{{\pgfplotspointmeta}}}},
-  every node near coord/.append style={{font=\scriptsize,anchor=south,yshift=1pt}},
+  point meta=explicit symbolic,
+  scatter/@pre marker code/.code={{}},
+  scatter/@post marker code/.code={{}},
+  nodes near coords*={{\pgfplotspointmeta}},
+  every node near coord/.append style={{font=\persiannumeralfont\scriptsize,anchor=south,yshift=1pt}},
 ]
 \addplot[draw=PlotBlue!80!black,fill=PlotBlue!75] coordinates {{{qwen}}};
 \addlegendentry{{\lr{{Qwen3 8B}}}}
@@ -488,7 +526,7 @@ def render_figure_tex(repo_root: Path, output_dir: Path) -> list[Path]:
             figure_id="gemini-direct-vs-selected-confusion",
             left_title=r"پیش‌بینی مستقیم \lr{Gemini 2.5 Flash}",
             right_title=r"سیاست منتخب \lr{Gemini}",
-            footer=r"زیرمجموعۀ متوازن مشترک آزمون \lr{$n=90$}؛ شمار و درصدهای نرمال‌شدۀ سطری",
+            footer="زیرمجموعۀ متوازن مشترک آزمون؛ تعداد نمونه‌ها: ۹۰؛ شمار و درصدهای نرمال‌شدۀ سطری",
         ),
     }
     paths = []
