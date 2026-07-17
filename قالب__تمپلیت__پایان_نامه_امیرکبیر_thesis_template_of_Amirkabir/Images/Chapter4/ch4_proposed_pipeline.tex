@@ -1,0 +1,204 @@
+\documentclass[tikz,border=8pt]{standalone}
+
+\usetikzlibrary{arrows.meta,calc,positioning,shapes.geometric}
+\usepackage{xepersian}
+
+\settextfont[
+  Scale=1.15,
+  Path=../../Fonts/,
+  BoldFont=B Nazanin Bold.ttf
+]{B Nazanin.ttf}
+\setlatintextfont[
+  Path=../../Fonts/,
+  BoldFont=timesbd.ttf
+]{times.ttf}
+
+\definecolor{AcademicNavy}{RGB}{31,58,95}
+\definecolor{AcademicBlue}{RGB}{232,240,248}
+\definecolor{AcademicBlueStrong}{RGB}{213,228,241}
+\definecolor{AcademicGray}{RGB}{243,245,247}
+\definecolor{AcademicGrayDark}{RGB}{91,105,120}
+\definecolor{AcademicWhite}{RGB}{255,255,255}
+
+\tikzset{
+  box/.style={
+    draw=AcademicNavy,
+    line width=0.75pt,
+    rounded corners=3pt,
+    align=center,
+    inner xsep=7pt,
+    inner ysep=5.5pt,
+    font=\small
+  },
+  input/.style={
+    box,
+    fill=AcademicNavy,
+    text=AcademicWhite,
+    text width=7.4cm,
+    minimum height=1.05cm,
+    font=\small\bfseries
+  },
+  source/.style={
+    box,
+    fill=AcademicBlue,
+    text width=4.9cm,
+    minimum height=1.25cm
+  },
+  compare/.style={
+    diamond,
+    draw=AcademicNavy,
+    fill=AcademicWhite,
+    line width=0.9pt,
+    aspect=2.4,
+    align=center,
+    inner sep=2.5pt,
+    text width=2.5cm,
+    font=\small\bfseries
+  },
+  agreement/.style={
+    box,
+    fill=AcademicGray,
+    draw=AcademicGrayDark,
+    text width=4.5cm,
+    minimum height=1.25cm
+  },
+  diagnostic/.style={
+    box,
+    fill=AcademicBlueStrong,
+    text width=5.1cm,
+    minimum height=1.5cm
+  },
+  signals/.style={
+    box,
+    fill=AcademicWhite,
+    text width=8.0cm,
+    minimum height=1.15cm
+  },
+  controller/.style={
+    box,
+    fill=AcademicGray,
+    draw=AcademicGrayDark,
+    dashed,
+    text width=4.0cm,
+    minimum height=1.55cm
+  },
+  selector/.style={
+    box,
+    fill=AcademicBlueStrong,
+    line width=1.15pt,
+    text width=5.2cm,
+    minimum height=1.75cm
+  },
+  training/.style={
+    box,
+    fill=AcademicGray,
+    draw=AcademicGrayDark,
+    text width=2.7cm,
+    minimum height=1.4cm,
+    font=\footnotesize
+  },
+  final/.style={
+    box,
+    fill=AcademicNavy,
+    text=AcademicWhite,
+    line width=1.05pt,
+    text width=4.7cm,
+    minimum height=0.9cm,
+    font=\small\bfseries
+  },
+  flow/.style={
+    -{Stealth[length=3.4mm,width=2.5mm]},
+    draw=AcademicNavy,
+    line width=1.1pt,
+    rounded corners=3pt
+  },
+  auxiliary/.style={
+    -{Stealth[length=3.0mm,width=2.1mm]},
+    draw=AcademicGrayDark,
+    dashed,
+    line width=0.9pt,
+    rounded corners=3pt
+  },
+  edgeLabel/.style={
+    draw=AcademicNavy,
+    fill=AcademicBlueStrong,
+    line width=0.5pt,
+    rounded corners=2pt,
+    inner xsep=5pt,
+    inner ysep=2pt,
+    text=AcademicNavy,
+    font=\footnotesize\bfseries
+  }
+}
+
+\begin{document}
+\begin{tikzpicture}
+  \node[input] (input) at (0,0)
+    {\textbf{ورودی سامانه}\\[-1pt]
+     جملۀ ورودی و عبارتی که احساس نسبت به آن سنجیده می‌شود};
+
+  \node[source] (thor) at (-3.35,-2.05)
+    {\textbf{\lr{THOR}}\\[-1pt]
+     سه اجرای مستقل مسیر استدلالی\\[-1pt]
+     رأی‌گیری میان سه برچسب};
+  \node[source] (direct) at (3.35,-2.05)
+    {\textbf{مسیر مستقیم}\\[-1pt]
+     مدل فقط برچسب احساس را تولید می‌کند};
+
+  \coordinate (inputSplit) at (0,-1.0);
+  \draw[flow] (input.south) -- (inputSplit);
+  \draw[flow] (inputSplit) -| (thor.north);
+  \draw[flow] (inputSplit) -| (direct.north);
+
+  \node[compare] (compare) at (0,-4.05)
+    {آیا دو برچسب\\یکسان‌اند؟};
+  \draw[flow] (thor.south) |- (compare.west);
+  \draw[flow] (direct.south) |- (compare.east);
+
+  \node[diagnostic] (diagnostic) at (-3.35,-6.05)
+    {\textbf{بررسی اختلاف}\\[-1pt]
+     تشخیص نوع خطا\\[-1pt]
+     پیشنهاد برچسب و تعیین میزان اطمینان};
+  \node[agreement] (agreement) at (3.35,-6.05)
+    {\textbf{توافق دو مسیر}\\[-1pt]
+     حفظ همان برچسب};
+
+  \draw[flow] (compare.west) -| (diagnostic.north);
+  \draw[flow] (compare.east) -| (agreement.north);
+  \node[edgeLabel] at (-2.35,-4.72) {خیر};
+  \node[edgeLabel] at (2.35,-4.72) {بله};
+
+  \node[signals] (signals) at (0,-8.15)
+    {\textbf{اطلاعات لازم برای انتخاب نهایی}\\[-1pt]
+     برچسب‌های تولیدشده و نتیجۀ بررسی اختلاف};
+  \draw[flow] (diagnostic.south) |- ($(signals.north)+(-2.1,0)$);
+  \draw[flow] (agreement.south) |- ($(signals.north)+(2.1,0)$);
+
+  \node[training] (training) at (-6.2,-10.35)
+    {\textbf{بخش آموزش}\\[-1pt]
+     اعتبارسنجی داخلی و تنظیم آستانه‌های محافظ};
+  \node[selector] (selector) at (-1.45,-10.35)
+    {\textbf{انتخاب‌گر نهایی}\\[-1pt]
+     پروفایل عملکردی پنج‌جزئی و شروط محافظ\\[-1pt]
+     انتخاب منبع یا بازگشت به مسیر مستقیم};
+  \node[controller] (controller) at (4.25,-10.35)
+    {\textbf{کنترل‌گر قاعده‌محور}\\[-1pt]
+     تولید تصمیم کمکی برای تحلیل\\[-1pt]
+     \textbf{در انتخاب نهایی دخالت ندارد}};
+
+  \draw[flow] (signals.south) -- ++(0,-0.55) -| (selector.north);
+  \draw[auxiliary] (signals.south) -- ++(0,-0.55) -| (controller.north);
+  \draw[auxiliary] (training.east) -- (selector.west);
+
+  \node[final] (final) at (-1.45,-12.4)
+    {برچسب نهایی احساس};
+  \draw[flow] (selector.south) -- (final.north);
+
+  \node[
+    text=AcademicGrayDark,
+    font=\scriptsize,
+    align=center,
+    below=0.18cm of controller
+  ] {خروجی میانی برای تحلیل};
+\end{tikzpicture}
+\end{document}
