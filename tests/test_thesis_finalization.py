@@ -221,6 +221,22 @@ class ThesisFinalizationTests(unittest.TestCase):
             self.assertIn(phrase, text)
         self.assertNotIn("۲۴۰", text)
 
+    def test_appendix_uses_repo_root_output_paths(self):
+        text = (THESIS_DIR / "appendix1.tex").read_text(encoding="utf-8")
+        thesis_dir = "قالب__تمپلیت__پایان_نامه_امیرکبیر_thesis_template_of_Amirkabir"
+
+        for output_path in [
+            rf"\path{{{thesis_dir}/Images/Chapter5}}",
+            rf"\path{{{thesis_dir}/AUTthesis.pdf}}",
+        ]:
+            self.assertIn(output_path, text)
+
+        for standalone_claim in [
+            r"& \path{Images/Chapter5} &",
+            r"& \path{AUTthesis.pdf} &",
+        ]:
+            self.assertNotIn(standalone_claim, text)
+
     def test_dictionaries_contain_only_project_terms(self):
         fa_to_en = read_thesis_file("dicfa2en.tex")
         en_to_fa = read_thesis_file("dicen2fa.tex")
