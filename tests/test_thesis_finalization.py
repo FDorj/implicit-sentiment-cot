@@ -345,16 +345,19 @@ class ThesisFinalizationTests(unittest.TestCase):
         required = [
             "ساختار پیاده‌سازی سامانه",
             "run_tfidf_logreg_baseline.py",
-            "PromptRunner", "OllamaPromptRunner", "OpenAICompatiblePromptRunner",
+            "PromptRunner", "OllamaPromptRunner", "HFSeq2SeqPromptRunner", "OpenAICompatiblePromptRunner",
             "THORPipeline", "SimpleReflectionPipeline", "ErrorTypeReflectionPipeline",
             "data_loader.py", "experiment_config.py", "controller.py",
             "apply_etc_policy.py", "run_meta_selector.py",
-            "run_logistic_source_ranker.py", "final_results.py",
+            "run_logistic_source_ranker.py", "evaluator.py", "final_results.py",
             "run_final_pipeline.py", "generate_thesis_result_figures.py",
             "اعتبارسنجی پنج‌لایه", "بازبرازش",
         ]
         for token in required:
             self.assertIn(token, text)
+        self.assertIn("مرحله‌های مولد", text)
+        self.assertNotIn("خروجی هر مرحله به‌صورت \\lr{CSV} شامل پاسخ خام", text)
+        self.assertNotIn("هر مرحله خروجی \\lr{CSV} شامل کلید نمونه، پاسخ خام", text)
 
 
 if __name__ == "__main__":
