@@ -181,7 +181,7 @@ class ThesisFinalizationTests(unittest.TestCase):
             "qwen3:8b",
             "Ollama",
             r"\fanum{۰٫۷}",
-            "سه مسیر استدلالی",
+            "سه نمونه‌گیری درون هر پیش‌بینی و رأی اکثریت",
             "run_final_pipeline.py",
             "generate_thesis_result_figures.py",
             "build_thesis.ps1",
@@ -191,6 +191,19 @@ class ThesisFinalizationTests(unittest.TestCase):
         for unrelated in ["کد میپل", "DifferentialGeometry", "DGsetup"]:
             self.assertNotIn(unrelated, appendix)
         self.assertNotRegex(appendix, r"\\lr\{(?!\\texttt\{)[^}]*_")
+
+    def test_appendix_matches_implemented_alignment_key(self):
+        appendix = read_thesis_file("appendix1.tex")
+        self.assertIn(
+            r"[id, source\_sentence\_id, sentence, target, from, to, polarity]",
+            appendix,
+        )
+        self.assertNotIn("بازۀ هدف، دامنه و بخش داده", appendix)
+
+    def test_appendix_describes_sc3_as_within_prediction_sampling(self):
+        appendix = read_thesis_file("appendix1.tex")
+        self.assertIn("سه نمونه‌گیری درون هر پیش‌بینی و رأی اکثریت", appendix)
+        self.assertNotIn("سه مسیر استدلالی، سه اجرا و رأی اکثریت", appendix)
 
     def test_selector_comparison_methods_are_explained_before_table(self):
         text = (THESIS_DIR / "chapter5.tex").read_text(encoding="utf-8")
