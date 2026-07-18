@@ -31,7 +31,7 @@ class ThesisCondensationTests(unittest.TestCase):
             "chapter2.tex": ["تحلیل احساسات ضمنی", "اف‌یک ماکرو"],
             "chapter3.tex": ["SCAPT", "THOR", "SAoT", "شکاف تحقیقاتی"],
             "chapter4.tex": ["P_R", "اعتبارسنجی داخلی", "پیش‌بینی نهایی"],
-            "chapter5.tex": ["۰/۷۲۳۹۸۲", "۰/۷۱۹۱۱۹", "Gemini 2.5 Flash"],
+            "chapter5.tex": ["۰٫۷۲۳۹۸۲", "۰٫۷۱۹۱۱۹", "Gemini 2.5 Flash"],
             "chapter6.tex": ["محدودیت‌های پژوهش", "کارهای آتی"],
         }
         for filename, anchors in required.items():
