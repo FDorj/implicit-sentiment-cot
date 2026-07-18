@@ -340,6 +340,22 @@ class ThesisFinalizationTests(unittest.TestCase):
             chapter5,
         )
 
+    def test_chapter4_documents_real_implementation_components(self):
+        text = (THESIS_DIR / "chapter4.tex").read_text(encoding="utf-8")
+        required = [
+            "ساختار پیاده‌سازی سامانه",
+            "run_tfidf_logreg_baseline.py",
+            "PromptRunner", "OllamaPromptRunner", "OpenAICompatiblePromptRunner",
+            "THORPipeline", "SimpleReflectionPipeline", "ErrorTypeReflectionPipeline",
+            "data_loader.py", "experiment_config.py", "controller.py",
+            "apply_etc_policy.py", "run_meta_selector.py",
+            "run_logistic_source_ranker.py", "final_results.py",
+            "run_final_pipeline.py", "generate_thesis_result_figures.py",
+            "اعتبارسنجی پنج‌لایه", "بازبرازش",
+        ]
+        for token in required:
+            self.assertIn(token, text)
+
 
 if __name__ == "__main__":
     unittest.main()
