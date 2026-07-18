@@ -150,6 +150,36 @@ class ThesisResultFigureRenderingTests(unittest.TestCase):
             self.assertNotIn("nan", content.lower())
             self.assertNotIn("None", content)
 
+    def test_sample_count_phrases_are_isolated_as_rtl_without_ltr_digits(self):
+        paths = {
+            path.stem: path
+            for path in render_figure_tex(REPO_ROOT, clean_test_output_dir("render-docs-rtl"))
+        }
+        selector = paths["ch5_selector_behavior"].read_text(encoding="utf-8")
+        comparison = paths["ch5_qwen_gemini_shared_subset"].read_text(encoding="utf-8")
+        gemini_confusion = paths["ch5_gemini_direct_vs_selected_confusion"].read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn(
+            r"title={\RL{منبع منتخب در آزمون؛ تعداد نمونه‌ها: ۴۴۲}}",
+            selector,
+        )
+        self.assertIn(
+            r"{\RL{گذار وضعیت صحت؛ تعداد نمونه‌ها: ۴۴۲}}",
+            selector,
+        )
+        self.assertIn(
+            r"title={\RL{زیرمجموعۀ متوازن مشترک آزمون؛ تعداد نمونه‌ها: ۹۰}}",
+            comparison,
+        )
+        self.assertIn(
+            r"{\RL{زیرمجموعۀ متوازن مشترک آزمون؛ تعداد نمونه‌ها: ۹۰؛ شمار و درصدهای نرمال‌شدۀ سطری}}",
+            gemini_confusion,
+        )
+        for content in [selector, comparison, gemini_confusion]:
+            self.assertNotRegex(content, r"\\lr\{[^}]*[۰-۹]")
+
     def test_rendering_uses_scopes_and_fixed_axis_bounds_from_design(self):
         paths = {
             path.stem: path

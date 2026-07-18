@@ -415,7 +415,7 @@ def _render_selector_behavior(data: dict) -> str:
   ytick=data,
   y dir=reverse,
   xlabel={{تعداد نمونه‌های منتخب}},
-  title={{منبع منتخب در آزمون؛ تعداد نمونه‌ها: {sample_count}}},
+  title={{\RL{{منبع منتخب در آزمون؛ تعداد نمونه‌ها: {sample_count}}}}},
   title style={{font=\small\bfseries}},
   tick label style={{font=\small}},
   xticklabel style={{font=\persiannumeralfont\small}},
@@ -434,7 +434,7 @@ def _render_selector_behavior(data: dict) -> str:
 \end{{axis}}
 
 \begin{{scope}}[xshift=9.0cm,yshift=0.25cm]
-\node[font=\small\bfseries] at (2.2,4.75) {{گذار وضعیت صحت؛ تعداد نمونه‌ها: {sample_count}}};
+\node[font=\small\bfseries] at (2.2,4.75) {{\RL{{گذار وضعیت صحت؛ تعداد نمونه‌ها: {sample_count}}}}};
 \node[font=\small] at (1.1,4.08) {{نهایی نادرست}};
 \node[font=\small] at (3.3,4.08) {{نهایی درست}};
 \node[font=\small,anchor=east] at (-0.15,3.05) {{مستقیم نادرست}};
@@ -487,7 +487,7 @@ def _render_shared_subset(data: dict) -> str:
   xtick=data,
   bar width=15pt,
   enlarge x limits=0.24,
-  title={{زیرمجموعۀ متوازن مشترک آزمون؛ تعداد نمونه‌ها: {_format_persian_number(data['n'])}}},
+  title={{\RL{{زیرمجموعۀ متوازن مشترک آزمون؛ تعداد نمونه‌ها: {_format_persian_number(data['n'])}}}}},
   title style={{at={{(axis description cs:0.5,1.16)}},anchor=south,font=\small\bfseries}},
   tick label style={{font=\small}},
   yticklabel style={{font=\persiannumeralfont\small}},
@@ -526,7 +526,7 @@ def render_figure_tex(repo_root: Path, output_dir: Path) -> list[Path]:
             figure_id="gemini-direct-vs-selected-confusion",
             left_title=r"پیش‌بینی مستقیم \lr{Gemini 2.5 Flash}",
             right_title=r"سیاست منتخب \lr{Gemini}",
-            footer="زیرمجموعۀ متوازن مشترک آزمون؛ تعداد نمونه‌ها: ۹۰؛ شمار و درصدهای نرمال‌شدۀ سطری",
+            footer=r"\RL{زیرمجموعۀ متوازن مشترک آزمون؛ تعداد نمونه‌ها: ۹۰؛ شمار و درصدهای نرمال‌شدۀ سطری}",
         ),
     }
     paths = []
