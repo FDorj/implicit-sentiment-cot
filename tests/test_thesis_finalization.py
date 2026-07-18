@@ -192,6 +192,35 @@ class ThesisFinalizationTests(unittest.TestCase):
             self.assertNotIn(unrelated, appendix)
         self.assertNotRegex(appendix, r"\\lr\{[^}]*_")
 
+    def test_selector_comparison_methods_are_explained_before_table(self):
+        text = (THESIS_DIR / "chapter5.tex").read_text(encoding="utf-8")
+        table_pos = text.index(r"\label{tab:ch5-selector-comparison}")
+        for phrase in [
+            "اوراکل انتخاب منبع",
+            "کران بالای تحلیلی",
+            "هر زوج نمونه و منبع",
+            "بیشترین امتیاز",
+            "انتخاب‌گر فراسطح مبتنی بر درخت",
+            "تقسیم داخلی آموزش",
+        ]:
+            self.assertGreaterEqual(text[:table_pos].find(phrase), 0)
+
+    def test_appendix_is_clean_reproduction_guide(self):
+        text = (THESIS_DIR / "appendix1.tex").read_text(encoding="utf-8")
+        for phrase in [
+            "پیوست: راهنمای بازتولید آزمایش‌ها",
+            "داده و کلید نمونه",
+            "مدل‌ها و تنظیمات تولید",
+            "مراحل بازتولید",
+            "نیاز به اجرای مدل",
+            "run_final_pipeline.py",
+            "generate_thesis_result_figures.py",
+            r"\fanum{۰٫۷}",
+            "۹۰ نمونه",
+        ]:
+            self.assertIn(phrase, text)
+        self.assertNotIn("۲۴۰", text)
+
     def test_dictionaries_contain_only_project_terms(self):
         fa_to_en = read_thesis_file("dicfa2en.tex")
         en_to_fa = read_thesis_file("dicen2fa.tex")

@@ -1,50 +1,84 @@
-\chapter*{پیوست: جزئیات بازتولید آزمایش‌ها}
-\markboth{پیوست: جزئیات بازتولید آزمایش‌ها}{}
-\addcontentsline{toc}{chapter}{پیوست: جزئیات بازتولید آزمایش‌ها}
+\chapter*{پیوست: راهنمای بازتولید آزمایش‌ها}
+\markboth{پیوست: راهنمای بازتولید آزمایش‌ها}{}
+\addcontentsline{toc}{chapter}{پیوست: راهنمای بازتولید آزمایش‌ها}
 
-این پیوست اطلاعات لازم برای بازسازی ارزیابی‌های گزارش‌شده را خلاصه می‌کند. خروجی‌های خام و میانی هر مرحله به‌صورت فایل‌های جداگانه ذخیره شده‌اند؛ بنابراین، بازتولید جدول‌ها و شکل‌های نهایی به اجرای دوبارۀ مدل زبانی نیاز ندارد.
+این پیوست مسیر کوتاه بازسازی اعداد، جدول‌ها و شکل‌های گزارش‌شده را مشخص می‌کند. خروجی‌های مورد ارزیابی در مخزن ذخیره شده‌اند؛ پس بازسازی گزارش از اجرای دوبارۀ استنتاج جدا است.
 
-\section*{داده و تقسیم‌بندی}
+\section*{داده و کلید نمونه}
 
-دادۀ اصلی از نمونۀ برچسب‌خورده و ضمنی \lr{SCAPT} مبتنی بر \lr{SemEval 2014} به دست آمده است. پس از پاک‌سازی، ۲۱۸۸ نمونه شامل ۱۷۴۶ نمونۀ آموزش و ۴۴۲ نمونۀ آزمون باقی مانده است. تقسیم رسمی آموزش و آزمون در تمام مراحل حفظ می‌شود. برای تطبیق پایدار ردیف‌ها، کلید مرکب شامل \lr{id}، شناسه جملۀ منبع، متن جمله، هدف، بازۀ هدف و قطبیت به کار می‌رود.
+دادۀ ضمنی پاک‌سازی‌شده شامل ۲۱۸۸ سطر است: ۱۷۴۶ سطر آموزش و ۴۴۲ سطر آزمون. هم‌ترازی فایل‌ها با کلید مرکب \lr{id}، شناسه‌جملۀ منبع، جمله، هدف، بازۀ هدف، دامنه و بخش داده کنترل می‌شود. در مقایسۀ \lr{Gemini}، ۱۵۰ سطر آموزش فقط برای تنظیم به کار می‌رود و نتایج گزارش‌شده فقط بر ۹۰ نمونه آزمون مشترک است.
 
 \section*{مدل‌ها و تنظیمات تولید}
 
-اجرای اصلی از مدل \lr{qwen3:8b} از طریق \lr{Ollama} استفاده می‌کند. پیش‌بینی مستقیم با دمای صفر تولید می‌شود. در مسیر \lr{THOR}، مراحل استخراج جنبه، استخراج نظر ضمنی و تولید استدلال قطبیت با دمای \fanum{۰٫۷} اجرا می‌شوند؛ مرحلۀ تبدیل استدلال به برچسب نهایی دمای صفر دارد. برای خودسازگاری سه‌اجرایی، سه مسیر استدلالی برای هر نمونه تولید و برچسب‌ها با رأی اکثریت تجمیع می‌شوند. مقایسۀ تکمیلی \lr{Gemini 2.5 Flash} فقط روی زیرمجموعۀ متوازن ۹۰ نمونه‌ای انجام شده است.
+\begin{table}[htbp]
+    \centering
+    \caption{مدل و تنظیمات اجرای خروجی‌های ذخیره‌شده.}
+    \small
+    \begin{tabular}{|p{0.32\textwidth}|p{0.58\textwidth}|}
+        \hline
+        \textbf{مؤلفه} & \textbf{تنظیم} \\
+        \hline
+        مدل اصلی & \lr{qwen3:8b} با \lr{Ollama} \\
+        \hline
+        پیش‌بینی مستقیم & دمای صفر \\
+        \hline
+        مسیر استدلالی & دمای \fanum{۰٫۷}؛ برچسب نهایی با دمای صفر \\
+        \hline
+        خودسازگاری \lr{SC3} & سه مسیر استدلالی، سه اجرا و رأی اکثریت \\
+        \hline
+        مقایسۀ تکمیلی & \lr{Gemini 2.5 Flash} روی ۹۰ نمونه آزمون مشترک \\
+        \hline
+    \end{tabular}
+\end{table}
 
-\section*{انتخاب منبع}
+\section*{مراحل بازتولید}
 
-سیاست اصلی، انتخاب‌گر پروفایلی محافظت‌شده و تنظیم‌شده با اعتبارسنجی داخلی بخش آموزش است. ویژگی‌های پروفایل شامل پیش‌بینی مستقیم، پیش‌بینی \lr{THOR}، نوع خطای تشخیصی، سطح اطمینان و دامنه است. واگذاری به منبع غیرمستقیم فقط در صورت پشتیبانی و حاشیۀ کافی انجام می‌شود؛ در غیر این صورت، پیش‌بینی مستقیم قاعدۀ بازگشت است. هیچ برچسب طلایی آزمون در ساخت پروفایل‌ها، تنظیم آستانه‌ها یا انتخاب منبع نهایی استفاده نمی‌شود.
+\begin{table}[htbp]
+    \centering
+    \caption{حداقل مراحل بازتولید گزارش.}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \begin{tabular}{|p{0.16\textwidth}|p{0.33\textwidth}|p{0.25\textwidth}|p{0.12\textwidth}|}
+        \hline
+        \textbf{مرحله} & \textbf{اسکریپت} & \textbf{خروجی} & \textbf{نیاز به اجرای مدل} \\
+        \hline
+        اعتبارسنجی و جدول & \path{experiments/run_final_pipeline.py} & \path{results/final_results_table.csv} & خیر \\
+        \hline
+        شکل‌های پایان‌نامه & \path{experiments/generate_thesis_result_figures.py} & \path{Images/Chapter5} & خیر \\
+        \hline
+        آزمون سند & \path{tests/test_thesis_finalization.py} & گزارش \lr{unittest} & خیر \\
+        \hline
+        ساخت پایان‌نامه & \path{scripts/build_thesis.ps1} & \path{AUTthesis.pdf} & خیر \\
+        \hline
+    \end{tabular}
+\end{table}
 
-\section*{فایل‌های اصلی خروجی}
+\section*{فایل‌های اصلی}
 
 \begin{latin}
+\footnotesize
 \begin{itemize}
+    \item \path{data/processed/semeval14_scapt_isa_only_clean.csv}
+    \item \path{data/processed/gemini_model_comparison_subset_train150_test90.csv}
     \item \path{results/direct_isa_predictions.csv}
     \item \path{results/thor_originalish_sc3_isa_predictions.csv}
-    \item \path{results/final_results_table.csv}
-    \item \path{results/tfidf_logreg_predictions.csv}
+    \item \path{results/etc_thor_originalish_sc3_guarded_tuned_selected_isa_predictions.csv}
 \end{itemize}
 \end{latin}
 
-وجود واژۀ \lr{originalish} در نام داخلی بعضی فایل‌های خروجی صرفاً برای سازگاری با اجراهای ذخیره‌شده است و نام علمی روش محسوب نمی‌شود.
+\section*{فرمان‌های حداقلی}
 
-\section*{فرمان‌های بازتولید گزارش}
-
-فرمان‌های زیر در ریشۀ مخزن و در محیط ویندوز اجرا می‌شوند:
+فرمان‌ها از ریشۀ مخزن در ویندوز اجرا می‌شوند:
 
 \begin{latin}
-\small
+\footnotesize
 \begin{verbatim}
-.\.venv\Scripts\python.exe -B `
-  experiments\run_final_pipeline.py
-.\.venv\Scripts\python.exe -B `
-  experiments\generate_thesis_result_figures.py
-.\.venv\Scripts\python.exe -m unittest discover `
-  -s tests -p "test_*.py" -v
+.\.venv\Scripts\python.exe -B experiments\run_final_pipeline.py
+.\.venv\Scripts\python.exe -B experiments\generate_thesis_result_figures.py
+.\.venv\Scripts\python.exe -B -m unittest tests.test_thesis_finalization -v
 powershell.exe -NoProfile -ExecutionPolicy Bypass `
   -File .\scripts\build_thesis.ps1
 \end{verbatim}
 \end{latin}
 
-فرمان \path{run_final_pipeline.py} پیش‌بینی‌های ذخیره‌شده را اعتبارسنجی و جدول نهایی را بازسازی می‌کند و مدل زبانی را دوباره اجرا نمی‌کند. فرمان \path{generate_thesis_result_figures.py} نیز شکل‌ها را از همان خروجی‌های ذخیره‌شده می‌سازد. اجرای دوبارۀ استنتاج مستلزم راه‌اندازی پشتانۀ مدل و اجرای جداگانۀ اسکریپت‌های مراحل مستقیم، استدلالی و تشخیصی است و برای بازسازی اعداد این پایان‌نامه ضروری نیست.
+بازسازی جدول‌ها و شکل‌ها مدل زبانی را دوباره اجرا نمی‌کند و به اجرای \lr{LLM} نیاز ندارد؛ اما تولید دوبارۀ خروجی خام به پشتانۀ مدل و اجرای اسکریپت‌های استنتاج وابسته است.
