@@ -190,7 +190,7 @@ class ThesisFinalizationTests(unittest.TestCase):
             self.assertIn(expected, appendix)
         for unrelated in ["کد میپل", "DifferentialGeometry", "DGsetup"]:
             self.assertNotIn(unrelated, appendix)
-        self.assertNotRegex(appendix, r"\\lr\{[^}]*_")
+        self.assertNotRegex(appendix, r"\\lr\{(?!\\texttt\{)[^}]*_")
 
     def test_selector_comparison_methods_are_explained_before_table(self):
         text = (THESIS_DIR / "chapter5.tex").read_text(encoding="utf-8")
@@ -223,13 +223,25 @@ class ThesisFinalizationTests(unittest.TestCase):
 
     def test_appendix_uses_repo_root_output_paths(self):
         text = (THESIS_DIR / "appendix1.tex").read_text(encoding="utf-8")
-        thesis_dir = "قالب__تمپلیت__پایان_نامه_امیرکبیر_thesis_template_of_Amirkabir"
+        self.assertNotRegex(text, r"\\path\{[^}]*[\u0600-\u06ff][^}]*\}")
+        self.assertNotIn(r"\path{_thesis_template_of_Amirkabir", text)
+        self.assertNotIn(r"\path{scripts/build_thesis.ps1}", text)
+        self.assertIn(r"\lr{\texttt{scripts/build\_thesis.ps1}}", text)
+        self.assertIn(r"\newcommand{\pathus}", text)
+        self.assertIn(r"\newcommand{\thesisdirfa}", text)
+        self.assertIn("قالب", text)
+        self.assertIn("تمپلیت", text)
+        self.assertIn("پایان", text)
+        self.assertIn("نامه", text)
+        self.assertIn("امیرکبیر", text)
 
-        for output_path in [
-            rf"\path{{{thesis_dir}/Images/Chapter5}}",
-            rf"\path{{{thesis_dir}/AUTthesis.pdf}}",
+        for latin_path_line in [
+            r"\lr{\texttt{\_thesis\_template\_}}",
+            r"\lr{\texttt{of\_Amirkabir/}}",
+            r"\lr{\texttt{Images/Chapter5}}",
+            r"\lr{\texttt{AUTthesis.pdf}}",
         ]:
-            self.assertIn(output_path, text)
+            self.assertIn(latin_path_line, text)
 
         for standalone_claim in [
             r"& \path{Images/Chapter5} &",
