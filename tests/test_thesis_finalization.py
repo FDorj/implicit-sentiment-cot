@@ -1,4 +1,3 @@
-import hashlib
 import re
 import unittest
 from pathlib import Path
@@ -111,14 +110,52 @@ class ThesisFinalizationTests(unittest.TestCase):
         ]:
             self.assertNotIn(unclear, figure)
 
-    def test_defense_approval_source_is_unchanged(self):
+    def test_defense_approval_placeholder_is_removed_but_declaration_is_kept(self):
         content = (THESIS_DIR / "taid.tex").read_text(encoding="utf-8")
-        normalized = content.replace("\r\n", "\n").encode("utf-8")
-        digest = hashlib.sha256(normalized).hexdigest()
-        self.assertEqual(
-            digest,
-            "8212555f994bea6aae5976199921b1cc55c925063440dd862e5cc3d4ac9adab8",
+        self.assertNotIn("صفحه فرم ارزیابی و تصویب پایان نامه", content)
+        self.assertNotIn("در این صفحه فرم دفاع", content)
+        self.assertIn("تعهدنامه اصالت اثر", content)
+        self.assertIn("متعهد می‌شوم", content)
+
+    def test_persian_abstract_is_rendered_before_front_matter_lists(self):
+        main = read_thesis_file("AUTthesis.tex")
+        abstract = read_thesis_file("fa-abstract.tex")
+
+        self.assertIn(r"\input{fa-abstract}", main)
+        self.assertIn(r"\clearpage" + "\n" + r"\pagenumbering{alph}", main)
+        self.assertFalse(abstract.lstrip().startswith(r"\newpage"))
+        self.assertLess(
+            main.index(r"\pagenumbering{alph}"),
+            main.index(r"\input{fa-abstract}"),
         )
+        self.assertLess(
+            main.index(r"\input{fa-abstract}"),
+            main.index(r"\input{TOC-TOF-LOT}"),
+        )
+        self.assertIn(r"\ffa-abstract", abstract)
+        self.assertIn(r"\fkeywords", abstract)
+        self.assertIn("چکیده", abstract)
+
+    def test_acronym_footnotes_do_not_repeat_abbreviations(self):
+        chapters = "\n".join(
+            read_thesis_file(name)
+            for name in ["chapter1.tex", "chapter2.tex", "chapter3.tex", "chapter5.tex"]
+        )
+        self.assertNotIn(
+            "Reasoning Implicit Sentiment with Chain-of-Thought Prompting",
+            chapters,
+        )
+        for redundant in [
+            "Implicit Sentiment Analysis (ISA)",
+            "Supervised Contrastive Pre-Training (SCAPT)",
+            "Aspect-Based Sentiment Analysis (ABSA)",
+            "Large Language Model (LLM)",
+            "Chain-of-Thought (CoT)",
+            "Sentiment Analysis of Thinking (SAoT)",
+            "Error-Type-Aware Reflection; ETC",
+        ]:
+            with self.subTest(redundant=redundant):
+                self.assertNotIn(redundant, chapters)
 
     def test_personal_pages_use_approved_text(self):
         dedication = read_thesis_file("Chant.tex")
@@ -318,7 +355,7 @@ class ThesisFinalizationTests(unittest.TestCase):
         self.assertNotIn("original-ish", prose)
         self.assertNotIn("Macro-F۱", prose)
         self.assertNotIn("F۱-score", prose)
-        self.assertIn("Reasoning Implicit Sentiment with Chain-of-Thought Prompting", prose)
+        self.assertNotIn("Reasoning Implicit Sentiment with Chain-of-Thought Prompting", prose)
         self.assertIn("Supervised Contrastive Pre-Training", prose)
         self.assertIn("Sentiment Analysis of Thinking", prose)
         self.assertIn(r"\ref{tab:ch5-class-f1}", prose)

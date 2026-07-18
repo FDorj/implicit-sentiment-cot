@@ -1,4 +1,3 @@
-import hashlib
 import re
 import subprocess
 import unittest
@@ -40,14 +39,11 @@ class ThesisCondensationTests(unittest.TestCase):
                 with self.subTest(filename=filename, anchor=anchor):
                     self.assertIn(anchor, content)
 
-    def test_defense_approval_content_is_unchanged(self):
+    def test_defense_approval_placeholder_is_removed(self):
         content = (THESIS / "taid.tex").read_text(encoding="utf-8")
-        normalized = content.replace("\r\n", "\n").encode("utf-8")
-        digest = hashlib.sha256(normalized).hexdigest()
-        self.assertEqual(
-            digest,
-            "8212555f994bea6aae5976199921b1cc55c925063440dd862e5cc3d4ac9adab8",
-        )
+        self.assertNotIn("صفحه فرم ارزیابی و تصویب پایان نامه", content)
+        self.assertNotIn("در این صفحه فرم دفاع", content)
+        self.assertIn("تعهدنامه اصالت اثر", content)
 
 
 if __name__ == "__main__":
