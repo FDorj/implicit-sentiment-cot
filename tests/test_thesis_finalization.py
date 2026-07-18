@@ -331,6 +331,15 @@ class ThesisFinalizationTests(unittest.TestCase):
             self.assertNotIn("۲۴۰", text)
             self.assertNotIn("240 examples", text)
 
+        chapter5 = read_thesis_file("chapter5.tex")
+        self.assertIn("۲۴۰ نمونه", chapter5)
+        self.assertIn(
+            "۱۵۰ نمونۀ آموزش فقط برای تنظیم سیاست انتخاب به کار می‌روند و تمام سنجه‌ها، "
+            "شکل‌ها و ادعاهای مقایسه‌ای این زیربخش فقط بر ۹۰ نمونۀ آزمون مشترک "
+            "(۳۰ نمونه از هر کلاس) گزارش می‌شوند.",
+            chapter5,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
