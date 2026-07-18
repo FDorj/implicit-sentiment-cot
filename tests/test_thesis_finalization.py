@@ -180,7 +180,7 @@ class ThesisFinalizationTests(unittest.TestCase):
         for expected in [
             "qwen3:8b",
             "Ollama",
-            "۰/۷",
+            r"\fanum{۰٫۷}",
             "سه مسیر استدلالی",
             "run_final_pipeline.py",
             "generate_thesis_result_figures.py",
@@ -308,6 +308,28 @@ class ThesisFinalizationTests(unittest.TestCase):
         self.assertNotIn("citecolor=red", commands)
         for field in ["pdftitle", "pdfauthor", "pdfsubject", "pdfkeywords"]:
             self.assertIn(field, commands)
+
+    def test_persian_thesis_numbers_are_direction_safe(self):
+        thesis_files = [
+            "fa_title.tex",
+            "chapter1.tex",
+            "chapter4.tex",
+            "chapter5.tex",
+            "chapter6.tex",
+            "appendix1.tex",
+        ]
+        combined = "\n".join(read_thesis_file(name) for name in thesis_files)
+
+        self.assertNotIn(r"\lr{\setpersianfont", combined)
+        self.assertNotRegex(combined, r"[۰-۹]+/[۰-۹]+")
+        self.assertIn(r"\fanum{۰٫۷}", combined)
+        self.assertIn("۹۰ نمون", combined)
+
+    def test_shared_gemini_subset_is_consistently_ninety(self):
+        for name in ["fa_title.tex", "en-abstract.tex", "appendix1.tex"]:
+            text = read_thesis_file(name)
+            self.assertNotIn("۲۴۰", text)
+            self.assertNotIn("240 examples", text)
 
 
 if __name__ == "__main__":

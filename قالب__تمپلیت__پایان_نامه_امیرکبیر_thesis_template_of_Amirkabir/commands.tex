@@ -88,6 +88,11 @@
 %
 \setdigitfont[Scale=1.1,Path=Fonts/,BoldFont=Yas Bd.ttf]{Yas.ttf}%%Yas
 %%%%%%%%%%%%%%%%%%%%%%%%%%
+% عدد فارسیِ نشکن؛ ورودی باید رقم فارسی و ممیز فارسی «٫» داشته باشد.
+\makeatletter
+\newcommand{\fanum}[1]{\mbox{\xepersian@textdigitfont #1}}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 % تعریف قلم‌های فارسی اضافی برای استفاده در بعضی از قسمت‌های متن
 \defpersianfont\nastaliq[Scale=2,Path=Fonts/]{IranNastaliq.ttf}
 \defpersianfont\chapternumber[Scale=3,Path=Fonts/,BoldFont=B Nazanin Bold.ttf]{B Nazanin.ttf}
