@@ -63,7 +63,32 @@
 
 \subsection{معیارهای ارزیابی}
 
-تعریف دقت کلی، صحت پیش‌بینی، بازخوانی، امتیاز اف‌یک هر کلاس و امتیاز اف‌یک ماکرو در روابط \ref{eq:accuracy} تا \ref{eq:macro-f1} فصل دوم ارائه شد. در این فصل، دقت کلی برای سنجش نسبت کل پاسخ‌های درست و امتیاز اف‌یک ماکرو برای وزن‌دادن یکسان به سه کلاس گزارش می‌شود. نزدیک‌بودن تغییر این دو معیار نشان می‌دهد که بهبود فقط حاصل غلبۀ کلاس خنثی نیست؛ بااین‌حال، برای روشن‌شدن محل تغییرها، ماتریس درهم‌ریختگی و اف‌یک هر کلاس نیز بررسی می‌شوند.
+برای کلاس $c$، مقادیر $TP_c$، $FP_c$ و $FN_c$ به‌ترتیب پاسخ درست در کلاس، انتساب نادرست به کلاس و ازدست‌دادن نمونۀ واقعی کلاس‌اند. ماتریس درهم‌ریختگی توزیع این جابه‌جایی‌ها را نشان می‌دهد. دقت کلی\LTRfootnote{Accuracy} نسبت همۀ پیش‌بینی‌های درست است:
+
+\begin{equation}
+    \mathrm{Accuracy}
+    = \frac{\text{\lr{1}}}{N}
+    \sum_{i=\text{\lr{1}}}^{N} \mathbb{I}\!\left(\hat{y}_i=y_i\right).
+    \label{eq:accuracy}
+\end{equation}
+
+صحت پیش‌بینی\LTRfootnote{Precision}، بازخوانی\LTRfootnote{Recall} و اف‌یک\LTRfootnote{F1-score} هر کلاس به صورت زیر محاسبه می‌شوند:
+
+\begin{align}
+    P_c &= \frac{TP_c}{TP_c+FP_c}, \label{eq:precision}\\
+    R_c &= \frac{TP_c}{TP_c+FN_c}, \label{eq:recall}\\
+    F_{\text{\lr{1}},c} &= \frac{\text{\lr{2}}P_cR_c}{P_c+R_c}. \label{eq:f1-class}
+\end{align}
+
+اف‌یک ماکرو میانگین اف‌یک کلاس‌ها است:
+
+\begin{equation}
+    \mathrm{Macro}\text{-}F_{\text{\lr{1}}}
+    =\frac{\text{\lr{1}}}{C}\sum_{c=\text{\lr{1}}}^{C}F_{\text{\lr{1}},c}.
+    \label{eq:macro-f1}
+\end{equation}
+
+در اف‌یک ماکرو هر کلاس مستقل از فراوانی خود وزن برابر دارد؛ بنابراین گزارش هم‌زمان آن با دقت کلی، ضعف روی کلاس کم‌تعداد را آشکارتر می‌کند. این سنجه‌ها صحت برچسب را می‌سنجند، نه درستی استدلال یا انتخاب منبع؛ فصل پنجم به همین دلیل تحلیل خطا و منشأ پاسخ را نیز گزارش می‌کند.
 
 \section{نتایج روش‌های اصلی روی آزمون کامل}
 
@@ -124,7 +149,7 @@
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{Images/Chapter5/ch5_direct_vs_final_confusion.pdf}
+    \includegraphics[width=\textwidth]{Images/Chapter5/ch5_direct_vs_final_confusion.png}
     \caption{ماتریس‌های درهم‌ریختگی پیش‌بینی مستقیم و سامانۀ نهایی \lr{Qwen3 8B} روی آزمون کامل.}
     \label{fig:ch5-qwen-confusion}
 \end{figure}
@@ -332,7 +357,7 @@ Unfortunately, we chose this spot for lunch as we had done a lot of walking and 
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.94\textwidth]{Images/Chapter5/ch5_gemini_direct_vs_selected_confusion.pdf}
+    \includegraphics[width=0.94\textwidth]{Images/Chapter5/ch5_gemini_direct_vs_selected_confusion.png}
     \caption{ماتریس‌های درهم‌ریختگی پیش‌بینی مستقیم و سیاست انتخاب تنظیم‌شده برای \lr{Gemini 2.5 Flash} روی آزمون مشترک.}
     \label{fig:ch5-gemini-confusion}
 \end{figure}

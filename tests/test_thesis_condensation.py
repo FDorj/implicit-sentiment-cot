@@ -27,10 +27,10 @@ class ThesisCondensationTests(unittest.TestCase):
     def test_condensed_chapters_preserve_scientific_anchors(self):
         required = {
             "chapter1.tex": ["پرسش‌های پژوهش", "نوآوری‌ها"],
-            "chapter2.tex": ["تحلیل احساسات ضمنی", "اف‌یک ماکرو"],
+            "chapter2.tex": ["تحلیل احساسات ضمنی", "کنترل‌گر و انتخاب چندمنبعی"],
             "chapter3.tex": ["SCAPT", "THOR", "SAoT", "شکاف تحقیقاتی"],
             "chapter4.tex": ["P_R", "اعتبارسنجی داخلی", "پیش‌بینی نهایی"],
-            "chapter5.tex": ["۰٫۷۲۳۹۸۲", "۰٫۷۱۹۱۱۹", "Gemini 2.5 Flash"],
+            "chapter5.tex": ["اف‌یک ماکرو", "۰٫۷۲۳۹۸۲", "۰٫۷۱۹۱۱۹", "Gemini 2.5 Flash"],
             "chapter6.tex": ["محدودیت‌های پژوهش", "کارهای آتی"],
         }
         for filename, anchors in required.items():

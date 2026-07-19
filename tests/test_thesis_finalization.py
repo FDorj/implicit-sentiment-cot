@@ -1,3 +1,4 @@
+import hashlib
 import re
 import unittest
 from pathlib import Path
@@ -156,6 +157,32 @@ class ThesisFinalizationTests(unittest.TestCase):
         ]:
             with self.subTest(redundant=redundant):
                 self.assertNotIn(redundant, chapters)
+
+    def test_thesis_uses_approved_replacement_figures(self):
+        chapter4 = read_thesis_file("chapter4.tex")
+        chapter5 = read_thesis_file("chapter5.tex")
+        expected = {
+            "Images/Chapter4/ch4_proposed_pipeline.png": (
+                chapter4,
+                "6fce01e625bb9739af2378427ebb58e4186d805010146540f117260051975f30",
+            ),
+            "Images/Chapter5/ch5_direct_vs_final_confusion.png": (
+                chapter5,
+                "c839b7579afb79323d6c90f1b69b1195fb01d2fe358bbc5c0792af71900cb949",
+            ),
+            "Images/Chapter5/ch5_gemini_direct_vs_selected_confusion.png": (
+                chapter5,
+                "16745f63d46406e4d4db2fe42edc0fccd5c57deae8e6fd8ae3b68aa6b8222d58",
+            ),
+        }
+
+        for relative_path, (chapter, expected_hash) in expected.items():
+            with self.subTest(relative_path=relative_path):
+                self.assertIn(relative_path, chapter)
+                actual_hash = hashlib.sha256(
+                    (THESIS_DIR / relative_path).read_bytes()
+                ).hexdigest()
+                self.assertEqual(expected_hash, actual_hash)
 
     def test_personal_pages_use_approved_text(self):
         dedication = read_thesis_file("Chant.tex")
