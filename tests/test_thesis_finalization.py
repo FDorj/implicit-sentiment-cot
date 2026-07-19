@@ -174,6 +174,14 @@ class ThesisFinalizationTests(unittest.TestCase):
                 chapter5,
                 "16745f63d46406e4d4db2fe42edc0fccd5c57deae8e6fd8ae3b68aa6b8222d58",
             ),
+            "Images/Chapter5/ch5_qwen_full_test_methods.png": (
+                chapter5,
+                "ed45bbf4777ce2f2a666d61740e2355d0036892ae78e1849d4852ee06cb583a4",
+            ),
+            "Images/Chapter5/ch5_qwen_gemini_shared_subset.png": (
+                chapter5,
+                "56355284b4df54f43f20446aa94dc590bfabef1437c32cb3f8029f9cdf8145f8",
+            ),
         }
 
         for relative_path, (chapter, expected_hash) in expected.items():
